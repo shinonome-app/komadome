@@ -36,7 +36,7 @@
         </nav>
       </header>
 
-      <h1 class="flex justify-center py-3 text-2xl font-semibold bg-yellow-100 border border-y-gray-500">公開中　作家リスト：<%= @kana %>行</h1>
+      <h1 class="flex justify-center py-3 text-2xl font-semibold bg-yellow-100 border border-y-gray-500">登録前作家　作家リスト：<%= @kana %>行</h1>
 
       <div class="text-right py-4">
         <a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" href="#sec1">[ア]</a>
@@ -53,7 +53,7 @@
       <div class="px-12 py-5">
         <ol class="list-decimal">
           <% @authors[kana_index].each do |person| %>
-          <li><a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" href="person<%= person.id %>.html#sakuhin_list_1"><%= person.name %></a>　(公開中：<%= person.works.count %>)　　<% if person.copyright_flag? %><strong>＊著作権存続＊</strong>　<% end %></li>
+          <li><a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" href="person<%= person.id %>.html#sakuhin_list_1"><%= person.name %></a>　(公開中：<%= person.published_works_count %>、作業中：<%= person.unpublished_works_count %>)　　<% if person.copyright_flag? %><strong>＊著作権存続＊</strong>　<% end %></li>
           <% end %>
         </ol>
       </div>

@@ -36,7 +36,7 @@
         </nav>
       </header>
 
-      <h1 class="flex justify-center py-3 text-2xl font-semibold bg-yellow-100 border border-y-gray-500">公開中　作家リスト：<%= @kana %>行</h1>
+      <h1 class="flex justify-center py-3 text-2xl font-semibold bg-yellow-100 border border-y-gray-500">公開中　作家リスト：全て</h1>
 
       <div class="text-right py-4">
         <a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" href="#sec1">[ア]</a>
@@ -46,13 +46,20 @@
         <a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" href="#sec5">[オ]</a>
       </div>
 
-      <% @kana_all.each_with_index do |kana, kana_index| %>
+      <div>
+        <p>→<a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" href="/index_pages/list_person_all.zip">「公開中　作家別作品一覧：全て(CSV形式、zip圧縮）」をダウンロード</a></p>
+        <p>→<a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" href="/index_pages/list_person_all_extended.zip">「公開中　作家別作品一覧拡充版：全て(CSV形式、zip圧縮）」をダウンロード</a></p>
+        <p>→<a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" href="/index_pages/list_person_all_utf8.zip">「公開中　作家別作品一覧：全て(CSV形式、UTF-8、zip圧縮）」をダウンロード</a></p>
+        <p>→<a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" href="/index_pages/list_person_all_extended_utf8.zip">「公開中　作家別作品一覧拡充版：全て(CSV形式、UTF-8、zip圧縮）」をダウンロード</a></p>
+      </div>
+
+      <% @authors.keys.each do |kana| %>
 
       <h2 class="flex py-1 px-5 text-2xl font-semibold bg-gray-300 border border-y-gray-500"><a name="sec1"><%= kana %></a></h2>
 
       <div class="px-12 py-5">
         <ol class="list-decimal">
-          <% @authors[kana_index].each do |person| %>
+          <% @authors[kana].each do |person| %>
           <li><a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" href="person<%= person.id %>.html#sakuhin_list_1"><%= person.name %></a>　(公開中：<%= person.works.count %>)　　<% if person.copyright_flag? %><strong>＊著作権存続＊</strong>　<% end %></li>
           <% end %>
         </ol>

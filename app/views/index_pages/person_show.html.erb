@@ -1,12 +1,3 @@
-<!DOCTYPE html>
-<html lang="ja">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="./css/output.css" rel="stylesheet">
-  </head>
-
-  <body class="bg-sky-50">
     <div id="app" class="container mx-auto max-w-5xl">
       <div id="top" name="top">&nbsp;</div>
 
@@ -118,10 +109,10 @@
         <ol class="list-decimal">
           <% @author.works.each do |work|  %>
           <li>
-            <a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" href="../cards/<%= @author.id %>/card<%= work.id %>.html"><%=work.title %></a> <%= work.subtitle %>
+            <a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" href="/cards/<%= sprintf("%06d", @author.id) %>/card<%= work.id %>.html"><%=work.title %></a> <%= work.subtitle %>
             <span class="px-4">（<%= work.kana_type.name %>、作品ID：<%= work.id %>）</span>
             <% work.work_people.order(:role_id).each do |work_person| %>
-            <% next if work_person.person_id == @author.id %>
+            <%   next if work_person.person_id == @author.id %>
             <span class="px-8">→<a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" href="person<%= work_person.person_id %>.html"><%= work_person.person.name %></a>(<%= work_person.role.name %>) </span>
             <% end %>
           </li>
@@ -138,21 +129,17 @@
 
       <div class="px-12 py-5">
         <ol class="list-decimal">
+          <% @author.works.each do |work|  %>
           <li>
-            媾曳　
-            <span class="px-4">（新字新仮名、作品ID：61062）</span>
-            <span class="px-8">→<a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" href="person398.html">池谷 信三郎</a>(翻訳者)
+            <%= work.title %>
+            <span class="px-4">（<%= work.kana_type.name %>、作品ID：<%= work.id %>）</span>
+            <% work.work_people.order(:role_id).each do |work_person| %>
+            <%   next if work_person.person_id == @author.id %>
+            <span class="px-8">→<a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" href="person<%= work_person.person_id %>.html"><%= work_person.person.name %></a>(<%= work_person.role.name %>)
             </span>
+            <% end %>
           </li>
-          <li>
-            アリアドナ　
-            <span class="px-4">（新字新仮名、作品ID：51390）</span>
-          </li>
-          <li>
-            三人姉妹　――戯曲　四幕――
-            <span class="px-4">（新字新仮名、作品ID：51861）</span>
-            <span class="px-8">→<a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" href="person1157.html">神西 清</a>(翻訳者)
-            </span>
+          <% end %>
         </ol>
       </div>
 
@@ -217,5 +204,3 @@
         ●<a href="../index.html">トップ</a>　●<a href="index_top.html">インデックス</a>／<a href="index_all.html">全</a>
       </div>
     </div>
-  </body>
-</html>
