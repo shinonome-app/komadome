@@ -51,6 +51,9 @@ gem 'pg'
 # Use I18n
 gem 'rails-i18n'
 
+# Pagination in views
+gem 'pagy'
+
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 # gem "image_processing", "~> 1.2"
 
