@@ -47,7 +47,7 @@ class Person < ApplicationRecord
   belongs_to :note_user, optional: true
   has_many :work_people, dependent: :destroy
   has_many :works, through: :work_people
-  has_one :base_person
+  has_one :base_person, dependent: :destroy
   has_one :original_person, through: :base_person
 
   def other_people
@@ -70,6 +70,14 @@ class Person < ApplicationRecord
 
   def name_en
     "#{first_name_en}, #{last_name_en}" if last_name_en || first_name_en
+  end
+
+  def published_works_count
+    Work.joins(:work_people).where('work_people.person_id = ? and work_status_id in (1)', id).count
+  end
+
+  def unpublished_works_count
+    Work.joins(:work_people).where('work_people.person_id = ? and work_status_id in (3,4,5,6,7,8,9,10,11)', id).count
   end
 
   validates :last_name, :last_name_kana, presence: true

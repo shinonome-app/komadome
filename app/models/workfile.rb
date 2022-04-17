@@ -37,6 +37,7 @@
 #  fk_rails_...  (work_id => works.id)
 #
 
+# 作品ファイル
 class Workfile < ApplicationRecord
   belongs_to :work
   belongs_to :filetype
@@ -48,4 +49,17 @@ class Workfile < ApplicationRecord
   has_one_attached :workdata
 
   validates :filename, presence: true
+
+  def html?
+    filetype&.html?
+  end
+
+  def filename
+    ext = if compresstype.compressed?
+            compresstype.extension
+          else
+            filetype&.extension
+          end
+    "#{work.id}_ruby_#{id}.#{ext}"
+  end
 end

@@ -11,5 +11,10 @@
 #  updated_at :datetime         not null
 #
 
+# ファイル種別
 class Filetype < ApplicationRecord
+  def html?
+    # TODO: do not use num literal
+    id == 3 || id == 9
+  end
 end
