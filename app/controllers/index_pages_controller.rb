@@ -104,22 +104,6 @@ class IndexPagesController < ApplicationController
              end
   end
 
-  def list_person_all
-    send_zip_file('list_person_all.zip')
-  end
-
-  def list_person_all_extended
-    send_zip_file('list_person_all_extended.zip')
-  end
-
-  def list_person_all_utf8
-    send_zip_file('list_person_all_utf8.zip')
-  end
-
-  def list_person_all_extended_utf8
-    send_zip_file('list_person_all_extended_utf8.zip')
-  end
-
   def list_inp_show
     @id, @page = params[:id_page].split('_')
     @author = Person.find(@id)
@@ -133,11 +117,5 @@ class IndexPagesController < ApplicationController
 
   def roma2kana_char(roma_id)
     ::KanaUtils.roma2kana_char(roma_id)
-  end
-
-  def send_zip_file(filename)
-    path = Rails.root.join('data', 'csv_zip', filename)
-    stat = File.stat(path)
-    send_file(path, filename:, length: stat.size)
   end
 end
