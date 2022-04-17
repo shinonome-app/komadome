@@ -7,20 +7,6 @@ class IndexPagesController < ApplicationController
 
   def index_all; end
 
-  def person_index
-    @kana_all = roma2kana_chars(params[:id].to_sym)
-    @kana = @kana_all[0]
-
-    @authors = []
-    if @kana_all.empty?
-      @authors << Person.where('sortkey !~ ?', '^[あいうえおか-もやゆよら-ろわをんアイウエオカ-モヤユヨラ-ロワヲンヴ]')
-    else
-      @kana_all.each do |kana|
-        @authors << Person.where('sortkey like ?', "#{kana}%")
-      end
-    end
-  end
-
   def person_all_index
     @kana_all = roma2kana_chars(params[:id].to_sym)
     @kana = @kana_all[0]
@@ -46,10 +32,6 @@ class IndexPagesController < ApplicationController
         end
       end
     end
-  end
-
-  def person_show
-    @author = Person.find(params[:id])
   end
 
   def person_inp_index
