@@ -12,9 +12,9 @@ Rails.application.routes.draw do
       get 'index_top'
       get 'index_all'
 
-      get 'whatsnew:page', to: 'index_pages#whatsnew', constraints: { page: /\d+/ }
+      get 'whatsnew:page', to: 'whatsnews#index', constraints: { page: /\d+/ }
 
-      get 'whatsnew_:year_page', to: 'index_pages#whatsnew_year', constraints: { year_page: /\d\d\d\d_\d+/ }
+      get 'whatsnew_:year_page', to: 'whatsnews#index_year', constraints: { year_page: /\d\d\d\d_\d+/ }
 
       get 'person_:id', to: 'index_pages#person_index', constraints: { id: /[kstnhmyrw]?a|zz/ }
       get 'person_all_:id', to: 'index_pages#person_all_index', constraints: { id: /[kstnhmyrw]?a|zz/ }

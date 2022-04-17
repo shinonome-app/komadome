@@ -7,16 +7,6 @@ class IndexPagesController < ApplicationController
 
   def index_all; end
 
-  def whatsnew
-    @pagy, @works = pagy(Work.order(:started_on).all, items: 50)
-  end
-
-  def whatsnew_year
-    @year, @page = params[:year_page].split('_')
-    logger.info("year:#{@year},#{params.inspect}")
-    @pagy, @works = pagy(Work.with_year_and_status(@year, 1).order(:started_on).all, items: 80, page: @page)
-  end
-
   def person_index
     @kana_all = roma2kana_chars(params[:id].to_sym)
     @kana = @kana_all[0]
