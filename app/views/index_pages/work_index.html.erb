@@ -1,4 +1,4 @@
-    <div id="app" class="container mx-auto py-4">
+    <div id="app" class="container mx-auto max-w-5xl py-4">
       <span id="top" name="top">&nbsp;</span>
 
       <header class="flex items-center justify-between">
@@ -24,10 +24,6 @@
           <span class="pr-3">
             ●
             <a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" href="index_top.html">インデックス</a>
-            ／
-            <a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" href="index_top.html">全</a>
-            ●
-            <a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" href="../index.html">作家作品別リスト</a>
           </span>
           <span class="pr-3">
             ●
@@ -39,47 +35,57 @@
         </div>
       </header>
 
-      <h1 class="flex justify-center py-3 text-2xl font-semibold bg-yellow-100 border border-y-gray-500">作業中　作家別作品一覧：<%= @author.name %>　No.<%= @author.id %></h1>
+      <h1 class="flex justify-center py-3 text-2xl font-semibold bg-yellow-100 border border-y-gray-500">公開中　作品一覧：<%= @kana %></h1>
 
       <div class="flex justify-center p-1">
 
-        <div>
+        <div class="w-full">
 
           <div class="text-right py-4">
           ページ:
-          <a class="text-2xl" href="#sec1">1</a>
-          <a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" href="#sec2">2</a>
-          <a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" href="#sec3">3</a>
+          <span class="text-2xl">1</span>
+          <%= link_to "2",
+              sakuhin_index_pages_path(id_page: "#{@id}2", format: :html),
+              class: "text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" %>
+          <%= link_to "3",
+              sakuhin_index_pages_path(id_page: "#{@id}3", format: :html),
+              class: "text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" %>
           <a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" href="#sec4">4</a>
           <a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" href="#sec5">5</a>
           <a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" href="#sec5">6</a>
+          <a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" href="#sec5">7</a>
+          <a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" href="#sec5">8</a>
+          <a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" href="#sec5">9</a>
+          <a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" href="#sec5">10</a>
           <span class="px-2">&nbsp;</span>
           <a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" href="#sec5">次の50件</a>
           </div>
 
-          <table class="border-double border-2 border-gray-800">
+          <table class="border-double border-2 border-gray-800 w-full">
             <tr class="w-770 border-double border-2 border-gray-800">
               <th class="w-100 font-normal bg-yellow-100 border-double border-2 border-gray-800">No.</th>
-              <th class="w-220 font-normal bg-yellow-100 border-double border-2 border-gray-800">作品名(作品ID)<br>副題</th>
-              <th class="w-110 font-normal bg-yellow-100 border-double border-2 border-gray-800">文字遣い種別</th>
-              <th class="w-110 font-normal bg-yellow-100 border-double border-2 border-gray-800">翻訳者名等<br/>(人物ID)</th>
-              <th class="w-110 font-normal bg-yellow-100 border-double border-2 border-gray-800">入力者名<br/>校正者名</th>
-              <th class="w-110 font-normal bg-yellow-100 border-double border-2 border-gray-800">状態<br/>状態の開始日</th>
-              <th class="w-110 font-normal bg-yellow-100 border-double border-2 border-gray-800">底本名<br/>出版社名</th>
-              <th class="w-110 font-normal bg-yellow-100 border-double border-2 border-gray-800">入力に使用した版</th>
+              <th class="w-220 font-normal bg-yellow-100 border-double border-2 border-gray-800">作品名<br>副題 </th>
+              <th class="w-110 font-normal bg-yellow-100 border-double border-2 border-gray-800">文字遣い種別 </th>
+              <th class="w-110 font-normal bg-yellow-100 border-double border-2 border-gray-800">著者名</th>
+              <th class="w-110 font-normal bg-yellow-100 border-double border-2 border-gray-800">著者基本名</th>
+              <th class="w-110 font-normal bg-yellow-100 border-double border-2 border-gray-800">翻訳者名等 </th>
             </tr>
 
-            <% @author.unpublished_works.each_with_index do |work, work_index|  %>
+            <% @works.each_with_index do |work, work_index| %>
             <tr>
-              <td class="bg-white border-double border-2 border-gray-800 text-right"><%= work_index + 1 %></td>
-              <td class="bg-white border-double border-2 border-gray-800"><%= work.title %>(<%= work.id %>)</td>
+              <td class="bg-white border-double border-2 border-gray-800 text-right"><%= work_index+1 %></td>
+              <td class="bg-white border-double border-2 border-gray-800">
+                <a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" href="/cards/<%= sprintf("%06d", work.first_author.id) %>/card<%= work.id %>.html">
+                  <%= work.title %><br >
+                  <%= work.subtitle %>
+                </a>
+              </td>
               <td class="bg-white border-double border-2 border-gray-800"><%= work.kana_type.name %></td>
+              <td class="bg-white border-double border-2 border-gray-800"><%= work.author_text %></td>
+              <td class="bg-white border-double border-2 border-gray-800">　</td>
               <td class="bg-white border-double border-2 border-gray-800"><%= work.translator_text %></td>
-              <td class="bg-white border-double border-2 border-gray-800"><%= work.inputer_text %><br><%= work.proofreader_text %></td>
-              <td class="bg-white border-double border-2 border-gray-800"><%= work.work_status.name %><br><%= work.started_on.strftime("%F") %></td>
-              <td class="bg-white border-double border-2 border-gray-800"><%= work.first_teihon.title %><br><%= work.first_teihon.publisher %></td>
-              <td class="bg-white border-double border-2 border-gray-800"><%= work.first_teihon.input_edition %></td>
             </tr>
+
             <% end %>
           </table>
           <div class="text-right py-4">
@@ -90,6 +96,10 @@
             <a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" href="#sec4">4</a>
             <a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" href="#sec5">5</a>
             <a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" href="#sec5">6</a>
+            <a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" href="#sec5">7</a>
+            <a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" href="#sec5">8</a>
+            <a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" href="#sec5">9</a>
+            <a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" href="#sec5">10</a>
             <span class="px-2">&nbsp;</span>
             <a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" href="#sec5">次の50件</a>
           </div>

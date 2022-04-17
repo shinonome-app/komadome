@@ -1,4 +1,5 @@
-    <div id="app" class="container mx-auto max-w-5xl">
+<% content_for(:bgcolor) { @author.copyright? ? 'bg-rose-50' : 'bg-sky-50' } %>
+    <div id="app" class="container mx-auto max-w-5xl ">
       <div id="top" name="top">&nbsp;</div>
 
       <header class="flex items-center justify-between">
@@ -11,15 +12,15 @@
             <div class="px-2">
               ●
               <a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline"
-                 href="../index.html">トップ</a>
+                 href="/index.html">トップ</a>
             </div>
             <div class="px-2">
               ●
               <a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline"
-                 href="../index.html">インデックス</a>
+                 href="/index_pages/index_top.html">インデックス</a>
               ／
               <a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline"
-                href="index_all.html">全</a>
+                href="/index_pages/index_all.html">全</a>
             </div>
             <div class="px-2">
               ●作家リスト:
@@ -91,6 +92,16 @@
             </td>
           </tr>
         </table>
+        <% if @author.copyright? %>
+        <div class="bg-white my-2 py-1">
+          <span class="text-red-500 font-bold">＊著作権存続＊</span>
+          　作品の取り扱いについては「
+          <a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" href="https://www.aozora.gr.jp/guide/kijyunn.html">
+            ファイル取り扱い規準
+          </a>
+          」を御覧ください。
+        </div>
+        <% end %>
       </div>
 
       <hr class="border-gray-400">
@@ -107,7 +118,7 @@
 
       <div class="px-12 py-5">
         <ol class="list-decimal">
-          <% @author.works.each do |work|  %>
+          <% @author.published_works.each do |work|  %>
           <li>
             <a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" href="/cards/<%= sprintf("%06d", @author.id) %>/card<%= work.id %>.html"><%=work.title %></a> <%= work.subtitle %>
             <span class="px-4">（<%= work.kana_type.name %>、作品ID：<%= work.id %>）</span>
@@ -129,7 +140,7 @@
 
       <div class="px-12 py-5">
         <ol class="list-decimal">
-          <% @author.works.each do |work|  %>
+          <% @author.unpublished_works.each do |work|  %>
           <li>
             <%= work.title %>
             <span class="px-4">（<%= work.kana_type.name %>、作品ID：<%= work.id %>）</span>

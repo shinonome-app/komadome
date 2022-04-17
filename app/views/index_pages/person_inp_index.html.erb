@@ -11,7 +11,7 @@
             <div class="px-2">
               ●
               <a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline"
-                 href="../index.html">トップ</a>
+                 href="/index.html">トップ</a>
             </div>
             <div class="px-2">
               ●
@@ -36,22 +36,22 @@
         </nav>
       </header>
 
-      <h1 class="flex justify-center py-3 text-2xl font-semibold bg-yellow-100 border border-y-gray-500">公開中　作家リスト：<%= @kana %>行</h1>
+      <h1 class="flex justify-center py-3 text-2xl font-semibold bg-yellow-100 border border-y-gray-500">作業中　作家リスト：<%= @kana %>行</h1>
 
       <div class="text-right py-4">
         <% @kana_all.each_with_index do |kana, kana_index| %>
-        <a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" href="#sec<%= kana_index+1 %>">[<%= kana %>]</a>
+        <a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" href="#sec<%= kana_index+1%>">[<%= kana %>]</a>
         <% end %>
       </div>
 
       <% @kana_all.each_with_index do |kana, kana_index| %>
 
-      <h2 class="flex py-1 px-5 text-2xl font-semibold bg-gray-300 border border-y-gray-500"><a name="sec<%= kana_index+1 %>"><%= kana %></a></h2>
+      <h2 class="flex py-1 px-5 text-2xl font-semibold bg-gray-300 border border-y-gray-500"><a name="sec<%= kana_index + 1 %>"><%= kana %></a></h2>
 
       <div class="px-12 py-5">
         <ol class="list-decimal">
           <% @authors[kana_index].each do |person| %>
-          <li><a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" href="person<%= person.id %>.html#sakuhin_list_1"><%= person.name %></a>　(公開中：<%= person.published_works.count %>)　　<% if person.copyright_flag? %><strong>＊著作権存続＊</strong>　<% end %></li>
+          <li><a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" href="person<%= person.id %>.html#sakuhin_list_1"><%= person.name %></a>　(作業中：<%= person.unpublished_works.count %>)　　<% if person.copyright_flag? %><strong>＊著作権存続＊</strong>　<% end %></li>
           <% end %>
         </ol>
       </div>
@@ -66,18 +66,14 @@
 
       <footer class="pt-3 pb-14">
         <div>
-          <span class="pr-3">●作家リスト：公開中</span>
-          <span class="text-red-500 font-bold">[あ]</span>
-          <span><a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" href="person_ka.html">[か]</a></span>
-          <span><a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" href="person_sa.html">[さ]</a></span>
-          <span><a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" href="person_ta.html">[た]</a></span>
-          <span><a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" href="person_na.html">[な]</a></span>
-          <span><a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" href="person_ha.html">[は]</a></span>
-          <span><a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" href="person_ma.html">[ま]</a></span>
-          <span><a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" href="person_ya.html">[や]</a></span>
-          <span><a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" href="person_ra.html">[ら]</a></span>
-          <span><a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" href="person_wa.html">[わ]</a></span>
-          <span><a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" href="person_zz.html">[他]</a></span>
+          <span class="pr-3">●作家リスト：作業中</span>
+          <% %w(a ka sa ta na ha ma ya ra wa zz).each do |kana| %>
+          <%   if kana == @kana %>
+          <span class="text-red-500 font-bold">[<%= kana %>]</span>
+          <%   else %>
+          <span><a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" href="person_inp_<%= kana %>.html">[<%= kana %>]</a></span>
+          <%   end %>
+          <% end %>
         </div>
         <div>
           <span class="pr-3">

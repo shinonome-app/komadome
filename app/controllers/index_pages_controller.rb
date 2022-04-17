@@ -3,24 +3,9 @@
 class IndexPagesController < ApplicationController
   include Pagy::Backend
 
-  ROMA2KANA = {a: 'あいうえお',
-               ka: 'かきくけこ',
-               sa: 'さしすせそ',
-               ta: 'たちつてと',
-               na: 'なにぬねの',
-               ha: 'はひふへほ',
-               ma: 'まみむめも',
-               ya: 'やゆよ',
-               ra: 'らりるれろ',
-               wa: 'わをん',
-               zz: ''
-              }
+  def index_top; end
 
-  def index_top
-  end
-
-  def index_all
-  end
+  def index_all; end
 
   def whatsnew
     @pagy, @works = pagy(Work.order(:started_on).all, items: 50)
@@ -33,7 +18,7 @@ class IndexPagesController < ApplicationController
   end
 
   def person_index
-    @kana_all = roma2kana(params[:id].to_sym).chars
+    @kana_all = roma2kana_chars(params[:id].to_sym)
     @kana = @kana_all[0]
 
     @authors = []
@@ -47,7 +32,7 @@ class IndexPagesController < ApplicationController
   end
 
   def person_all_index
-    @kana_all = roma2kana(params[:id].to_sym).chars
+    @kana_all = roma2kana_chars(params[:id].to_sym)
     @kana = @kana_all[0]
 
     @authors = []
@@ -62,7 +47,7 @@ class IndexPagesController < ApplicationController
 
   def person_all
     @authors = {}
-    ROMA2KANA.values.each do |value|
+    KanaUtils::ROMA2KANA_CHARS.each_value do |value|
       if value.empty?
         @authors['その他'] = Person.where('sortkey !~ ?', '^[あいうえおか-もやゆよら-ろわをんアイウエオカ-モヤユヨラ-ロワヲンヴ]')
       else
@@ -75,6 +60,48 @@ class IndexPagesController < ApplicationController
 
   def person_show
     @author = Person.find(params[:id])
+  end
+
+  def person_inp_index
+    @kana_all = roma2kana_chars(params[:id].to_sym)
+    @kana = @kana_all[0]
+
+    @authors = []
+    if @kana_all.empty?
+      @authors << Person.where('sortkey !~ ?', '^[あいうえおか-もやゆよら-ろわをんアイウエオカ-モヤユヨラ-ロワヲンヴ]')
+    else
+      @kana_all.each do |kana|
+        @authors << Person.where('sortkey like ?', "#{kana}%")
+      end
+    end
+  end
+
+  def work_index
+    params[:id_page] =~ /([kstnhmyrw]?[aiueo]|zz)(\d+)/
+    @id = Regexp.last_match(1)
+    @page = Regexp.last_match(2)
+
+    @kana = roma2kana_char(@id.to_sym)
+
+    @pagy, @works = if @kana.empty?
+               pagy(Work.where('sortkey !~ ?', '^[あいうえおか-もやゆよら-ろわをんアイウエオカ-モヤユヨラ-ロワヲンヴ]').order(:id).all, item: 20, page: @page)
+             else
+               pagy(Work.where('sortkey ~ ?', "^#{@kana}").order(:id).all, item: 20, page: @page)
+             end
+  end
+
+  def work_inp_index
+    params[:id_page] =~ /([kstnhmyrw]?[aiueo]|zz)(\d+)/
+    @id = Regexp.last_match(1)
+    @page = Regexp.last_match(2)
+
+    @kana = roma2kana_char(@id.to_sym)
+
+    @pagy, @works = if @kana.empty?
+               pagy(Work.where('sortkey !~ ?', '^[あいうえおか-もやゆよら-ろわをんアイウエオカ-モヤユヨラ-ロワヲンヴ]').order(:id).all, item: 20, page: @page)
+             else
+               pagy(Work.where('sortkey ~ ?', "^#{@kana}").order(:id).all, item: 20, page: @page)
+             end
   end
 
   def list_person_all
@@ -100,13 +127,17 @@ class IndexPagesController < ApplicationController
 
   private
 
-  def roma2kana(roma_id)
-    ROMA2KANA[roma_id]
+  def roma2kana_chars(roma_id)
+    ::KanaUtils.roma2kana_chars(roma_id)
+  end
+
+  def roma2kana_char(roma_id)
+    ::KanaUtils.roma2kana_char(roma_id)
   end
 
   def send_zip_file(filename)
     path = Rails.root.join('data', 'csv_zip', filename)
-    stat = File::stat(path)
-    send_file(path, filename: filename, length: stat.size)
+    stat = File.stat(path)
+    send_file(path, filename:, length: stat.size)
   end
 end
