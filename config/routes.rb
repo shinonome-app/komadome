@@ -42,7 +42,7 @@ Rails.application.routes.draw do
 
   resources :cards, only: [] do
     member do
-      get 'card:card_id', to: 'cards#card_show', constraints: { card_id: /\d+/ }
+      get 'card:card_id', to: 'cards#show', constraints: { card_id: /\d+/ }
     end
   end
 end
