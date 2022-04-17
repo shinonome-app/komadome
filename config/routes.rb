@@ -40,9 +40,5 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :cards, only: [] do
-    member do
-      get 'card:card_id', to: 'cards#show', constraints: { card_id: /\d+/ }
-    end
-  end
+  get 'cards/:person_id/card:card_id', to: 'cards#show', constraints: { person_id: /\d+/, card_id: /\d+/ }
 end
