@@ -62,6 +62,15 @@ gem 'pagy'
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem 'debug', platforms: %i[mri mingw x64_mingw]
+
+  # Ruby static analytics and lint
+  gem 'rubocop'
+  gem 'rubocop-rails', require: false
+  gem 'rubocop-rspec', require: false
+
+  # Makes dummy data for seeds
+  gem 'faker'
+  gem 'gimei'
 end
 
 group :development do
@@ -81,7 +90,3 @@ group :test do
   gem 'selenium-webdriver'
   gem 'webdrivers'
 end
-
-gem 'rubocop', '~> 1.28'
-gem 'rubocop-rails', '~> 2.14'
-gem 'rubocop-rspec', '~> 2.10'
