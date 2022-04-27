@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+=begin
 # Shinonome::User.connection.execute('TRUNCATE TABLE users;')
 Shinonome::User.create!(username: 'admin',
                         email: 'admin@example.com',
@@ -10,3 +11,4 @@ Shinonome::User.create!(username: 'admin',
                           email: "shinonome-user#{n}@example.com",
                           password: "shinonome-pass#{n}")
 end
+=end

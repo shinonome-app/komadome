@@ -11,7 +11,8 @@ selected_workers = Worker.order(:id).limit(10)
 person_id_list = Person.all.pluck(:id)
 person_a_id_list = Person.where('sortkey ~ ?', '^あ').all.pluck(:id)
 work_status_id_list = WorkStatus.all.pluck(:id)
-user_id_list = Shinonome::User.all.pluck(:id)
+# user_id_list = Shinonome::User.all.pluck(:id)
+user_id_list = (1..10).to_a
 
 FIRST_CHAR = 'あいうえおかきくけこさしすせそたちつてとなにぬねのはひふへほまみむめもやゆよらりるれろわをん★'
 

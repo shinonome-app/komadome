@@ -397,6 +397,5 @@ ActiveRecord::Schema[7.0].define(version: 2021_12_28_000000) do
   add_foreign_key "workfiles", "filetypes"
   add_foreign_key "workfiles", "works"
   add_foreign_key "works", "kana_types"
-  add_foreign_key "works", "users"
   add_foreign_key "works", "work_statuses"
 end
