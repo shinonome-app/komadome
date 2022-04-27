@@ -89,6 +89,10 @@ class Work < ApplicationRecord
     work_people.where(role_id: 1).first.person
   end
 
+  def card_person_id
+    sprintf("%06d", first_author.id)
+  end
+
   def first_teihon
     original_books.where(worktype: 1).first
   end

@@ -58,7 +58,10 @@
                 <% end %>
               </td>
               <td class="bg-white border-double border-2 border-gray-800">
-                <%= link_to work.title, card_path(person_id: work.first_author.id, card_id: work.id, format: :html), class: "text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" %>
+                <%= link_to work.title,
+                    card_path(person_id: work.card_person_id, card_id: work.id, format: :html),
+                    class: "text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" %>
+                <br><%= work.subtitle %>
               </td>
               <td class="bg-white border-double border-2 border-gray-800"><%= work.author_text %></td>
               <td class="bg-white border-double border-2 border-gray-800"><%= work.inputer_text %></td>

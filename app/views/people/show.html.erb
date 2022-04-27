@@ -120,7 +120,10 @@
         <ol class="list-decimal">
           <% @author.published_works.each do |work|  %>
           <li>
-            <a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" href="/cards/<%= sprintf("%06d", @author.id) %>/card<%= work.id %>.html"><%=work.title %></a> <%= work.subtitle %>
+            <%= link_to work.title,
+                card_path(person_id: work.card_person_id, card_id: work.id, format: :html),
+                class: "text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" %>
+            <%= work.subtitle %>
             <span class="px-4">（<%= work.kana_type.name %>、作品ID：<%= work.id %>）</span>
             <% work.work_people.order(:role_id).each do |work_person| %>
             <%   next if work_person.person_id == @author.id %>
