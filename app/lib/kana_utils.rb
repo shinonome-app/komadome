@@ -1,3 +1,6 @@
+# frozen_string_literal: true
+
+# Utility module for Hiragana/Katakana
 module KanaUtils
   ROMA2KANA_CHARS = { a: 'あいうえお',
                       ka: 'かきくけこ',

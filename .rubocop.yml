@@ -1,0 +1,72 @@
+# The behavior of RuboCop can be controlled via the .rubocop.yml
+# configuration file. It makes it possible to enable/disable
+# certain cops (checks) and to alter their behavior if they accept
+# any parameters. The file can be placed either in your home
+# directory or in some project directory.
+#
+# RuboCop will start looking for the configuration file in the directory
+# where the inspected file is and continue its way up to the root directory.
+#
+# See https://docs.rubocop.org/rubocop/configuration
+
+require:
+  - rubocop-rails
+  - rubocop-rspec
+
+AllCops:
+  NewCops: enable
+
+Layout/LineLength:
+  Max: 300
+
+Lint/EmptyBlock:
+  Exclude:
+    - "spec/factories/*"
+
+Metrics/AbcSize:
+  Max: 200
+
+Metrics/BlockLength:
+  Max: 200
+  Exclude:
+    - "db/schema.rb"
+
+Metrics/CyclomaticComplexity:
+  Max: 20
+
+Metrics/MethodLength:
+  Max: 200
+
+Metrics/PerceivedComplexity:
+  Max: 20
+
+Rails/I18nLocaleTexts:
+  Enabled: false
+
+Rails/SkipsModelValidations:
+  Exclude:
+    - "db/seeds/*"
+
+RSpec/MultipleMemoizedHelpers:
+  Max: 12
+
+Style/AsciiComments:
+  Enabled: false
+
+Style/Documentation:
+  Exclude:
+    - "db/migrate/*.rb"
+    - "app/controllers/**/*.rb"
+    - "app/helpers/**/*.rb"
+
+Style/HashSyntax:
+  Enabled: false
+
+Style/NumericLiterals:
+  Enabled: false
+
+Style/NumericPredicate:
+  Enabled: false
+
+Style/SymbolProc:
+  Enabled: false

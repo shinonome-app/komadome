@@ -7,14 +7,14 @@ class WhatsnewsController < ApplicationController
     # TODO: 新着情報に載せるタイミングを決める
     # とりあえずは去年にしないとseedデータ上の問題がある…
     date = '2021-01-01'
-    @pagy, @works = pagy(Work.order(started_on: :desc).where("started_on >= ?", date), items: 50)
+    @pagy, @works = pagy(Work.order(started_on: :desc).where('started_on >= ?', date), items: 50)
   end
 
   def index_year
     @year, @page = params[:year_page].split('_')
     logger.info("year:#{@year},#{params.inspect}")
     begin_date = "#{@year}-01-01"
-    end_date = "#{@year.to_i+1}-01-01"
-    @pagy, @works = pagy(Work.with_year_and_status(@year, 1).where("started_on >= ? AND started_on < ?", begin_date, end_date).order(started_on: :desc), items: 50, page: @page)
+    end_date = "#{@year.to_i + 1}-01-01"
+    @pagy, @works = pagy(Work.with_year_and_status(@year, 1).where('started_on >= ? AND started_on < ?', begin_date, end_date).order(started_on: :desc), items: 50, page: @page)
   end
 end

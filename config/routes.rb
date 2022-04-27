@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 
 ## CONSONANTS = ["a", "ka", "sa", "ta", "na", "ha", "ma", "ya", "ra", "wa", "zz"]
 
@@ -5,7 +6,6 @@ Rails.application.routes.draw do
   get '/index', to: 'top#index'
 
   root to: 'top#index'
-
 
   resources :index_pages, only: [] do
     collection do
@@ -16,13 +16,11 @@ Rails.application.routes.draw do
       get 'person_:id', to: 'people#index', constraints: { id: /[kstnhmyrw]?a|zz/ }
       get 'person:id', to: 'people#show', constraints: { id: /\d+/ }
 
-
       get 'person_all_:id', to: 'index_pages#person_all_index', constraints: { id: /[kstnhmyrw]?a|zz/ }
 
       get 'person_inp_:id', to: 'index_pages#person_inp_index', constraints: { id: /[kstnhmyrw]?a|zz/ }
 
       get 'person_all', to: 'index_pages#person_all'
-
 
       get 'list_inp:id_page', to: 'index_pages#list_inp_show', constraints: { id_page: /\d+_\d+/ }
 
@@ -35,10 +33,10 @@ Rails.application.routes.draw do
       get 'whatsnew_:year_page', to: 'whatsnews#index_year', constraints: { year_page: /\d\d\d\d_\d+/ }, as: :whatsnew_year
 
       # Download zip files
-      get 'list_person_all', to: 'downloads#list_person_all', constraints: {format: 'zip'}
-      get 'list_person_all_extended', to: 'downloads#list_person_all_extended', constraints: {format: 'zip'}
-      get 'list_person_all_utf8', to: 'downloads#list_person_all_utf8', constraints: {format: 'zip'}
-      get 'list_person_all_extended_utf8', to: 'downloads#list_person_all_extended_utf8', constraints: {format: 'zip'}
+      get 'list_person_all', to: 'downloads#list_person_all', constraints: { format: 'zip' }
+      get 'list_person_all_extended', to: 'downloads#list_person_all_extended', constraints: { format: 'zip' }
+      get 'list_person_all_utf8', to: 'downloads#list_person_all_utf8', constraints: { format: 'zip' }
+      get 'list_person_all_extended_utf8', to: 'downloads#list_person_all_extended_utf8', constraints: { format: 'zip' }
     end
   end
 

@@ -84,7 +84,7 @@ WorkWorker.insert_all(work_workers)
 ## WorkPeople
 work_people = work_id_list.map do |n|
   author_id = if n % 10 == 0
-                person_a_id_list[0,2].sample
+                person_a_id_list[0, 2].sample
               else
                 person_id_list.sample
               end
