@@ -79,3 +79,7 @@ group :test do
   gem "selenium-webdriver"
   gem "webdrivers"
 end
+
+gem "rubocop", "~> 1.28"
+gem "rubocop-rails", "~> 2.14"
+gem "rubocop-rspec", "~> 2.10"
