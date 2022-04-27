@@ -42,23 +42,7 @@
         <div class="w-full">
 
           <div class="text-right py-4">
-          ページ:
-          <span class="text-2xl">1</span>
-          <%= link_to "2",
-              sakuhin_index_pages_path(id_page: "#{@id}2", format: :html),
-              class: "text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" %>
-          <%= link_to "3",
-              sakuhin_index_pages_path(id_page: "#{@id}3", format: :html),
-              class: "text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" %>
-          <a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" href="#sec4">4</a>
-          <a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" href="#sec5">5</a>
-          <a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" href="#sec5">6</a>
-          <a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" href="#sec5">7</a>
-          <a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" href="#sec5">8</a>
-          <a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" href="#sec5">9</a>
-          <a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" href="#sec5">10</a>
-          <span class="px-2">&nbsp;</span>
-          <a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" href="#sec5">次の50件</a>
+            <%= render partial: "inp_pagynav", locals: {pagy: @pagy} %>
           </div>
 
           <table class="border-double border-2 border-gray-800 w-full">
@@ -77,12 +61,10 @@
 
             <% @works.each_with_index do |work, work_index| %>
             <tr>
-              <td class="bg-white border-double border-2 border-gray-800 text-right"><%= work_index+1 %></td>
+              <td class="bg-white border-double border-2 border-gray-800 text-right"><%= work_index+1 + (@page.to_i - 1) * @pagy.items %></td>
               <td class="bg-white border-double border-2 border-gray-800">
-                <a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" href="/cards/<%= sprintf("%06d", work.first_author.id) %>/card<%= work.id %>.html">
-                  <%= work.title %>(<%= work.id %>)<br >
-                  <%= work.subtitle %>
-                </a>
+                <%= work.title %>(<%= work.id %>)<br >
+                <%= work.subtitle %>
               </td>
               <td class="bg-white border-double border-2 border-gray-800"><%= work.kana_type.name %></td>
               <td class="bg-white border-double border-2 border-gray-800"><%= work.first_author.name %>(<%= work.first_author.id %>)</td>
@@ -97,19 +79,7 @@
             <% end %>
           </table>
           <div class="text-right py-4">
-            ページ:
-            <a class="text-2xl" href="#sec1">1</a>
-            <a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" href="#sec2">2</a>
-            <a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" href="#sec3">3</a>
-            <a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" href="#sec4">4</a>
-            <a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" href="#sec5">5</a>
-            <a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" href="#sec5">6</a>
-            <a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" href="#sec5">7</a>
-            <a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" href="#sec5">8</a>
-            <a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" href="#sec5">9</a>
-            <a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" href="#sec5">10</a>
-            <span class="px-2">&nbsp;</span>
-            <a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" href="#sec5">次の50件</a>
+            <%= render partial: "inp_pagynav", locals: {pagy: @pagy} %>
           </div>
         </div>
       </div>
