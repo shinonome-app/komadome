@@ -31,8 +31,8 @@ Rails.application.routes.draw do
       get 'sakuhin_inp_:id_page', to: 'index_pages#work_inp_index', constraints: { id_page: /([kstnhmyrw]?[aiueo]|zz)\d+/ }, as: :sakuhin_inp
 
       # Whatsnew
-      get 'whatsnew:page', to: 'whatsnews#index', constraints: { page: /\d+/ }
-      get 'whatsnew_:year_page', to: 'whatsnews#index_year', constraints: { year_page: /\d\d\d\d_\d+/ }
+      get 'whatsnew:page', to: 'whatsnews#index', constraints: { page: /\d+/ }, as: :whatsnew
+      get 'whatsnew_:year_page', to: 'whatsnews#index_year', constraints: { year_page: /\d\d\d\d_\d+/ }, as: :whatsnew_year
 
       # Download zip files
       get 'list_person_all', to: 'downloads#list_person_all', constraints: {format: 'zip'}
@@ -42,5 +42,5 @@ Rails.application.routes.draw do
     end
   end
 
-  get 'cards/:person_id/card:card_id', to: 'cards#show', constraints: { person_id: /\d+/, card_id: /\d+/ }
+  get 'cards/:person_id/card:card_id', to: 'cards#show', constraints: { person_id: /\d+/, card_id: /\d+/ }, as: :card
 end

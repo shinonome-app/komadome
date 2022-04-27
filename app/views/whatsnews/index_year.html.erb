@@ -26,44 +26,41 @@
 
         <div class="lg:w-3/4">
 
-        <div class="text-right py-4">
-          ページ:
-          <a class="text-2xl" href="#sec1">1</a>
-          <a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" href="#sec2">2</a>
-          <a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" href="#sec3">3</a>
-          <a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" href="#sec4">4</a>
-          <a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" href="#sec5">5</a>
-          <span class="px-2">&nbsp;</span>
-          <a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" href="#sec5">次の50件</a>
+          <div class="text-right py-4">
+            <%= render partial: "pagynav_year", locals: {pagy: @pagy, year: @year} %>
+          </div>
+
+          <table class="border-double border-2 border-gray-800 w-full">
+            <tr class="w-770 border-double border-2 border-gray-800">
+              <th class="w-100 font-normal bg-yellow-100 border-double border-2 border-gray-800">公開日</th>
+              <th class="w-220 font-normal bg-yellow-100 border-double border-2 border-gray-800">作品名<br>副題 </th>
+              <th class="w-110 font-normal bg-yellow-100 border-double border-2 border-gray-800">著者名 </th>
+              <th class="w-110 font-normal bg-yellow-100 border-double border-2 border-gray-800">入力者名</th>
+              <th class="w-110 font-normal bg-yellow-100 border-double border-2 border-gray-800">校正者名</th>
+              <th class="w-110 font-normal bg-yellow-100 border-double border-2 border-gray-800">翻訳者名等 </th>
+            </tr>
+            <% @works.each do |work| %>
+            <tr>
+              <td class="bg-white border-double border-2 border-gray-800"><%= work.started_on %></td>
+              <td class="bg-white border-double border-2 border-gray-800">
+                <a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" href="/cards/001569/card<%= work.id %>.html">
+                  <%= work.title %><br>
+                  <%= work.subtitle %>
+                </a><br>
+              </td>
+              <td class="bg-white border-double border-2 border-gray-800"><%= work.author_text %></td>
+              <td class="bg-white border-double border-2 border-gray-800"><%= work.inputer_text %></td>
+              <td class="bg-white border-double border-2 border-gray-800"><%= work.proofreader_text %></td>
+              <td class="bg-white border-double border-2 border-gray-800"><%= work.translator_text %></td>
+            </tr>
+            <% end %>
+
+          </table>
+
+          <div class="text-right py-4">
+            <%= render partial: "pagynav_year", locals: {pagy: @pagy, year: @year} %>
+          </div>
         </div>
-
-      <table class="border-double border-2 border-gray-800">
-        <tr class="w-770 border-double border-2 border-gray-800">
-          <th class="w-100 font-normal bg-yellow-100 border-double border-2 border-gray-800">公開日</th>
-          <th class="w-220 font-normal bg-yellow-100 border-double border-2 border-gray-800">作品名<br>副題 </th>
-          <th class="w-110 font-normal bg-yellow-100 border-double border-2 border-gray-800">著者名 </th>
-          <th class="w-110 font-normal bg-yellow-100 border-double border-2 border-gray-800">入力者名</th>
-          <th class="w-110 font-normal bg-yellow-100 border-double border-2 border-gray-800">校正者名</th>
-          <th class="w-110 font-normal bg-yellow-100 border-double border-2 border-gray-800">翻訳者名等 </th>
-        </tr>
-        <% @works.each do |work| %>
-        <tr>
-          <td class="bg-white border-double border-2 border-gray-800"><%= work.started_on %></td>
-          <td class="bg-white border-double border-2 border-gray-800">
-            <a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" href="/cards/001569/card<%= work.id %>.html">
-              <%= work.title %><br>
-              <%= work.subtitle %>
-            </a><br>
-          </td>
-          <td class="bg-white border-double border-2 border-gray-800"><%= work.author_text %></td>
-          <td class="bg-white border-double border-2 border-gray-800"><%= work.inputer_text %></td>
-          <td class="bg-white border-double border-2 border-gray-800"><%= work.proofreader_text %></td>
-          <td class="bg-white border-double border-2 border-gray-800"><%= work.translator_text %></td>
-        </tr>
-        <% end %>
-
-      </table>
-      </div>
       </div>
 
       <div class="text-right py-4">
