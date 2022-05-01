@@ -100,7 +100,7 @@ ActiveRecord::Schema[7.0].define(version: 2021_12_28_000000) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "news", force: :cascade do |t|
+  create_table "news_entries", force: :cascade do |t|
     t.date "published_on"
     t.text "title", null: false
     t.text "body", null: false
