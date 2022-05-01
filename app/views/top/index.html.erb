@@ -11,17 +11,7 @@
             <div class="px-2">
               ●
               <a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline"
-                 href="./index.html">トップ</a>
-            </div>
-            <div class="px-2">
-              ●
-              <a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline"
-                 href="./index.html">インデックス</a>
-            </div>
-            <div class="px-2">
-              ●
-              <a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline"
-                 href="./index.html">作家リスト</a>
+                 href="/index.html">トップ</a>
             </div>
           </div>
 
@@ -38,27 +28,44 @@
         </nav>
       </header>
 
-      <h1 class="flex justify-center py-3 text-2xl font-semibold bg-yellow-100 border border-y-gray-500">(top)</h1>
+      <h1 class="flex justify-center py-3 text-2xl font-semibold bg-yellow-100 border border-y-gray-500">
+        (仮)トップページ
+      </h1>
 
 
       <p>
-        <a href="/index_pages/index_top.html">
-          総合インデックス
+        <a href="/index_pages/index_top.html" class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline">
+          →総合インデックス
         </a>
       </p>
       <p>
-        <a href="/index_pages/index_all.html">
-          登録全作家インデックス
+        <a href="/index_pages/index_all.html" class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline">
+          →登録全作家インデックス
         </a>
       </p>
       <p>
-        <a href="/index_pages/whatsnew1.html">
-          新着情報
+        <a href="/index_pages/whatsnew1.html" class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline">
+          →新着情報
         </a>
       </p>
       <p>
-        link3
+        <a href="/index_pages/whatsnew1.html" class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline">
+          →そらもよう
+        </a>
       </p>
+      <div class="px-12 py-5">
+        最新公開作品：<%= @new_works_published_on %>
+        <ol class="list-decimal">
+          <% @new_works.each do |work|  %>
+          <li>
+            <%= link_to work.title,
+                card_path(person_id: work.card_person_id, card_id: work.id, format: :html),
+                class: "text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" %>
+            <%= work.subtitle %>
+          </li>
+          <% end %>
+        </ol>
+      </div>
 
       <hr class="border-gray-400">
 
@@ -66,11 +73,7 @@
         <div>
           <span class="pr-3">
             ●
-            <a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" href="./index.html">トップ</a>
-          </span>
-          <span class="pr-3">
-            ●
-            <a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" href="index_top.html">インデックス</a>
+            <a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" href="/index.html">トップ</a>
           </span>
         </div>
       </footer>
