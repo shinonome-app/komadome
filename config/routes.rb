@@ -22,7 +22,7 @@ Rails.application.routes.draw do
 
       get 'person_all', to: 'index_pages#person_all'
 
-      get 'list_inp:id_page', to: 'index_pages#list_inp_show', constraints: { id_page: /\d+_\d+/ }
+      get 'list_inp:id_page', to: 'index_pages#list_inp_show', constraints: { id_page: /\d+_\d+/ }, as: :list_inp
 
       get 'sakuhin_:id_page', to: 'index_pages#work_index', constraints: { id_page: /([kstnhmyrw]?[aiueo]|zz)\d+/ }, as: :sakuhin
 

@@ -46,15 +46,7 @@
         <div>
 
           <div class="text-right py-4">
-          ページ:
-          <a class="text-2xl" href="#sec1">1</a>
-          <a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" href="#sec2">2</a>
-          <a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" href="#sec3">3</a>
-          <a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" href="#sec4">4</a>
-          <a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" href="#sec5">5</a>
-          <a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" href="#sec5">6</a>
-          <span class="px-2">&nbsp;</span>
-          <a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" href="#sec5">次の50件</a>
+            <%= render partial: "list_inp_pagynav", locals: {pagy: @pagy} %>
           </div>
 
           <table class="border-double border-2 border-gray-800">
@@ -69,7 +61,7 @@
               <th class="w-110 font-normal bg-yellow-100 border-double border-2 border-gray-800">入力に使用した版</th>
             </tr>
 
-            <% @author.unpublished_works.each_with_index do |work, work_index|  %>
+            <% @works.each_with_index do |work, work_index|  %>
             <tr>
               <td class="bg-white border-double border-2 border-gray-800 text-right"><%= work_index + 1 %></td>
               <td class="bg-white border-double border-2 border-gray-800"><%= work.title %>(<%= work.id %>)</td>
@@ -82,16 +74,9 @@
             </tr>
             <% end %>
           </table>
+
           <div class="text-right py-4">
-            ページ:
-            <a class="text-2xl" href="#sec1">1</a>
-            <a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" href="#sec2">2</a>
-            <a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" href="#sec3">3</a>
-            <a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" href="#sec4">4</a>
-            <a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" href="#sec5">5</a>
-            <a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" href="#sec5">6</a>
-            <span class="px-2">&nbsp;</span>
-            <a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" href="#sec5">次の50件</a>
+            <%= render partial: "list_inp_pagynav", locals: {pagy: @pagy} %>
           </div>
         </div>
       </div>
@@ -106,11 +91,11 @@
         <div>
           <span class="pr-3">
             ●
-            <a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" href="../index.html">トップ</a>
+            <a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" href="/index.html">トップ</a>
           </span>
           <span class="pr-3">
             ●
-            <a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" href="index_top.html">インデックス</a>
+            <a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" href="/index_pages/index_top.html">インデックス</a>
           </span>
         </div>
       </footer>

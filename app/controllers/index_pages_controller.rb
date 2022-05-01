@@ -79,6 +79,7 @@ class IndexPagesController < ApplicationController
   def list_inp_show
     @id, @page = params[:id_page].split('_')
     @author = Person.find(@id)
+    @pagy, @works = pagy(@author.unpublished_works.order(:id), item: 20, page: @page.to_i)
   end
 
   private
