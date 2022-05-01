@@ -40,5 +40,10 @@ Rails.application.routes.draw do
     end
   end
 
+  scope '/soramoyou' do
+    get 'soramoyouindex', to: 'news_entries#index', as: :soramoyou_index
+    get 'soramoyou:year', to: 'news_entries#index_year', constraints: { year: /\d\d\d\d/ }, as: :soramoyou_year
+  end
+
   get 'cards/:person_id/card:card_id', to: 'cards#show', constraints: { person_id: /\d+/, card_id: /\d+/ }, as: :card
 end
