@@ -19,6 +19,8 @@ class PeopleController < ApplicationController
 
   def show
     @author = Person.find(params[:id])
+    @kana, index = KanaUtils.kana2roma_chars(@author.sortkey.first)
+    @kana_fragment = "sec#{index + 1}"
   end
 
   private

@@ -35,4 +35,13 @@ module KanaUtils
     ROMA2KANA[roma_sym]
   end
   module_function :roma2kana_char
+
+  def kana2roma_chars(kana)
+    ROMA2KANA_CHARS.each_pair do |roma, kana_str|
+      idx = kana_str.index(kana)
+      return roma, idx if idx
+    end
+    [:zz, 0]
+  end
+  module_function :kana2roma_chars
 end

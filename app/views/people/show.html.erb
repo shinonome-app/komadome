@@ -25,13 +25,13 @@
             <div class="px-2">
               ●作家リスト:
               <a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline"
-                 href="/index_pages/person_<%= %>.html#sec1">公開</a>
+                 href="/index_pages/person_<%= @kana %>.html#<%= @kana_fragment %>">公開</a>
               ／
               <a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline"
-                 href="/index_pages/person_inp_<%= %>.html#sec1">作業</a>
+                 href="/index_pages/person_inp_<%= @kana %>.html#<%= @kana_fragment %>">作業</a>
               ／
               <a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline"
-                 href="/index_pages/person_all_<%= %>.html#sec1">全</a>
+                 href="/index_pages/person_all_<%= @kana %>.html#<%= @kana_fragment %>">全</a>
             </div>
             <div class="px-2">●<span class="current font-bold text-red-500">作家別作品リスト</span></div>
           </div>
