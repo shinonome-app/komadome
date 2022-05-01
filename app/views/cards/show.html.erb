@@ -1,10 +1,11 @@
 <% content_for(:bgcolor) { @work.copyright? ? 'bg-rose-50' : 'bg-sky-50' } %>
+<% content_for(:title) { "図書カード：#{@work.title}" } %>
     <div id="app" class="container mx-auto max-w-5xl">
       <div id="top" name="top">&nbsp;</div>
 
       <header class="flex items-center justify-between">
         <a href="/" class="md:hidden flex justify-between px-2">
-		  <img src="./images/top_logo.png" alt="Logo" class="h-8 w-8" />
+		  <img src="/images/top_logo.png" alt="Logo" class="h-8 w-8" />
 	    </a>
         <span class="hidden md:flex">&nbsp;</span>
         <nav class="flex justify-end">
@@ -130,8 +131,7 @@
             <th class="text-left text-red-800 align-top">備考：</th>
             <td>
               <%= @work.note %>
-              <div id="link"></div>
-              <script type="text/javascript" src="../link.js"></script>
+              <%= render partial: "link" %>
             </td>
           </tr>
         </table>
