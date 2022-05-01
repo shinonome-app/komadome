@@ -13,8 +13,8 @@ Rails.application.routes.draw do
       get 'index_all'
 
       ## People
-      get 'person_:id', to: 'people#index', constraints: { id: /[kstnhmyrw]?a|zz/ }
-      get 'person:id', to: 'people#show', constraints: { id: /\d+/ }
+      get 'person_:id', to: 'people#index', constraints: { id: /[kstnhmyrw]?a|zz/ }, as: :people
+      get 'person:id', to: 'people#show', constraints: { id: /\d+/ }, as: :person
 
       get 'person_all_:id', to: 'index_pages#person_all_index', constraints: { id: /[kstnhmyrw]?a|zz/ }
 

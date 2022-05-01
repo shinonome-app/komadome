@@ -25,8 +25,9 @@
             </div>
             <div class="px-2">
               ●
-              <a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline"
-                href="/index_pages/person<%= @work.first_author.id %>.html">作家別作品リスト</a>
+              <%= link_to "作家別作品リスト",
+                       person_index_pages_path(id: @work.first_author.id, format: :html),
+                       class: "text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" %>
             </div>
             <div class="px-2">●<span class="current font-bold text-red-500">図書カード</span></div>
 
@@ -73,7 +74,9 @@
             <th class="text-left text-red-800 w-1/6">著者名：</th>
             <td>
               <% @work.work_people.where(role_id: 1).each do |work_person| %>
-              <a class="underline text-blue-700 text-1xl" href="/index_pages/person<%= work_person.person_id %>.html" ><%= work_person.person.name %></a>
+              <%= link_to work_person.person.name,
+                  person_index_pages_path(id: work_person.person_id, format: :html),
+                  class: "underline text-blue-700 text-1xl" %>
               <% end %>
             </td>
           </tr>
@@ -147,7 +150,12 @@
         <% end %>
         <table class="table-fixed w-full" summary="作家データ">
           <tr><th class="text-left text-red-800 w-1/6 align-top">分類：</th><td><%= work_person.role.name %></td></tr>
-          <tr><th class="text-left text-red-800 w-1/6 align-top">作家名：</th><td><a class="underline text-blue-700" href="/index_pages/person<%= person.id %>.html"><%= person.name %></a></td></tr>
+          <tr>
+            <th class="text-left text-red-800 w-1/6 align-top">作家名：</th>
+            <td><%= link_to person.name,
+                    person_index_pages_path(id: person.id, format: :html),
+                    class: "underline text-blue-700" %></td>
+          </tr>
           <tr><th class="text-left text-red-800 w-1/6 align-top">作家名読み：</th><td><%= person.name_kana %></td></tr>
           <tr><th class="text-left text-red-800 w-1/6 align-top">ローマ字表記：</th><td><%= person.name_en %></td></tr>
           <tr><th class="text-left text-red-800 w-1/6 align-top">生年：</th><td><%= person.born_on %></td></tr>
