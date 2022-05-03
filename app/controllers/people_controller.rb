@@ -18,9 +18,9 @@ class PeopleController < ApplicationController
   end
 
   def show
-    @author = Person.find(params[:id])
-    @kana, index = KanaUtils.kana2roma_chars(@author.sortkey.first)
-    @kana_fragment = "sec#{index + 1}"
+    person = Person.find(params[:id])
+
+    render ::Pages::People::ShowPageComponent.new(person: person)
   end
 
   private
