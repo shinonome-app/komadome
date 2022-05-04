@@ -51,15 +51,23 @@ namespace :build do
     builder.copy_precompiled_assets
     builder.copy_public_images
 
+    builder.build_html(::Pages::Top::IndexPageComponent.new,
+                       path: 'index.html')
+
     builder.build_html(::Pages::IndexPages::IndexTopPageComponent.new,
                        path: 'index_pages/index_top.html')
 
     builder.build_html(::Pages::IndexPages::IndexAllPageComponent.new,
                        path: 'index_pages/index_all.html')
 
+    builder.build_html(::Pages::IndexPages::PersonAllPageComponent.new,
+                       path: 'index_pages/person_all.html')
+
     KanaUtils::ROMA2KANA_CHARS.keys.each do |key|
       builder.build_html(::Pages::People::IndexPageComponent.new(id: key),
                          path: "index_pages/person_#{key}.html")
+      builder.build_html(::Pages::IndexPages::PersonAllIndexPageComponent.new(id: key),
+                         path: "index_pages/person_all_#{key}.html")
     end
 
     Person.all.find_each do |person|
