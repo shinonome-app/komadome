@@ -3,9 +3,13 @@
 class IndexPagesController < ApplicationController
   include Pagy::Backend
 
-  def index_top; end
+  def index_top
+    render ::Pages::IndexPages::IndexTopPageComponent.new
+  end
 
-  def index_all; end
+  def index_all
+    render ::Pages::IndexPages::IndexAllPageComponent.new
+  end
 
   def person_all_index
     @kana_all = roma2kana_chars(params[:id].to_sym)
