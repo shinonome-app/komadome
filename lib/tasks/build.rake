@@ -7,32 +7,42 @@ class StaticPageBuilder
     @target_dir = target_dir || Rails.root.join('build')
   end
 
-  def clean
-    begin
-      FileUtils.remove_entry_secure(@target_dir)
-    rescue StandardError
-      # noop
-    end
+  def copy_precompiled_assets
+    Rake::Task["assets:precompile"].invoke
+    FileUtils.mkdir_p(@target_dir.join('assets'))
+    FileUtils.cp_r(Rails.root.join('public/assets'), @target_dir)
+  end
+
+  def force_clean
+    FileUtils.remove_entry_secure(@target_dir, :force)
   end
 
   def build_html(component, path:)
     html = ApplicationController.renderer.render(component, layout: nil)
     full_path = @target_dir.join(path)
+    puts "Generate #{full_path}"
+    write_with_mkdir(full_path, html)
+  end
+
+  private
+
+  def write_with_mkdir(full_path, html)
     dir = File.dirname(full_path)
     FileUtils.mkdir_p(dir)
-    puts "Generate #{full_path}"
     File.write(full_path, html)
   end
 end
 
 namespace :build do
-  desc 'Generate all people#show pages'
+  desc 'Generate all pages'
   task all: :environment do
     start_time = Time.current
 
     builder = StaticPageBuilder.new
 
-    builder.clean
+    builder.force_clean
+
+    builder.copy_precompiled_assets
 
     builder.build_html(::Pages::IndexPages::IndexTopPageComponent.new,
                        path: 'index_pages/index_top.html')
