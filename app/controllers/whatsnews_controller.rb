@@ -1,13 +1,20 @@
 # frozen_string_literal: true
 
 class WhatsnewsController < ApplicationController
+  # TODO: 新着情報に載せるタイミングを決める
+  # とりあえずは去年にしないとseedデータ上の問題がある…
+  LIMIT_DATE = '2021-01-01'
+  ITEM_COUNT = 50
+
   include Pagy::Backend
 
   def index
-    # TODO: 新着情報に載せるタイミングを決める
-    # とりあえずは去年にしないとseedデータ上の問題がある…
-    date = '2021-01-01'
-    @pagy, @works = pagy(Work.order(started_on: :desc).where('started_on >= ?', date), items: 50)
+    date = LIMIT_DATE
+    pagy, works = pagy(Work.order(started_on: :desc).where('started_on >= ?', date), items: ITEM_COUNT)
+
+    render ::Pages::Whatsnew::IndexPageComponent.new(date: date,
+                                                     pagy: pagy,
+                                                     works: works)
   end
 
   def index_year

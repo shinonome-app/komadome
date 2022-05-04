@@ -24,7 +24,8 @@ class StaticPageBuilder
 
   def build_html(component, path:)
     html = ApplicationController.renderer.render(component, layout: nil)
-    full_path = @target_dir.join(path)
+    rel_path = path.sub(%r(^/), '')
+    full_path = @target_dir.join(rel_path)
     puts "Generate #{full_path}"
     write_with_mkdir(full_path, html)
   end
@@ -63,6 +64,22 @@ namespace :build do
     builder.build_html(::Pages::IndexPages::PersonAllPageComponent.new,
                        path: 'index_pages/person_all.html')
 
+    date = WhatsnewsController::LIMIT_DATE
+    item_count = WhatsnewsController::ITEM_COUNT
+    works = Work.order(started_on: :desc).where('started_on >= ?', date)
+    total_page = (works.count / item_count) + 1
+    (1..total_page).each do |page|
+      pagy = Pagy.new(count: works.count,
+                      page: page,
+                      items: item_count)
+      current_works = works.offset(pagy.offset).limit(pagy.items)
+      path = url.whatsnew_index_pages_path(page: page, format: :html)
+      builder.build_html(::Pages::Whatsnew::IndexPageComponent.new(date: date,
+                                                                   pagy: pagy,
+                                                                   works: current_works),
+                         path: path)
+    end
+
     KanaUtils::ROMA2KANA_CHARS.keys.each do |key|
       builder.build_html(::Pages::People::IndexPageComponent.new(id: key),
                          path: "index_pages/person_#{key}.html")
@@ -78,7 +95,7 @@ namespace :build do
                                                                card_id: card_id),
                            path: url.card_path(person_id: format('%06d', person.id),
                                                card_id: card_id,
-                                               format: :html).sub(%r(^/), ''))
+                                               format: :html))
       end
     end
 
