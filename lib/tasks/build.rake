@@ -3,8 +3,8 @@
 require 'fileutils'
 
 class StaticPageBuilder
-  def initialize(target_dir)
-    @target_dir = target_dir
+  def initialize(target_dir: nil)
+    @target_dir = target_dir || Rails.root.join('build')
   end
 
   def clean
@@ -30,8 +30,7 @@ namespace :build do
   task all: :environment do
     start_time = Time.current
 
-    target_dir = Rails.root.join('build')
-    builder = StaticPageBuilder.new(target_dir)
+    builder = StaticPageBuilder.new
 
     builder.clean
 
