@@ -85,7 +85,7 @@
   <% unless pagy.next %>
   <div class="flex justify-center p-1">
     <div>
-      <%   (2001..2021).each do |year| %>
+      <%   (FIRST_YEAR..prev_year).each do |year| %>
       <%= link_to "#{year}年",
           whatsnew_year_index_pages_path(year_page: "#{year}_1", format: :html),
           class: "text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" %>
