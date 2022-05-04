@@ -43,6 +43,7 @@ namespace :build do
   task all: :environment do
     start_time = Time.current
 
+    url = Rails.application.routes.url_helpers
     builder = StaticPageBuilder.new
 
     builder.force_clean
@@ -64,6 +65,13 @@ namespace :build do
     Person.all.find_each do |person|
       builder.build_html(Pages::People::ShowPageComponent.new(person: person),
                          path: "index_pages/person#{person.id}.html")
+      person.works.all.pluck(:id).each do |card_id|
+        builder.build_html(Pages::Cards::ShowPageComponent.new(person_id: person.id,
+                                                               card_id: card_id),
+                           path: url.card_path(person_id: format('%06d', person.id),
+                                               card_id: card_id,
+                                               format: :html).sub(%r(^/), ''))
+      end
     end
 
     puts "Done: #{Time.current - start_time}"
