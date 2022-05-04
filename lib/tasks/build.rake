@@ -53,6 +53,9 @@ namespace :build do
     builder.build_html(::Pages::IndexPages::IndexTopPageComponent.new,
                        path: 'index_pages/index_top.html')
 
+    builder.build_html(::Pages::IndexPages::IndexAllPageComponent.new,
+                       path: 'index_pages/index_all.html')
+
     KanaUtils::ROMA2KANA_CHARS.keys.each do |key|
       builder.build_html(::Pages::People::IndexPageComponent.new(id: key),
                          path: "index_pages/person_#{key}.html")
