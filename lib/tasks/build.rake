@@ -13,6 +13,11 @@ class StaticPageBuilder
     FileUtils.cp_r(Rails.root.join('public/assets'), @target_dir)
   end
 
+  def copy_public_images
+    FileUtils.mkdir_p(@target_dir.join('images'))
+    FileUtils.cp_r(Rails.root.join('public/images'), @target_dir)
+  end
+
   def force_clean
     FileUtils.remove_entry_secure(@target_dir, :force)
   end
@@ -43,6 +48,7 @@ namespace :build do
     builder.force_clean
 
     builder.copy_precompiled_assets
+    builder.copy_public_images
 
     builder.build_html(::Pages::IndexPages::IndexTopPageComponent.new,
                        path: 'index_pages/index_top.html')
