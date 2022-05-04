@@ -66,18 +66,31 @@ namespace :build do
 
     date = WhatsnewsController::LIMIT_DATE
     item_count = WhatsnewsController::ITEM_COUNT
+
     works = Work.order(started_on: :desc).where('started_on >= ?', date)
     total_page = (works.count / item_count) + 1
     (1..total_page).each do |page|
-      pagy = Pagy.new(count: works.count,
-                      page: page,
-                      items: item_count)
+      pagy = Pagy.new(count: works.count, page: page, items: item_count)
       current_works = works.offset(pagy.offset).limit(pagy.items)
       path = url.whatsnew_index_pages_path(page: page, format: :html)
       builder.build_html(::Pages::Whatsnew::IndexPageComponent.new(date: date,
                                                                    pagy: pagy,
                                                                    works: current_works),
                          path: path)
+    end
+
+    (::Pages::Whatsnew::IndexPageComponent::FIRST_YEAR..2020).each do |year|
+      works = Work.with_year_and_status(year, 1).where('started_on >= ? AND started_on < ?', "#{year}-01-01", "#{year+1}-01-01").order(started_on: :desc)
+      total_page = (works.count / item_count) + 1
+      (1..total_page).each do |page|
+        pagy = Pagy.new(count: works.count, page: page, items: item_count)
+        current_works = works.offset(pagy.offset).limit(pagy.items)
+        path = url.whatsnew_year_index_pages_path(year_page: "#{year}_#{page}", format: :html)
+        builder.build_html(::Pages::Whatsnew::IndexYearPageComponent.new(year: year,
+                                                                         pagy: pagy,
+                                                                         works: current_works),
+                           path: path)
+      end
     end
 
     KanaUtils::ROMA2KANA_CHARS.keys.each do |key|
