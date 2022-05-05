@@ -106,8 +106,12 @@ namespace :build do
     KanaUtils::ROMA2KANA_CHARS.keys.each do |key|
       builder.build_html(::Pages::People::IndexPageComponent.new(id: key),
                          path: "index_pages/person_#{key}.html")
+
       builder.build_html(::Pages::IndexPages::PersonAllIndexPageComponent.new(id: key),
                          path: "index_pages/person_all_#{key}.html")
+
+      builder.build_html(::Pages::IndexPages::PersonInpIndexPageComponent.new(id: key),
+                         path: "index_pages/person_inp_#{key}.html")
     end
 
     Person.all.find_each do |person|
