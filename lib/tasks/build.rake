@@ -160,13 +160,26 @@ namespace :build do
     Person.all.find_each do |person|
       builder.build_html(Pages::People::ShowPageComponent.new(person: person),
                          path: "index_pages/person#{person.id}.html")
-      person.works.all.pluck(:id).each do |card_id|
+      person.works.published.pluck(:id).each do |card_id|
         builder.build_html(Pages::Cards::ShowPageComponent.new(person_id: person.id,
                                                                card_id: card_id),
                            path: url.card_path(person_id: format('%06d', person.id),
                                                card_id: card_id,
                                                format: :html))
       end
+
+      item_count = 20
+      works = person.works.unpublished
+      total_page = works.count.fdiv(item_count).ceil
+      (1..total_page).each do |page|
+        pagy = Pagy.new(count: works.count, items: item_count, page: page)
+        current_works = works.offset(pagy.offset).limit(pagy.items)
+        builder.build_html(Pages::IndexPages::ListInpShowPageComponent.new(author: person,
+                                                                           pagy: pagy,
+                                                                           works: current_works),
+                           path: "index_pages/list_inp#{person.id}_#{page}.html")
+      end
+
     end
 
     puts "Done: #{Time.current - start_time}"
