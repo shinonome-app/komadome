@@ -64,6 +64,49 @@ namespace :build do
     builder.build_html(::Pages::IndexPages::PersonAllPageComponent.new,
                        path: 'index_pages/person_all.html')
 
+    KanaUtils::ROMA2KANA.each_pair do |id, kana|
+      item_count = 20
+
+      works = if kana.empty?
+                Work.published.where('sortkey !~ ?', '^[あいうえおか-もやゆよら-ろわをんアイウエオカ-モヤユヨラ-ロワヲンヴ]').order(:id).all
+              else
+                Work.published.where('sortkey ~ ?', "^#{kana}").order(:id).all
+              end
+      total_page = works.count.fdiv(item_count).ceil # 割り切れない場合は切り上げ
+      (1..total_page).each do |page|
+        pagy = Pagy.new(count: works.count, items: item_count, page: page)
+        current_works = works.offset(pagy.offset).limit(pagy.items)
+
+        builder.build_html(::Pages::IndexPages::WorkIndexPageComponent.new(id: id,
+                                                                           kana: kana,
+                                                                           pagy: pagy,
+                                                                           works: current_works),
+                           path: "index_pages/sakuhin_#{id}#{page}.html")
+      end
+    end
+
+    KanaUtils::ROMA2KANA.each_pair do |id, kana|
+      item_count = 20
+
+      works = if kana.empty?
+                Work.unpublished.where('sortkey !~ ?', '^[あいうえおか-もやゆよら-ろわをんアイウエオカ-モヤユヨラ-ロワヲンヴ]').order(:id).all
+              else
+                Work.unpublished.where('sortkey ~ ?', "^#{kana}").order(:id).all
+              end
+      total_page = works.count.fdiv(item_count).ceil # 割り切れない場合は切り上げ
+      (1..total_page).each do |page|
+        pagy = Pagy.new(count: works.count, items: item_count, page: page)
+        current_works = works.offset(pagy.offset).limit(pagy.items)
+
+        builder.build_html(::Pages::IndexPages::WorkInpIndexPageComponent.new(id: id,
+                                                                           kana: kana,
+                                                                           pagy: pagy,
+                                                                           works: current_works),
+                           path: "index_pages/sakuhin_inp_#{id}#{page}.html")
+      end
+
+    end
+
     current_year = Time.zone.now.year
     builder.build_html(::Pages::NewsEntries::IndexPageComponent.new(year: current_year),
                        path: 'soramoyou/soramoyouindex.html')

@@ -24,16 +24,16 @@ class IndexPagesController < ApplicationController
   end
 
   def work_index
-    params[:id_page] =~ /([kstnhmyrw]?[aiueo]|zz)(\d+)/
+    params[:id_page] =~ /([kstnhmyrw]?[aiueo]|zz|nn)(\d+)/
     id = Regexp.last_match(1).to_sym
     page = Regexp.last_match(2)
 
     kana = roma2kana_char(id)
 
     works = if kana.empty?
-              Work.where('sortkey !~ ?', '^[あいうえおか-もやゆよら-ろわをんアイウエオカ-モヤユヨラ-ロワヲンヴ]').order(:id).all
+              Work.published.where('sortkey !~ ?', '^[あいうえおか-もやゆよら-ろわをんアイウエオカ-モヤユヨラ-ロワヲンヴ]').order(:id).all
             else
-              Work.where('sortkey ~ ?', "^#{kana}").order(:id).all
+              Work.published.where('sortkey ~ ?', "^#{kana}").order(:id).all
             end
 
     pagy, current_works = pagy(works, item: 20, page: page)
@@ -45,16 +45,16 @@ class IndexPagesController < ApplicationController
   end
 
   def work_inp_index
-    params[:id_page] =~ /([kstnhmyrw]?[aiueo]|zz)(\d+)/
+    params[:id_page] =~ /([kstnhmyrw]?[aiueo]|zz|nn)(\d+)/
     id = Regexp.last_match(1).to_sym
     page = Regexp.last_match(2)
 
     kana = roma2kana_char(id)
 
     works = if kana.empty?
-              Work.where('sortkey !~ ?', '^[あいうえおか-もやゆよら-ろわをんアイウエオカ-モヤユヨラ-ロワヲンヴ]').order(:id).all
+              Work.unpublished.where('sortkey !~ ?', '^[あいうえおか-もやゆよら-ろわをんアイウエオカ-モヤユヨラ-ロワヲンヴ]').order(:id).all
             else
-              Work.where('sortkey ~ ?', "^#{kana}").order(:id).all
+              Work.unpublished.where('sortkey ~ ?', "^#{kana}").order(:id).all
             end
 
     pagy, current_works = pagy(works, item: 20, page: page)

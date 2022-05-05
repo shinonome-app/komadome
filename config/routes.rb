@@ -24,9 +24,9 @@ Rails.application.routes.draw do
 
       get 'list_inp:id_page', to: 'index_pages#list_inp_show', constraints: { id_page: /\d+_\d+/ }, as: :list_inp
 
-      get 'sakuhin_:id_page', to: 'index_pages#work_index', constraints: { id_page: /([kstnhmyrw]?[aiueo]|zz)\d+/ }, as: :sakuhin
+      get 'sakuhin_:id_page', to: 'index_pages#work_index', constraints: { id_page: /([kstnhmyrw]?[aiueo]|zz|nn)\d+/ }, as: :sakuhin
 
-      get 'sakuhin_inp_:id_page', to: 'index_pages#work_inp_index', constraints: { id_page: /([kstnhmyrw]?[aiueo]|zz)\d+/ }, as: :sakuhin_inp
+      get 'sakuhin_inp_:id_page', to: 'index_pages#work_inp_index', constraints: { id_page: /([kstnhmyrw]?[aiueo]|zz|nn)\d+/ }, as: :sakuhin_inp
 
       # Whatsnew
       get 'whatsnew:page', to: 'whatsnews#index', constraints: { page: /\d+/ }, as: :whatsnew
