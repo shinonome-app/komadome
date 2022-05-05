@@ -8,7 +8,7 @@ class StaticPageBuilder
   end
 
   def copy_precompiled_assets
-    Rake::Task["assets:precompile"].invoke
+    Rake::Task['assets:precompile'].invoke
     FileUtils.mkdir_p(@target_dir.join('assets'))
     FileUtils.cp_r(Rails.root.join('public/assets'), @target_dir)
   end
@@ -24,7 +24,7 @@ class StaticPageBuilder
 
   def build_html(component, path:)
     html = ApplicationController.renderer.render(component, layout: nil)
-    rel_path = path.sub(%r(^/), '')
+    rel_path = path.sub(%r{^/}, '')
     full_path = @target_dir.join(rel_path)
     puts "Generate #{full_path}"
     write_with_mkdir(full_path, html)
@@ -99,12 +99,11 @@ namespace :build do
         current_works = works.offset(pagy.offset).limit(pagy.items)
 
         builder.build_html(::Pages::IndexPages::WorkInpIndexPageComponent.new(id: id,
-                                                                           kana: kana,
-                                                                           pagy: pagy,
-                                                                           works: current_works),
+                                                                              kana: kana,
+                                                                              pagy: pagy,
+                                                                              works: current_works),
                            path: "index_pages/sakuhin_inp_#{id}#{page}.html")
       end
-
     end
 
     current_year = Time.zone.now.year
@@ -114,7 +113,7 @@ namespace :build do
     begin_year = Pages::NewsEntries::IndexYearPageComponent::BEGIN_YEAR
     (begin_year..current_year).each do |year|
       builder.build_html(::Pages::NewsEntries::IndexYearPageComponent.new(year: year),
-                       path: "soramoyou/soramoyou#{year}.html")
+                         path: "soramoyou/soramoyou#{year}.html")
     end
 
     date = WhatsnewsController::LIMIT_DATE
@@ -133,7 +132,7 @@ namespace :build do
     end
 
     (::Pages::Whatsnew::IndexPageComponent::FIRST_YEAR..2020).each do |year|
-      works = Work.with_year_and_status(year, 1).where('started_on >= ? AND started_on < ?', "#{year}-01-01", "#{year+1}-01-01").order(started_on: :desc)
+      works = Work.with_year_and_status(year, 1).where('started_on >= ? AND started_on < ?', "#{year}-01-01", "#{year + 1}-01-01").order(started_on: :desc)
       total_page = works.count.fdiv(item_count).ceil # 割り切れない場合は切り上げ
       (1..total_page).each do |page|
         pagy = Pagy.new(count: works.count, page: page, items: item_count)
@@ -146,7 +145,7 @@ namespace :build do
       end
     end
 
-    KanaUtils::ROMA2KANA_CHARS.keys.each do |key|
+    KanaUtils::ROMA2KANA_CHARS.each_key do |key|
       builder.build_html(::Pages::People::IndexPageComponent.new(id: key),
                          path: "index_pages/person_#{key}.html")
 
@@ -179,7 +178,6 @@ namespace :build do
                                                                            works: current_works),
                            path: "index_pages/list_inp#{person.id}_#{page}.html")
       end
-
     end
 
     puts "Done: #{Time.current - start_time}"

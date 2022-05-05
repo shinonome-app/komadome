@@ -105,9 +105,7 @@ def generate_sample_zip(workfile)
       end
     end
 
-    if workfile[:workdata]
-      workfile.workdata.attach(io: File.open(zipfile_name), filename: zip_file, content_type: 'application/zip')
-    end
+    workfile.workdata.attach(io: File.open(zipfile_name), filename: zip_file, content_type: 'application/zip') if workfile[:workdata]
 
     workfile.filename = zip_file
     # workfile.filesize = File.size(zipfile_name)
