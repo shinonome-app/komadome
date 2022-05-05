@@ -30,11 +30,7 @@ class IndexPagesController < ApplicationController
 
     kana = roma2kana_char(id)
 
-    works = if kana.empty?
-              Work.published.where('sortkey !~ ?', '^[あいうえおか-もやゆよら-ろわをんアイウエオカ-モヤユヨラ-ロワヲンヴ]').order(:id).all
-            else
-              Work.published.where('sortkey ~ ?', "^#{kana}").order(:id).all
-            end
+    works = Work.published.with_title_firstchar(kana).order(:id).all
 
     pagy, current_works = pagy(works, item: 20, page: page)
 
@@ -51,11 +47,7 @@ class IndexPagesController < ApplicationController
 
     kana = roma2kana_char(id)
 
-    works = if kana.empty?
-              Work.unpublished.where('sortkey !~ ?', '^[あいうえおか-もやゆよら-ろわをんアイウエオカ-モヤユヨラ-ロワヲンヴ]').order(:id).all
-            else
-              Work.unpublished.where('sortkey ~ ?', "^#{kana}").order(:id).all
-            end
+    works = Work.unpublished.with_title_firstchar(kana).order(:id).all
 
     pagy, current_works = pagy(works, item: 20, page: page)
 

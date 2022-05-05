@@ -76,11 +76,8 @@ namespace :build do
     KanaUtils::ROMA2KANA.each_pair do |id, kana|
       item_count = 20
 
-      works = if kana.empty?
-                Work.published.where('sortkey !~ ?', '^[あいうえおか-もやゆよら-ろわをんアイウエオカ-モヤユヨラ-ロワヲンヴ]').order(:id).all
-              else
-                Work.published.where('sortkey ~ ?', "^#{kana}").order(:id).all
-              end
+      works = Work.published.with_title_firstchar(kana).order(:id).all
+
       total_page = works.count.fdiv(item_count).ceil # 割り切れない場合は切り上げ
       (1..total_page).each do |page|
         pagy = Pagy.new(count: works.count, items: item_count, page: page)
@@ -97,11 +94,8 @@ namespace :build do
     KanaUtils::ROMA2KANA.each_pair do |id, kana| # rubocop:disable Style/CombinableLoops
       item_count = 20
 
-      works = if kana.empty?
-                Work.unpublished.where('sortkey !~ ?', '^[あいうえおか-もやゆよら-ろわをんアイウエオカ-モヤユヨラ-ロワヲンヴ]').order(:id).all
-              else
-                Work.unpublished.where('sortkey ~ ?', "^#{kana}").order(:id).all
-              end
+      works = Work.unpublished.with_title_firstchar(kana).order(:id).all
+
       total_page = works.count.fdiv(item_count).ceil # 割り切れない場合は切り上げ
       (1..total_page).each do |page|
         pagy = Pagy.new(count: works.count, items: item_count, page: page)
