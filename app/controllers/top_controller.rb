@@ -2,7 +2,6 @@
 
 class TopController < ApplicationController
   def index
-    @new_works_published_on = Work.published.order(started_on: :desc).first.started_on
-    @new_works = Work.published.where(started_on: @new_works_published_on)
+    render ::Pages::Top::IndexPageComponent.new
   end
 end

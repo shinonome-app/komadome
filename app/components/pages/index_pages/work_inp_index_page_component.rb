@@ -1,0 +1,18 @@
+# frozen_string_literal: true
+
+module Pages
+  module IndexPages
+    class WorkInpIndexPageComponent < ViewComponent::Base
+      attr_reader :id, :kana, :pagy, :works
+
+      def initialize(id:, kana:, pagy:, works:)
+        super
+
+        @id = id
+        @kana = kana
+        @pagy = pagy
+        @works = works
+      end
+    end
+  end
+end
