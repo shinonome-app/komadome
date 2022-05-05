@@ -64,6 +64,16 @@ namespace :build do
     builder.build_html(::Pages::IndexPages::PersonAllPageComponent.new,
                        path: 'index_pages/person_all.html')
 
+    current_year = Time.zone.now.year
+    builder.build_html(::Pages::NewsEntries::IndexPageComponent.new(year: current_year),
+                       path: 'soramoyou/soramoyouindex.html')
+
+    begin_year = Pages::NewsEntries::IndexYearPageComponent::BEGIN_YEAR
+    (begin_year..current_year).each do |year|
+      builder.build_html(::Pages::NewsEntries::IndexYearPageComponent.new(year: year),
+                       path: "soramoyou/soramoyou#{year}.html")
+    end
+
     date = WhatsnewsController::LIMIT_DATE
     item_count = WhatsnewsController::ITEM_COUNT
 
