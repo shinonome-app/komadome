@@ -6,6 +6,8 @@ module Pages
       attr_reader :kana, :kana_all, :authors
 
       def initialize(id:)
+        super
+
         @kana_all = ::KanaUtils.roma2kana_chars(id)
         @kana = @kana_all[0]
 

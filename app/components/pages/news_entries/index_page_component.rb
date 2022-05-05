@@ -6,6 +6,8 @@ module Pages
       attr_reader :news_entries
 
       def initialize(year:)
+        super
+
         @news_entries = NewsEntry.where('extract(year from published_on) = ?', year).order(published_on: :desc)
       end
     end

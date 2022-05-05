@@ -2,6 +2,7 @@
 
 require 'fileutils'
 
+# Static page builder
 class StaticPageBuilder
   def initialize(target_dir: nil)
     @target_dir = target_dir || Rails.root.join('build')
@@ -85,7 +86,7 @@ namespace :build do
       end
     end
 
-    KanaUtils::ROMA2KANA.each_pair do |id, kana|
+    KanaUtils::ROMA2KANA.each_pair do |id, kana| # rubocop:disable Style/CombinableLoops
       item_count = 20
 
       works = if kana.empty?

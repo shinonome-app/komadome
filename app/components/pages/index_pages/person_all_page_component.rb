@@ -6,6 +6,8 @@ module Pages
       attr_reader :authors
 
       def initialize
+        super
+
         @authors = {}
         KanaUtils::ROMA2KANA_CHARS.each_value do |value|
           if value.empty?
