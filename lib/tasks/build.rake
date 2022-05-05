@@ -41,17 +41,25 @@ class StaticPageBuilder
 end
 
 namespace :build do
-  desc 'Generate all pages'
-  task all: :environment do
-    start_time = Time.current
-
-    url = Rails.application.routes.url_helpers
+  desc 'Clean build dir'
+  task :clean do
     builder = StaticPageBuilder.new
 
     builder.force_clean
+  end
+
+  desc 'Prepare asset files'
+  task :prepare_assets do
+    builder = StaticPageBuilder.new
 
     builder.copy_precompiled_assets
     builder.copy_public_images
+  end
+
+  desc 'Build HTML files'
+  task generate: :environment do
+    url = Rails.application.routes.url_helpers
+    builder = StaticPageBuilder.new
 
     builder.build_html(::Pages::Top::IndexPageComponent.new,
                        path: 'index.html')
@@ -180,6 +188,13 @@ namespace :build do
                            path: "index_pages/list_inp#{person.id}_#{page}.html")
       end
     end
+  end
+
+  desc 'Generate all pages'
+  task all: [:environment, :"build:clean", :"build:prepare_assets"] do
+    start_time = Time.current
+
+    Rake::Task['build:generate'].invoke
 
     puts "Done: #{Time.current - start_time}"
   end
