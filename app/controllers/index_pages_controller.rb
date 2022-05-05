@@ -70,8 +70,7 @@ class IndexPagesController < ApplicationController
     author = Person.find(id)
     pagy, works = pagy(author.unpublished_works.order(:id), item: 20, page: page.to_i)
 
-    render ::Pages::IndexPages::ListInpShowPageComponent.new(id: id,
-                                                             author: author,
+    render ::Pages::IndexPages::ListInpShowPageComponent.new(author: author,
                                                              pagy: pagy,
                                                              works: works)
   end
