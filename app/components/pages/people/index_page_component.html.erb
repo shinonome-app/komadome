@@ -1,4 +1,4 @@
-<%= render ::LayoutComponent.new do -%>
+<%= render ::LayoutComponent.new(title: "公開中　作家リスト：#{kana}行 | 青空文庫") do -%>
 <div id="app" class="container mx-auto max-w-5xl py-4">
   <span id="top" name="top">&nbsp;</span>
 
@@ -37,21 +37,21 @@
     </nav>
   </header>
 
-  <h1 class="flex justify-center py-3 text-2xl font-semibold bg-yellow-100 border border-y-gray-500">公開中　作家リスト：<%= @kana %>行</h1>
+  <h1 class="flex justify-center py-3 text-2xl font-semibold bg-yellow-100 border border-y-gray-500">公開中　作家リスト：<%= kana %>行</h1>
 
   <div class="text-right py-4">
-    <% @kana_all.each_with_index do |kana, kana_index| %>
-    <a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" href="#sec<%= kana_index+1 %>">[<%= kana %>]</a>
+    <% kana_all.each_with_index do |current_kana, kana_index| %>
+    <a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" href="#sec<%= kana_index+1 %>">[<%= current_kana %>]</a>
     <% end %>
   </div>
 
-  <% @kana_all.each_with_index do |kana, kana_index| %>
+  <% kana_all.each_with_index do |current_kana, kana_index| %>
 
-  <h2 class="flex py-1 px-5 text-2xl font-semibold bg-gray-300 border border-y-gray-500"><a name="sec<%= kana_index+1 %>"><%= kana %></a></h2>
+  <h2 class="flex py-1 px-5 text-2xl font-semibold bg-gray-300 border border-y-gray-500"><a name="sec<%= kana_index+1 %>"><%= current_kana %></a></h2>
 
   <div class="px-12 py-5">
     <ol class="list-decimal">
-      <% @authors[kana_index].each do |person| %>
+      <% authors[kana_index].each do |person| %>
       <li><a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" href="person<%= person.id %>.html#sakuhin_list_1"><%= person.name %></a>　(公開中：<%= person.published_works.count %>)　　<% if person.copyright_flag? %><strong>＊著作権存続＊</strong>　<% end %></li>
       <% end %>
     </ol>

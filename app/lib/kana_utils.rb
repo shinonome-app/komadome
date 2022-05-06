@@ -24,15 +24,15 @@ module KanaUtils
                 ya: 'や', yu: 'ゆ', yo: 'よ',
                 ra: 'ら', ri: 'り', ru: 'る', re: 'れ', ro: 'ろ',
                 wa: 'わ', wo: 'を', nn: 'ん',
-                zz: '' }.freeze
+                zz: nil }.freeze
 
   def roma2kana_chars(roma_sym)
     ROMA2KANA_CHARS[roma_sym].chars
   end
   module_function :roma2kana_chars
 
-  def roma2kana_char(roma_sym)
-    ROMA2KANA[roma_sym]
+  def roma2kana_char(roma_sym, other: '')
+    ROMA2KANA[roma_sym] || other
   end
   module_function :roma2kana_char
 

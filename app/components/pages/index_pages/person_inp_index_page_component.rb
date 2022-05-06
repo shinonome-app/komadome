@@ -3,11 +3,12 @@
 module Pages
   module IndexPages
     class PersonInpIndexPageComponent < ViewComponent::Base
-      attr_reader :kana, :kana_all, :authors
+      attr_reader :id, :kana, :kana_all, :authors
 
       def initialize(id:)
         super
 
+        @id = id
         @kana_all = ::KanaUtils.roma2kana_chars(id)
         @kana = @kana_all[0]
 
