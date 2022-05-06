@@ -122,7 +122,7 @@ namespace :build do
     date = WhatsnewsController::LIMIT_DATE
     item_count = WhatsnewsController::ITEM_COUNT
 
-    works = Work.order(started_on: :desc).where('started_on >= ?', date)
+    works = Work.where('published_on IS NOT NULL AND published_on >= ?', date).order(published_on: :desc, id: :asc)
     total_page = works.count.fdiv(item_count).ceil # 割り切れない場合は切り上げ
     (1..total_page).each do |page|
       pagy = Pagy.new(count: works.count, page: page, items: item_count)
@@ -135,7 +135,7 @@ namespace :build do
     end
 
     (::Pages::Whatsnew::IndexPageComponent::FIRST_YEAR..2020).each do |year|
-      works = Work.with_year_and_status(year, 1).where('started_on >= ? AND started_on < ?', "#{year}-01-01", "#{year + 1}-01-01").order(started_on: :desc)
+      works = Work.with_year_and_status(year, 1).where('published_on IS NOT NULL AND published_on >= ? AND published_on < ?', "#{year}-01-01", "#{year + 1}-01-01").order(published_on: :desc, id: :asc)
       total_page = works.count.fdiv(item_count).ceil # 割り切れない場合は切り上げ
       (1..total_page).each do |page|
         pagy = Pagy.new(count: works.count, page: page, items: item_count)
