@@ -49,9 +49,7 @@ works = (1..5000).map do |n|
     updated_at: Time.current
   }
 
-  if work[:work_status_id] == 1
-    work[:published_on] = started
-  end
+  work[:published_on] = started if work[:work_status_id] == 1
 
   work
 end
