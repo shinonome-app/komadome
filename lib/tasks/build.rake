@@ -42,14 +42,14 @@ end
 
 namespace :build do
   desc 'Clean build dir'
-  task :clean do
+  task clean: :environment do
     builder = StaticPageBuilder.new
 
     builder.force_clean
   end
 
   desc 'Prepare asset files'
-  task :prepare_assets do
+  task prepare_assets: :environment do
     builder = StaticPageBuilder.new
 
     builder.copy_precompiled_assets
@@ -185,7 +185,7 @@ namespace :build do
   end
 
   desc 'Generate all pages'
-  task all: [:environment, :"build:clean", :"build:prepare_assets"] do
+  task all: %i[environment build:clean build:prepare_assets] do
     start_time = Time.current
 
     Rake::Task['build:generate'].invoke
