@@ -143,6 +143,8 @@ GEM
     nokogiri (1.13.5)
       mini_portile2 (~> 2.8.0)
       racc (~> 1.4)
+    nokogiri (1.13.5-aarch64-linux)
+      racc (~> 1.4)
     nokogiri (1.13.5-arm64-darwin)
       racc (~> 1.4)
     pagy (5.10.1)
@@ -245,6 +247,8 @@ GEM
     strscan (3.0.1)
     tailwindcss-rails (2.0.8)
       railties (>= 6.0.0)
+    tailwindcss-rails (2.0.8-aarch64-linux)
+      railties (>= 6.0.0)
     tailwindcss-rails (2.0.8-arm64-darwin)
       railties (>= 6.0.0)
     thor (1.2.1)
@@ -272,6 +276,7 @@ GEM
     zeitwerk (2.5.4)
 
 PLATFORMS
+  aarch64-linux
   arm64-darwin
   ruby
 
