@@ -14,13 +14,13 @@
 #  note                  :text
 #  orig_text             :text
 #  original_title        :text
+#  published_on          :date
 #  sortkey               :text
 #  started_on            :date             not null
 #  subtitle              :text
 #  subtitle_kana         :text
 #  title                 :text             not null
 #  title_kana            :text
-#  update_flag           :integer
 #  created_at            :datetime         not null
 #  updated_at            :datetime         not null
 #  description_person_id :bigint
@@ -37,7 +37,6 @@
 # Foreign Keys
 #
 #  fk_rails_...  (kana_type_id => kana_types.id)
-#  fk_rails_...  (user_id => users.id)
 #  fk_rails_...  (work_status_id => work_statuses.id)
 #
 
