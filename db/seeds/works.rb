@@ -27,7 +27,7 @@ works = (1..5000).map do |n|
   started = Faker::Time.between(from: Time.zone.parse('1998-01-01'), to: Time.zone.parse('2021-05-05'))
   started = created if created > started
 
-  {
+  work = {
     title_kana: "#{ch}さくひん#{n}",
     title: "#{ch}作品#{n}",
     subtitle_kana: "ふくだい#{n}",
@@ -47,7 +47,14 @@ works = (1..5000).map do |n|
     created_at: created,
     updated_at: Time.current
   }
+
+  if work[:work_status_id] == 1
+    work[:published_on] = started
+  end
+
+  work
 end
+
 Work.insert_all(works.sort_by { |b| b[:created_at] })
 
 ## WorkWorkers

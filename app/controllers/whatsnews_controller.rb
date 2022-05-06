@@ -10,7 +10,7 @@ class WhatsnewsController < ApplicationController
 
   def index
     date = LIMIT_DATE
-    works = Work.order(started_on: :desc).where('started_on >= ?', date)
+    works = Work.where('published_on IS NOT NULL AND published_on >= ?', date).order(published_on: :desc, id: :asc)
     pagy, current_works = pagy(works, items: ITEM_COUNT)
 
     render ::Pages::Whatsnew::IndexPageComponent.new(date: date,
@@ -21,7 +21,7 @@ class WhatsnewsController < ApplicationController
   def index_year
     year, page = params[:year_page].split('_')
     begin_date, end_date = begin_and_end_date(year)
-    works = Work.with_year_and_status(year, 1).where('started_on >= ? AND started_on < ?', begin_date, end_date).order(started_on: :desc)
+    works = Work.with_year_and_status(year, 1).where('published_on IS NOT NULL AND published_on >= ? AND published_on < ?', begin_date, end_date).order(published_on: :desc, id: :asc)
     pagy, current_works = pagy(works, items: 50, page: page)
 
     render ::Pages::Whatsnew::IndexYearPageComponent.new(year: year,

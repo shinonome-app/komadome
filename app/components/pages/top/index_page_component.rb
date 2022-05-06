@@ -8,8 +8,8 @@ module Pages
       def initialize
         super
 
-        @new_works_published_on = Work.published.order(started_on: :desc).first.started_on
-        @new_works = Work.published.where(started_on: new_works_published_on)
+        @new_works_published_on = Work.published.order(published_on: :desc).first.published_on
+        @new_works = Work.published.where(published_on: new_works_published_on).order(id: :asc)
       end
     end
   end

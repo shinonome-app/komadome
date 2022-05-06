@@ -52,10 +52,10 @@
         <tr>
           <td class="bg-white border-double border-2 border-gray-800">
             <%# TODO: 7.daysに修正する %>
-            <% if work.started_on > Time.zone.now.ago(400.days) %>
-            <span class="text-red-500"><%= work.started_on %></span>
+            <% if work.published_on && work.published_on > Time.zone.now.ago(400.days) %>
+            <span class="text-red-500"><%= work.published_on %></span>
             <% else %>
-            <span><%= work.started_on %></span>
+            <span><%= work.published_on %></span>
             <% end %>
           </td>
           <td class="bg-white border-double border-2 border-gray-800">

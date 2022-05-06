@@ -42,7 +42,7 @@
         </tr>
         <% works.each do |work| %>
         <tr>
-          <td class="bg-white border-double border-2 border-gray-800"><%= work.started_on %></td>
+          <td class="bg-white border-double border-2 border-gray-800"><%= work.published_on %></td>
           <td class="bg-white border-double border-2 border-gray-800">
             <%= link_to work.title,
                 card_path(person_id: work.card_person_id, card_id: work.id, format: :html),
