@@ -11,8 +11,8 @@ module Pages
         super
         @pagy = pagy
         @works = works
-        @data = date
-        @prev_year = Time.zone.parse(date).year - 1
+        @date = date
+        @prev_year = date.year - 1
       end
     end
   end

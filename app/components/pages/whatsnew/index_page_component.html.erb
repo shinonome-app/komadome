@@ -19,9 +19,9 @@
     </div>
   </header>
 
-  <h1 class="flex justify-center py-3 text-2xl font-semibold bg-yellow-100 border border-y-gray-500">新規公開作品　2022年公開分</h1>
+  <h1 class="flex justify-center py-3 text-2xl font-semibold bg-yellow-100 border border-y-gray-500">新規公開作品　<%= date.year %>年公開分</h1>
 
-  <p class="flex justify-center py-3">最終更新日: 2022.3.21</p>
+  <p class="flex justify-center py-3">最終更新日: <%= date.strftime('%Y.%m.%d')%></p>
 
   <p class="flex justify-center">
     新規公開作品は、表の上のほうに追加されていきます。
