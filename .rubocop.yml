@@ -18,6 +18,7 @@ AllCops:
   Exclude:
   - "storage/**/*"
   - "tmp/**/*"
+  - "vendor/**/*"
   - "db/schema.rb"
 
 Layout/LineLength:
