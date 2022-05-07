@@ -1,9 +1,19 @@
 <%= render ::LayoutComponent.new(title: '青空文庫', bgcolor: 'bg-white-100') do -%>
-<div id="app" class="container mx-auto max-w-5xl py-4">
-  <h1 class="flex justify-center py-3 text-2xl font-semibold bg-indigo-900 text-white border border-y-gray-500">
+<div id="app" class="container mx-auto max-w-6xl py-2">
+  <div class="flex">
+    <img src="/images/top_logo.png">
+    <div class="flex justify-end h-10 py-2 bg-[#000063] text-white border border-y-gray-500 w-full">
+      <div class="px-2 underline">メイン</div>
+      <div class="px-2 underline">お知らせ</div>
+      <div class="px-2 underline">別館</div>
+      <div class="px-2 underline">資料</div>
+      <div class="px-2 underline">運営</div>
+    </div>
+  </div>
+
+  <h1 class="flex justify-center h-10 py-2 text-xl font-semibold text-gray-900 w-full">
     (仮)トップページ
   </h1>
-
 
   <p>
     <a href="/index_pages/index_top.html" class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline">
