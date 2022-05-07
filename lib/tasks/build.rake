@@ -19,6 +19,13 @@ class StaticPageBuilder
     FileUtils.cp_r(Rails.root.join('public/images'), @target_dir)
   end
 
+  def copy_zip_files
+    FileUtils.mkdir_p(@target_dir.join('index_pages'))
+    Dir.glob(Rails.root.join('data/csv_zip/*.zip')) do |file|
+      FileUtils.cp(file, @target_dir.join('index_pages'))
+    end
+  end
+
   def force_clean
     FileUtils.remove_entry_secure(@target_dir, :force)
   end
@@ -54,6 +61,13 @@ namespace :build do
 
     builder.copy_precompiled_assets
     builder.copy_public_images
+  end
+
+  desc 'Copy zip files'
+  task copy_zip_files: :environment do
+    builder = StaticPageBuilder.new
+
+    builder.copy_zip_files
   end
 
   desc 'Build HTML files'
@@ -187,7 +201,7 @@ namespace :build do
   end
 
   desc 'Generate all pages'
-  task all: %i[environment build:clean build:prepare_assets] do
+  task all: %i[environment build:clean build:prepare_assets build:copy_zip_files] do
     start_time = Time.current
 
     Rake::Task['build:generate'].invoke
