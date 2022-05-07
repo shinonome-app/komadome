@@ -28,7 +28,7 @@ class IndexPagesController < ApplicationController
     id = Regexp.last_match(1).to_sym
     page = Regexp.last_match(2)
 
-    kana = roma2kana_char(id)
+    kana = Kana.new(id).to_char
 
     works = Work.published.with_title_firstchar(kana).order(:id).all
 
@@ -45,7 +45,7 @@ class IndexPagesController < ApplicationController
     id = Regexp.last_match(1).to_sym
     page = Regexp.last_match(2)
 
-    kana = roma2kana_char(id)
+    kana = Kana.new(id).to_char
 
     works = Work.unpublished.with_title_firstchar(kana).order(:id).all
 
@@ -65,15 +65,5 @@ class IndexPagesController < ApplicationController
     render ::Pages::IndexPages::ListInpShowPageComponent.new(author: author,
                                                              pagy: pagy,
                                                              works: works)
-  end
-
-  private
-
-  def roma2kana_chars(roma_id)
-    ::KanaUtils.roma2kana_chars(roma_id)
-  end
-
-  def roma2kana_char(roma_id)
-    ::KanaUtils.roma2kana_char(roma_id)
   end
 end

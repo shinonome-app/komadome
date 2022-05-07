@@ -9,11 +9,11 @@ module Pages
         super
 
         @authors = {}
-        KanaUtils::ROMA2KANA_CHARS.each_value do |value|
-          if value.empty?
+        Kana.each_column_chars do |chars|
+          if chars.empty?
             @authors['その他'] = Person.where('sortkey !~ ?', '^[あいうえおか-もやゆよら-ろわをんアイウエオカ-モヤユヨラ-ロワヲンヴ]')
           else
-            value.chars.each do |kana|
+            chars.each do |kana|
               @authors[kana] = Person.where('sortkey like ?', "#{kana}%")
             end
           end

@@ -8,7 +8,7 @@ module Pages
       def initialize(id:)
         super
 
-        @kana_all = ::KanaUtils.roma2kana_chars(id)
+        @kana_all = Kana.new(id).to_chars
         @kana = @kana_all[0]
 
         @authors = []

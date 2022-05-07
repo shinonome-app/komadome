@@ -8,7 +8,7 @@ module Pages
       def initialize(person:)
         super
         @author = person
-        @kana, index = KanaUtils.kana2roma_chars(@author.sortkey.first)
+        @kana, index = Kana.from_kana(@author.sortkey.first).to_symbol_and_index
         @kana_fragment = "sec#{index + 1}"
       end
     end
