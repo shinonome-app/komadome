@@ -87,7 +87,7 @@ namespace :build do
     builder.build_html(::Pages::IndexPages::PersonAllPageComponent.new,
                        path: 'index_pages/person_all.html')
 
-    KanaUtils::ROMA2KANA.each_pair do |id, kana|
+    Kana.each_sym_and_char do |id, kana|
       item_count = 20
 
       works = Work.published.with_title_firstchar(kana).order(:id).all
@@ -105,7 +105,7 @@ namespace :build do
       end
     end
 
-    KanaUtils::ROMA2KANA.each_pair do |id, kana| # rubocop:disable Style/CombinableLoops
+    Kana.each_sym_and_char do |id, kana| # rubocop:disable Style/CombinableLoops
       item_count = 20
 
       works = Work.unpublished.with_title_firstchar(kana).order(:id).all
@@ -164,7 +164,7 @@ namespace :build do
       end
     end
 
-    KanaUtils::ROMA2KANA_CHARS.each_key do |key|
+    Kana.each_column_key do |key|
       builder.build_html(::Pages::People::IndexPageComponent.new(id: key),
                          path: "index_pages/person_#{key}.html")
 

@@ -8,7 +8,7 @@ module Pages
       def initialize(id:)
         super
 
-        @kana_all = roma2kana_chars(id)
+        @kana_all = Kana.new(id).to_chars
         @kana = @kana_all[0]
 
         @authors = []
@@ -19,16 +19,6 @@ module Pages
             @authors << Person.where('sortkey like ?', "#{kana}%")
           end
         end
-      end
-
-      private
-
-      def roma2kana_chars(roma_id)
-        ::KanaUtils.roma2kana_chars(roma_id)
-      end
-
-      def roma2kana_char(roma_id)
-        ::KanaUtils.roma2kana_char(roma_id)
       end
     end
   end

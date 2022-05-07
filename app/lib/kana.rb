@@ -1,7 +1,10 @@
 # frozen_string_literal: true
 
-# Utility module for Hiragana/Katakana
-module KanaUtils
+# Handling Kana characters and Kana columns
+class Kana
+  class Error < StandardError
+  end
+
   ROMA2KANA_CHARS = { a: 'あいうえお',
                       ka: 'かきくけこ',
                       sa: 'さしすせそ',
@@ -26,22 +29,46 @@ module KanaUtils
                 wa: 'わ', wo: 'を', nn: 'ん',
                 zz: nil }.freeze
 
-  def roma2kana_chars(roma_sym)
-    ROMA2KANA_CHARS[roma_sym].chars
+  def self.from_kana(kana)
+    sym = ROMA2KANA.invert[kana] || :zz
+    new(sym)
   end
-  module_function :roma2kana_chars
 
-  def roma2kana_char(roma_sym, other: '')
-    ROMA2KANA[roma_sym] || other
+  def self.each_sym_and_char(&)
+    ROMA2KANA.each_pair(&)
   end
-  module_function :roma2kana_char
 
-  def kana2roma_chars(kana)
+  def self.each_column_key(&)
+    ROMA2KANA_CHARS.each_key(&)
+  end
+
+  def self.each_column_chars
+    ROMA2KANA_CHARS.each_value do |value|
+      yield value.chars
+    end
+  end
+
+  def initialize(roma_sym)
+    @sym = roma_sym
+    raise Kana::Error, "invalid symbol (#{@sym})" unless ROMA2KANA.keys.include?(@sym)
+  end
+
+  def to_chars
+    raise Kana::Error, "invalid symbol (#{@sym})" unless ROMA2KANA_CHARS.keys.include?(@sym)
+
+    ROMA2KANA_CHARS[@sym].chars
+  end
+
+  def to_char(other: nil)
+    ROMA2KANA[@sym] || other
+  end
+
+  def to_symbol_and_index
+    kana_char = to_char(other: 'not_found')
     ROMA2KANA_CHARS.each_pair do |roma, kana_str|
-      idx = kana_str.index(kana)
+      idx = kana_str.index(kana_char)
       return roma, idx if idx
     end
     [:zz, 0]
   end
-  module_function :kana2roma_chars
 end

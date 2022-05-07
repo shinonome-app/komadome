@@ -70,9 +70,9 @@
       <span class="pr-3">●作家リスト：作業中</span>
       <% %i(a ka sa ta na ha ma ya ra wa zz).each do |current_id| %>
       <%   if current_id == id %>
-      <span class="text-red-500 font-bold">[<%= KanaUtils.roma2kana_char(current_id, other: '他') %>]</span>
+      <span class="text-red-500 font-bold">[<%= Kana.new(current_id).to_char(other: '他') %>]</span>
       <%   else %>
-      <span><a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" href="person_inp_<%= current_id %>.html">[<%= KanaUtils.roma2kana_char(current_id, other: '他') %>]</a></span>
+      <span><a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" href="person_inp_<%= current_id %>.html">[<%= Kana.new(current_id).to_char(other: '他') %>]</a></span>
       <%   end %>
       <% end %>
     </div>
