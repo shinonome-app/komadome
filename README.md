@@ -1,5 +1,8 @@
 # Komadome
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![rubocop](https://github.com/takahashim/komadome/actions/workflows/rubocop.yml/badge.svg)](https://github.com/takahashim/komadome/actions/workflows/rubocop.yml)
+
 An application that generates the same content as static and dynamic pages.
 
 It uses:
