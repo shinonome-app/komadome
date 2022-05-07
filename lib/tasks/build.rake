@@ -11,8 +11,8 @@ class StaticPageBuilder
   def copy_precompiled_assets
     Rake::Task['assets:precompile'].invoke
     FileUtils.mkdir_p(@target_dir.join('assets'))
-    Dir.glob(Rails.root.join('public/assets/*')) do |file|
-      FileUtils.mv(file, @target_dir.join('assets'))
+    Dir.children(Rails.root.join('public/assets')).each do |file|
+      FileUtils.mv(Rails.root.join('public/assets', file), @target_dir.join('assets'))
     end
   end
 
