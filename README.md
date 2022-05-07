@@ -33,3 +33,12 @@ bin/rails build:all
 ```
 
 All contents are generated under the `build` directory.
+
+
+## View template files
+
+This Rails application does not use view templates (no `app/views` directory). Instead, it uses ViewComponent.
+All page templates are located under `app/components/pages`.
+
+For example, the page template corresponding to `cards#show` is `app/components/pages/cards/show_page_component.html.erb` (and `app/components/pages/cards/show_page_ component.rb`).
+And the general layout will be `app/components/layout_component.html.erb` (and `app/components/layout_component.rb`).
