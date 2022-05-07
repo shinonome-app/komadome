@@ -14,5 +14,7 @@
 #
 
 class NewsEntry < ApplicationRecord
+  scope :published, ->(date = Time.zone.today) { where('published_on <= ?', date) }
+
   validates :title, :body, :flag, presence: true
 end

@@ -11,7 +11,7 @@ module Pages
         super
 
         @year = year
-        @news_entries = NewsEntry.where('extract(year from published_on) = ?',
+        @news_entries = NewsEntry.published.where('extract(year from published_on) = ?',
                                         @year).order(published_on: :desc)
       end
     end
