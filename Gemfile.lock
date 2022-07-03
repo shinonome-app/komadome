@@ -147,6 +147,8 @@ GEM
       racc (~> 1.4)
     nokogiri (1.13.6-arm64-darwin)
       racc (~> 1.4)
+    nokogiri (1.13.6-x86_64-linux)
+      racc (~> 1.4)
     pagy (5.10.1)
       activesupport
     parallel (1.22.1)
@@ -251,6 +253,8 @@ GEM
       railties (>= 6.0.0)
     tailwindcss-rails (2.0.8-arm64-darwin)
       railties (>= 6.0.0)
+    tailwindcss-rails (2.0.8-x86_64-linux)
+      railties (>= 6.0.0)
     thor (1.2.1)
     timeout (0.2.0)
     tzinfo (2.0.4)
@@ -280,6 +284,7 @@ PLATFORMS
   aarch64-linux
   arm64-darwin
   ruby
+  x86_64-linux
 
 DEPENDENCIES
   bootsnap
