@@ -48,6 +48,10 @@ Metrics/PerceivedComplexity:
 Rails/I18nLocaleTexts:
   Enabled: false
 
+Rails/Present:
+  Exclude:
+    - "bin/*"
+
 Rails/SkipsModelValidations:
   Exclude:
     - "db/seeds/*"
@@ -68,6 +72,10 @@ Style/Documentation:
     - "app/controllers/**/*.rb"
     - "app/helpers/**/*.rb"
     - "app/components/**/*.rb"
+
+Style/FetchEnvVar:
+  Exclude:
+    - 'bin/*'
 
 Style/HashSyntax:
   Enabled: false
