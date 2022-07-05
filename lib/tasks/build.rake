@@ -4,8 +4,11 @@ require 'fileutils'
 
 # Static page builder
 class StaticPageBuilder
+  attr_reader :target_dir, :rsync_keyfile
+
   def initialize(target_dir: nil)
-    @target_dir = target_dir || Rails.root.join('build')
+    @target_dir = target_dir || Pathname.new('/tmp/build')
+    @rsync_keyfile = '/tmp/rsync.key'
   end
 
   def copy_precompiled_assets
@@ -40,6 +43,11 @@ class StaticPageBuilder
     write_with_mkdir(full_path, html)
   end
 
+  def create_rsync_keyfile(data)
+    File.write(@rsync_keyfile, data)
+    FileUtils.chmod(0o600, @rsync_keyfile)
+  end
+
   private
 
   def write_with_mkdir(full_path, html)
@@ -70,6 +78,16 @@ namespace :build do
     builder = StaticPageBuilder.new
 
     builder.copy_zip_files
+  end
+
+  desc 'rsync'
+  task rsync: :environment do
+    builder = StaticPageBuilder.new
+    builder.create_rsync_keyfile(ENV.fetch('RSYNC_PASS_FILE', nil))
+    src_dir = "#{builder.target_dir}/"
+    cmd = "rsync -avhz -e \"ssh -i #{builder.rsync_keyfile}\" #{src_dir} aozora-renewal@aozora-renewal.sakura.ne.jp:/home/aozora-renewal/www"
+    puts cmd
+    system(cmd)
   end
 
   desc 'Build HTML files'
