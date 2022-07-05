@@ -85,7 +85,7 @@ namespace :build do
     builder = StaticPageBuilder.new
     builder.create_rsync_keyfile(ENV.fetch('RSYNC_PASS_FILE', nil))
     src_dir = "#{builder.target_dir}/"
-    cmd = "rsync -avhz -e \"ssh -i #{builder.rsync_keyfile}\" #{src_dir} aozora-renewal@aozora-renewal.sakura.ne.jp:/home/aozora-renewal/www"
+    cmd = "rsync -avhz -e \"ssh -o StrictHostKeyChecking=no -i #{builder.rsync_keyfile}\" #{src_dir} aozora-renewal@aozora-renewal.sakura.ne.jp:/home/aozora-renewal/www"
     puts cmd
     system(cmd)
   end
