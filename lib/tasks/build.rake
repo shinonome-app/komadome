@@ -14,19 +14,19 @@ class StaticPageBuilder
   def copy_precompiled_assets
     Rake::Task['assets:precompile'].invoke
     FileUtils.mkdir_p(@target_dir.join('assets'))
-    Dir.children(Rails.root.join('public/assets')).each do |file|
-      FileUtils.mv(Rails.root.join('public/assets', file), @target_dir.join('assets'))
+    Rails.public_path.join('assets').children.each do |file|
+      FileUtils.mv(Rails.public_path.join('assets', file), @target_dir.join('assets'))
     end
   end
 
   def copy_public_images
     FileUtils.mkdir_p(@target_dir.join('images'))
-    FileUtils.cp_r(Rails.root.join('public/images'), @target_dir)
+    FileUtils.cp_r(Rails.public_path.join('images'), @target_dir)
   end
 
   def copy_zip_files
     FileUtils.mkdir_p(@target_dir.join('index_pages'))
-    Dir.glob(Rails.root.join('data/csv_zip/*.zip')) do |file|
+    Rails.root.glob('data/csv_zip/*.zip') do |file|
       FileUtils.cp(file, @target_dir.join('index_pages'))
     end
   end
