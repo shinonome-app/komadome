@@ -9,8 +9,8 @@ class CreatePeople < ActiveRecord::Migration[6.1]
       t.text :first_name
       t.text :first_name_kana
       t.text :first_name_en
-      t.date :born_on
-      t.date :died_on
+      t.text :born_on
+      t.text :died_on
       t.boolean :copyright_flag, null: false
       t.text :email
       t.text :url
@@ -18,7 +18,7 @@ class CreatePeople < ActiveRecord::Migration[6.1]
       t.bigint :note_user_id
       t.text :basename
       t.text :note
-      t.text :updated_by
+      t.bigint :updated_by
       t.text :sortkey
       t.text :sortkey2
       t.integer :input_count

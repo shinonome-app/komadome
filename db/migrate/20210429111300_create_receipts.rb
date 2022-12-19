@@ -14,8 +14,6 @@ class CreateReceipts < ActiveRecord::Migration[6.1]
       t.text :first_appearance
       t.text :memo
       t.text :note
-      t.text :status
-      t.text :started_on
       t.boolean :copyright_flag, null: false
       t.text :last_name_kana, null: false
       t.text :last_name, null: false
@@ -35,11 +33,14 @@ class CreateReceipts < ActiveRecord::Migration[6.1]
       t.text :original_book_title2
       t.text :publisher2
       t.text :first_pubdate2
-      t.text :person_id
-      t.text :worker_id
-      t.date :created_on
-      t.integer :register_status, default: 0
+      t.bigint :person_id
+      t.bigint :worker_id
+      t.bigint :work_id
+      t.integer :register_status, default: 0, null: false
       t.text :original_book_note
+      t.references :work_status, foreign_key: true, null: false
+      t.date :started_on, null: false
+      t.datetime :deleted_at
 
       t.timestamps
     end

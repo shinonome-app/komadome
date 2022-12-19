@@ -156,7 +156,7 @@ namespace :build do
     item_count = WhatsnewsController::ITEM_COUNT
     date = Time.zone.today
 
-    works = Work.latest_published(until_date: date).order(published_on: :desc, id: :asc)
+    works = Work.latest_published(until_date: date).order(started_on: :desc, id: :asc)
     total_page = works.count.fdiv(item_count).ceil # 割り切れない場合は切り上げ
     (1..total_page).each do |page|
       pagy = Pagy.new(count: works.count, page: page, items: item_count)
@@ -170,7 +170,7 @@ namespace :build do
 
     prev_year = date.year - 1
     (::Pages::Whatsnew::IndexPageComponent::FIRST_YEAR..prev_year).each do |year|
-      works = Work.latest_published(year: year).order(published_on: :desc, id: :asc)
+      works = Work.latest_published(year: year).order(started_on: :desc, id: :asc)
       total_page = works.count.fdiv(item_count).ceil # 割り切れない場合は切り上げ
       (1..total_page).each do |page|
         pagy = Pagy.new(count: works.count, page: page, items: item_count)

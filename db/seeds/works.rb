@@ -42,14 +42,11 @@ works = (1..5000).map do |n|
     started_on: started,
     note: note,
     copyright_flag: rand(100) <= 90,
-    published_on: nil,
     sortkey: "#{ch}さくひん#{n}",
     user_id: user_id_list.sample,
     created_at: created,
     updated_at: Time.current
   }
-
-  work[:published_on] = started if work[:work_status_id] == 1
 
   work
 end
@@ -146,7 +143,7 @@ original_books = work_id_list.map do |n|
     proof_edition: "校正使用版#{n}",
     publisher: "底本出版社#{n}",
     note: "底本備考#{n}",
-    worktype_id: 1,
+    booktype_id: 1,
     created_at: Time.current,
     updated_at: Time.current
   }
@@ -163,7 +160,7 @@ work_id_list.each do |n|
     proof_edition: "校正使用版#{n}",
     publisher: "親本出版社#{n}",
     note: "底本の親本備考#{n}",
-    worktype_id: 2,
+    booktype_id: 2,
     created_at: Time.current,
     updated_at: Time.current
   }

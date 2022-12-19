@@ -2,16 +2,16 @@
 
 kana_types = {
   1 => '旧字旧仮名',
-  2 =>	'旧字新仮名',
-  3 =>	'新字旧仮名',
-  4 =>	'新字新仮名',
-  99 =>	'その他'
+  2 => '旧字新仮名',
+  3 => '新字旧仮名',
+  4 => '新字新仮名',
+  99 => 'その他'
 }
 
 # exist successfully if already created
 if KanaType.count.positive?
   warn 'Seeds have already been created.'
-  exit
+  return
 end
 
 # KanaType.connection.execute('TRUNCATE TABLE kana_types;')
@@ -20,10 +20,10 @@ kana_types.each do |k, v|
 end
 
 charsets = {
-  1	=> 'JIS X 0208',
-  2	=>	'JIS X 0213',
-  3	=>	'Unicode',
-  99	=> 'その他'
+  1 => 'JIS X 0208',
+  2 => 'JIS X 0213',
+  3 => 'Unicode',
+  99 => 'その他'
 }
 
 # Charset.connection.execute('TRUNCATE TABLE charsets;')
@@ -121,21 +121,42 @@ work_statuses.each_line do |line|
   WorkStatus.create!(id: rows[0].to_i, name: rows[1], sort_order: rows[2].to_i)
 end
 
-worktypes = {
+booktypes = {
   1 => '底本',
   2 => '底本の親本'
 }
 
-# Worktype.connection.execute('TRUNCATE TABLE worktypes;')
-worktypes.each do |k, v|
-  Worktype.create!(id: k, name: v)
+# Booktype.connection.execute('TRUNCATE TABLE booktypes;')
+booktypes.each do |k, v|
+  Booktype.create!(id: k, name: v)
 end
 
-require_relative 'seeds/users'
-require_relative 'seeds/news_entries'
-require_relative 'seeds/workers'
-require_relative 'seeds/people'
-require_relative 'seeds/receipts'
-require_relative 'seeds/works'
-require_relative 'seeds/sites'
-require_relative 'seeds/workfiles'
+## 人物（著者なし）を追加
+Person.create(id: 0,
+              last_name: '著者なし',
+              last_name_kana: 'ちょしゃなし',
+              last_name_en: 'Choshanashi',
+              copyright_flag: false,
+              sortkey: 'ちょしゃなし')
+## 予備工作員を追加
+worker_dummy = Worker.create(id: 0,
+                             name: '予備工作員',
+                             name_kana: 'よびこうさくいん',
+                             sortkey: 'よびこうさくいん')
+WorkerSecret.create(
+  worker_id: worker_dummy.id,
+  email: 'shinonome-worker0@example.com',
+  note: '予備工作員用',
+  url: 'https://shinonome.example.com/dummy/workers/0'
+)
+
+if Rails.env.development? || ENV.fetch('USE_ALL_SEEDS', nil)
+  require_relative 'seeds/users'
+  require_relative 'seeds/news_entries'
+  require_relative 'seeds/workers'
+  require_relative 'seeds/people'
+  require_relative 'seeds/receipts'
+  require_relative 'seeds/works'
+  require_relative 'seeds/sites'
+  require_relative 'seeds/workfiles'
+end

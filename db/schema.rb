@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2021_12_28_000000) do
+ActiveRecord::Schema[7.0].define(version: 2021_12_29_040000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -42,6 +42,17 @@ ActiveRecord::Schema[7.0].define(version: 2021_12_28_000000) do
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
+  create_table "admin_mail_secrets", force: :cascade do |t|
+    t.bigint "worker_id", null: false
+    t.text "email", null: false
+    t.text "subject", null: false
+    t.text "body", null: false
+    t.integer "cc_flag"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["worker_id"], name: "index_admin_mail_secrets_on_worker_id"
+  end
+
   create_table "base_people", force: :cascade do |t|
     t.bigint "person_id", null: false
     t.bigint "original_person_id", null: false
@@ -56,6 +67,12 @@ ActiveRecord::Schema[7.0].define(version: 2021_12_28_000000) do
     t.text "name", null: false
     t.text "num", null: false
     t.text "note"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "booktypes", force: :cascade do |t|
+    t.text "name", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -77,6 +94,8 @@ ActiveRecord::Schema[7.0].define(version: 2021_12_28_000000) do
     t.text "command"
     t.bigint "user_id"
     t.integer "separator"
+    t.jsonb "result"
+    t.datetime "executed_at", precision: nil
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -116,12 +135,12 @@ ActiveRecord::Schema[7.0].define(version: 2021_12_28_000000) do
     t.text "first_pubdate"
     t.text "input_edition"
     t.text "proof_edition"
-    t.bigint "worktype_id"
+    t.bigint "booktype_id"
     t.text "note"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["booktype_id"], name: "index_original_books_on_booktype_id"
     t.index ["work_id"], name: "index_original_books_on_work_id"
-    t.index ["worktype_id"], name: "index_original_books_on_worktype_id"
   end
 
   create_table "people", force: :cascade do |t|
@@ -131,8 +150,8 @@ ActiveRecord::Schema[7.0].define(version: 2021_12_28_000000) do
     t.text "first_name"
     t.text "first_name_kana"
     t.text "first_name_en"
-    t.date "born_on"
-    t.date "died_on"
+    t.text "born_on"
+    t.text "died_on"
     t.boolean "copyright_flag", null: false
     t.text "email"
     t.text "url"
@@ -140,7 +159,7 @@ ActiveRecord::Schema[7.0].define(version: 2021_12_28_000000) do
     t.bigint "note_user_id"
     t.text "basename"
     t.text "note"
-    t.text "updated_by"
+    t.bigint "updated_by"
     t.text "sortkey"
     t.text "sortkey2"
     t.integer "input_count"
@@ -154,6 +173,7 @@ ActiveRecord::Schema[7.0].define(version: 2021_12_28_000000) do
     t.bigint "site_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["person_id", "site_id"], name: "index_person_sites_on_person_id_and_site_id", unique: true
     t.index ["person_id"], name: "index_person_sites_on_person_id"
     t.index ["site_id"], name: "index_person_sites_on_site_id"
   end
@@ -172,8 +192,9 @@ ActiveRecord::Schema[7.0].define(version: 2021_12_28_000000) do
     t.text "email"
     t.text "url"
     t.bigint "person_id", null: false
-    t.text "assign_status"
-    t.text "order_status"
+    t.integer "assign_status", null: false
+    t.integer "order_status", null: false
+    t.datetime "deleted_at", precision: nil
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["person_id"], name: "index_proofreads_on_person_id"
@@ -192,8 +213,6 @@ ActiveRecord::Schema[7.0].define(version: 2021_12_28_000000) do
     t.text "first_appearance"
     t.text "memo"
     t.text "note"
-    t.text "status"
-    t.text "started_on"
     t.boolean "copyright_flag", null: false
     t.text "last_name_kana", null: false
     t.text "last_name", null: false
@@ -213,13 +232,17 @@ ActiveRecord::Schema[7.0].define(version: 2021_12_28_000000) do
     t.text "original_book_title2"
     t.text "publisher2"
     t.text "first_pubdate2"
-    t.text "person_id"
-    t.text "worker_id"
-    t.date "created_on"
-    t.integer "register_status", default: 0
+    t.bigint "person_id"
+    t.bigint "worker_id"
+    t.bigint "work_id"
+    t.integer "register_status", default: 0, null: false
     t.text "original_book_note"
+    t.bigint "work_status_id", null: false
+    t.date "started_on", null: false
+    t.datetime "deleted_at", precision: nil
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["work_status_id"], name: "index_receipts_on_work_status_id"
   end
 
   create_table "roles", force: :cascade do |t|
@@ -261,6 +284,7 @@ ActiveRecord::Schema[7.0].define(version: 2021_12_28_000000) do
     t.datetime "updated_at", null: false
     t.index ["person_id"], name: "index_work_people_on_person_id"
     t.index ["role_id"], name: "index_work_people_on_role_id"
+    t.index ["work_id", "person_id"], name: "index_work_people_on_work_id_and_person_id", unique: true
     t.index ["work_id"], name: "index_work_people_on_work_id"
   end
 
@@ -270,6 +294,7 @@ ActiveRecord::Schema[7.0].define(version: 2021_12_28_000000) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["site_id"], name: "index_work_sites_on_site_id"
+    t.index ["work_id", "site_id"], name: "index_work_sites_on_work_id_and_site_id", unique: true
     t.index ["work_id"], name: "index_work_sites_on_work_id"
   end
 
@@ -286,6 +311,7 @@ ActiveRecord::Schema[7.0].define(version: 2021_12_28_000000) do
     t.bigint "worker_role_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["work_id", "worker_id", "worker_role_id"], name: "index_work_workers_on_work_id_and_worker_id_and_worker_role_id", unique: true
     t.index ["work_id"], name: "index_work_workers_on_work_id"
     t.index ["worker_id"], name: "index_work_workers_on_worker_id"
     t.index ["worker_role_id"], name: "index_work_workers_on_worker_role_id"
@@ -313,6 +339,7 @@ ActiveRecord::Schema[7.0].define(version: 2021_12_28_000000) do
     t.text "name", null: false
     t.text "name_kana", null: false
     t.text "sortkey"
+    t.bigint "updated_by"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -324,7 +351,7 @@ ActiveRecord::Schema[7.0].define(version: 2021_12_28_000000) do
     t.integer "filesize"
     t.bigint "user_id"
     t.text "url"
-    t.text "filename", null: false
+    t.text "filename"
     t.date "opened_on"
     t.integer "revision_count"
     t.bigint "file_encoding_id", null: false
@@ -358,7 +385,6 @@ ActiveRecord::Schema[7.0].define(version: 2021_12_28_000000) do
     t.text "note"
     t.text "orig_text"
     t.bigint "user_id", null: false
-    t.date "published_on"
     t.text "sortkey"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -367,22 +393,17 @@ ActiveRecord::Schema[7.0].define(version: 2021_12_28_000000) do
     t.index ["work_status_id"], name: "index_works_on_work_status_id"
   end
 
-  create_table "worktypes", force: :cascade do |t|
-    t.text "name", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "base_people", "people"
   add_foreign_key "base_people", "people", column: "original_person_id"
+  add_foreign_key "original_books", "booktypes"
   add_foreign_key "original_books", "works"
-  add_foreign_key "original_books", "worktypes"
   add_foreign_key "person_sites", "people"
   add_foreign_key "person_sites", "sites"
   add_foreign_key "proofreads", "people"
   add_foreign_key "proofreads", "works"
+  add_foreign_key "receipts", "work_statuses"
   add_foreign_key "work_people", "people"
   add_foreign_key "work_people", "roles"
   add_foreign_key "work_people", "works"
