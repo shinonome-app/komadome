@@ -21,7 +21,16 @@
 #  fk_rails_...  (person_id => people.id)
 #
 
+# 基本人物
 class BasePerson < ApplicationRecord
   belongs_to :person
   belongs_to :original_person, class_name: 'Person'
+
+  validates :person_id, uniqueness: { message: I18n.t('errors.base_person.unique') }
+
+  validate :person_and_original_persion_must_be_different
+
+  def person_and_original_persion_must_be_different
+    errors.add(:person_id, I18n.t('errors.base_person.same_person')) if original_person_id == person_id
+  end
 end

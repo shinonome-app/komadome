@@ -12,8 +12,9 @@
 #
 # Indexes
 #
-#  index_work_sites_on_site_id  (site_id)
-#  index_work_sites_on_work_id  (work_id)
+#  index_work_sites_on_site_id              (site_id)
+#  index_work_sites_on_work_id              (work_id)
+#  index_work_sites_on_work_id_and_site_id  (work_id,site_id) UNIQUE
 #
 # Foreign Keys
 #
@@ -21,7 +22,11 @@
 #  fk_rails_...  (work_id => works.id)
 #
 
+require 'csv'
+
 class WorkSite < ApplicationRecord
   belongs_to :work
   belongs_to :site
+
+  validates :site_id, uniqueness: { scope: :work_id, message: 'がすでに関連付けられています' }
 end

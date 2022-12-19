@@ -6,10 +6,10 @@
 #
 #  id              :bigint           not null, primary key
 #  basename        :text
-#  born_on         :date
+#  born_on         :text
 #  copyright_flag  :boolean          not null
 #  description     :text
-#  died_on         :date
+#  died_on         :text
 #  email           :text
 #  first_name      :text
 #  first_name_en   :text
@@ -22,12 +22,14 @@
 #  publish_count   :integer
 #  sortkey         :text
 #  sortkey2        :text
-#  updated_by      :text
+#  updated_by      :bigint
 #  url             :text
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
 #  note_user_id    :bigint
 #
+
+require 'csv'
 
 # 人物(著者等)
 class Person < ApplicationRecord
@@ -49,6 +51,24 @@ class Person < ApplicationRecord
   has_many :works, through: :work_people
   has_one :base_person, dependent: :destroy
   has_one :original_person, through: :base_person
+  has_many :person_sites, dependent: :destroy
+  has_many :sites, through: :person_sites
+
+  validates :last_name, :last_name_kana, presence: true
+  validates :copyright_flag, inclusion: { in: [true, false] }
+  validates :input_count, :publish_count, numericality: { only_integer: true }, allow_nil: true
+  validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }, allow_blank: true
+  validates :url, format: { with: URI::DEFAULT_PARSER.make_regexp(%w[http https]) }, allow_blank: true
+
+  def self.csv_header
+    "人物id,姓,姓読み,姓英字,名,名読み,名英字,生年月日,没年月日,著作権フラグ,email,url,人物について,人物基本名,備考,最終更新日,更新者,姓ソート用読み,名ソート用読み\r\n"
+  end
+
+  def to_csv
+    array = [id, last_name, last_name_kana, last_name_en, first_name, first_name_kana, first_name_en, born_on, died_on, copyright_char, email, url, description, basename, note, updated_at, updated_by, sortkey, sortkey2]
+
+    CSV.generate_line(array, force_quotes: true, row_sep: "\r\n")
+  end
 
   def other_people
     other_person_ids = BasePerson.where(person_id: id).pluck(:original_person_id) +
@@ -62,6 +82,10 @@ class Person < ApplicationRecord
 
   def copyright_text
     copyright_flag ? '有' : '無'
+  end
+
+  def copyright_char
+    copyright_flag ? 't' : 'f'
   end
 
   def name
@@ -83,8 +107,4 @@ class Person < ApplicationRecord
   def unpublished_works
     Work.joins(:work_people).unpublished.where(work_people: { person_id: id })
   end
-
-  validates :last_name, :last_name_kana, presence: true
-  validates :copyright_flag, inclusion: { in: [true, false] }
-  validates :input_count, :publish_count, numericality: { only_integer: true }, allow_nil: true
 end

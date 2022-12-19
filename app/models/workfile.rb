@@ -5,7 +5,7 @@
 # Table name: workfiles
 #
 #  id               :bigint           not null, primary key
-#  filename         :text             not null
+#  filename         :text
 #  filesize         :integer
 #  note             :text
 #  opened_on        :date
@@ -48,18 +48,100 @@ class Workfile < ApplicationRecord
 
   has_one_attached :workdata if defined?(ActiveStorage)
 
-  validates :filename, presence: true
+  after_save :set_filename
+  validates :filetype_id, numericality: { only_integer: true }
+  validates :charset_id, numericality: { only_integer: true }
+  validates :compresstype_id, numericality: { only_integer: true }
+  validates :file_encoding_id, numericality: { only_integer: true }
 
   def html?
     filetype&.html?
   end
 
-  def filename
-    ext = if compresstype.compressed?
+  def text?
+    filetype&.text?
+  end
+
+  def zip?
+    compresstype&.zip?
+  end
+
+  def using_ruby?
+    content = uncompressed_workdata
+    return false if content.nil?
+
+    content.force_encoding('Shift_JIS')
+    utf8_content = content.encode('UTF-8')
+    utf8_content.match?(/《.*》/)
+  end
+
+  def compressed?
+    compresstype&.compressed?
+  end
+
+  def uncompressed_workdata
+    return nil if workdata.blank? || compresstype.blank?
+
+    content = workdata.open { |file| file&.read }
+    return content unless compressed?
+
+    raise 'サポートしていない圧縮形式です' if compresstype.lha? || compresstype.sit?
+
+    if compresstype.zip?
+      unzip_workdata
+    elsif compresstype.gzip?
+      gunzip_workdata
+    else
+      raise 'サポートしていない圧縮形式です'
+    end
+  end
+
+  def unzip_workdata
+    workdata.open do |file|
+      Zip::File.open(file) do |zip|
+        zip.each do |entry|
+          return entry.get_input_stream.read if entry.name =~ /\.txt\z/
+        end
+      end
+    end
+  end
+
+  def gunzip_workdata
+    workdata.open do |file|
+      Zlib::GzipReader.open(file) do |gz|
+        return gz.read
+      end
+    end
+  end
+
+  def generate_filename
+    # URLがある場合はfilenameは空、filesizeは0
+    return if url.present?
+
+    ext = if compresstype&.compressed?
             compresstype.extension
+          elsif filetype&.rtxt?
+            'txt'
           else
             filetype&.extension
           end
-    "#{work.id}_ruby_#{id}.#{ext}"
+
+    if filetype&.rtxt?
+      "#{work.id}_ruby_#{id}.#{ext}"
+    elsif compresstype&.compressed?
+      "#{work.id}_#{filetype&.extension}_#{id}.#{ext}"
+    else
+      "#{work.id}_#{id}.#{ext}"
+    end
+  end
+
+  def download_url
+    url.presence || "#{Rails.application.config.x.main_site_url}/cards/#{work.card_person_id}/files/#{filename}"
+  end
+
+  private
+
+  def set_filename
+    update_columns(filename: generate_filename) if filename.blank? # rubocop:disable Rails/SkipsModelValidations
   end
 end
