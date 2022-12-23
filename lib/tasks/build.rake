@@ -95,16 +95,16 @@ namespace :build do
     url = Rails.application.routes.url_helpers
     builder = StaticPageBuilder.new
 
-    builder.build_html(::Pages::Top::IndexPageComponent.new,
+    builder.build_html(Pages::Top::IndexPageComponent.new,
                        path: 'index.html')
 
-    builder.build_html(::Pages::IndexPages::IndexTopPageComponent.new,
+    builder.build_html(Pages::IndexPages::IndexTopPageComponent.new,
                        path: 'index_pages/index_top.html')
 
-    builder.build_html(::Pages::IndexPages::IndexAllPageComponent.new,
+    builder.build_html(Pages::IndexPages::IndexAllPageComponent.new,
                        path: 'index_pages/index_all.html')
 
-    builder.build_html(::Pages::IndexPages::PersonAllPageComponent.new,
+    builder.build_html(Pages::IndexPages::PersonAllPageComponent.new,
                        path: 'index_pages/person_all.html')
 
     Kana.each_sym_and_char do |id, kana|
@@ -117,10 +117,10 @@ namespace :build do
         pagy = Pagy.new(count: works.count, items: item_count, page: page)
         current_works = works.offset(pagy.offset).limit(pagy.items)
 
-        builder.build_html(::Pages::IndexPages::WorkIndexPageComponent.new(id: id,
-                                                                           kana: kana,
-                                                                           pagy: pagy,
-                                                                           works: current_works),
+        builder.build_html(Pages::IndexPages::WorkIndexPageComponent.new(id: id,
+                                                                         kana: kana,
+                                                                         pagy: pagy,
+                                                                         works: current_works),
                            path: "index_pages/sakuhin_#{id}#{page}.html")
       end
     end
@@ -135,21 +135,21 @@ namespace :build do
         pagy = Pagy.new(count: works.count, items: item_count, page: page)
         current_works = works.offset(pagy.offset).limit(pagy.items)
 
-        builder.build_html(::Pages::IndexPages::WorkInpIndexPageComponent.new(id: id,
-                                                                              kana: kana,
-                                                                              pagy: pagy,
-                                                                              works: current_works),
+        builder.build_html(Pages::IndexPages::WorkInpIndexPageComponent.new(id: id,
+                                                                            kana: kana,
+                                                                            pagy: pagy,
+                                                                            works: current_works),
                            path: "index_pages/sakuhin_inp_#{id}#{page}.html")
       end
     end
 
     current_year = Time.zone.now.year
-    builder.build_html(::Pages::NewsEntries::IndexPageComponent.new(year: current_year),
+    builder.build_html(Pages::NewsEntries::IndexPageComponent.new(year: current_year),
                        path: 'soramoyou/soramoyouindex.html')
 
     begin_year = Pages::NewsEntries::IndexYearPageComponent::BEGIN_YEAR
     (begin_year..current_year).each do |year|
-      builder.build_html(::Pages::NewsEntries::IndexYearPageComponent.new(year: year),
+      builder.build_html(Pages::NewsEntries::IndexYearPageComponent.new(year: year),
                          path: "soramoyou/soramoyou#{year}.html")
     end
 
@@ -162,36 +162,36 @@ namespace :build do
       pagy = Pagy.new(count: works.count, page: page, items: item_count)
       current_works = works.offset(pagy.offset).limit(pagy.items)
       path = url.whatsnew_index_pages_path(page: page, format: :html)
-      builder.build_html(::Pages::Whatsnew::IndexPageComponent.new(date: date,
-                                                                   pagy: pagy,
-                                                                   works: current_works),
+      builder.build_html(Pages::Whatsnew::IndexPageComponent.new(date: date,
+                                                                 pagy: pagy,
+                                                                 works: current_works),
                          path: path)
     end
 
     prev_year = date.year - 1
-    (::Pages::Whatsnew::IndexPageComponent::FIRST_YEAR..prev_year).each do |year|
+    (Pages::Whatsnew::IndexPageComponent::FIRST_YEAR..prev_year).each do |year|
       works = Work.latest_published(year: year).order(started_on: :desc, id: :asc)
       total_page = works.count.fdiv(item_count).ceil # 割り切れない場合は切り上げ
       (1..total_page).each do |page|
         pagy = Pagy.new(count: works.count, page: page, items: item_count)
         current_works = works.offset(pagy.offset).limit(pagy.items)
         path = url.whatsnew_year_index_pages_path(year_page: "#{year}_#{page}", format: :html)
-        builder.build_html(::Pages::Whatsnew::IndexYearPageComponent.new(year: year,
-                                                                         date: date,
-                                                                         pagy: pagy,
-                                                                         works: current_works),
+        builder.build_html(Pages::Whatsnew::IndexYearPageComponent.new(year: year,
+                                                                       date: date,
+                                                                       pagy: pagy,
+                                                                       works: current_works),
                            path: path)
       end
     end
 
     Kana.each_column_key do |key|
-      builder.build_html(::Pages::People::IndexPageComponent.new(id: key),
+      builder.build_html(Pages::People::IndexPageComponent.new(id: key),
                          path: "index_pages/person_#{key}.html")
 
-      builder.build_html(::Pages::IndexPages::PersonAllIndexPageComponent.new(id: key),
+      builder.build_html(Pages::IndexPages::PersonAllIndexPageComponent.new(id: key),
                          path: "index_pages/person_all_#{key}.html")
 
-      builder.build_html(::Pages::IndexPages::PersonInpIndexPageComponent.new(id: key),
+      builder.build_html(Pages::IndexPages::PersonInpIndexPageComponent.new(id: key),
                          path: "index_pages/person_inp_#{key}.html")
     end
 
