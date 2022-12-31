@@ -249,10 +249,10 @@
           <%= workfile.filesize %>
         </td>
         <td class="px-2">
-          <%= workfile.created_at.strftime("%F") %>
+          <%= workfile.registrated_on.strftime("%F") %>
         </td>
         <td class="px-2">
-          <%= workfile.updated_at.strftime("%F") %>
+          <%= workfile.last_updated_on.strftime("%F") %>
         </td>
       </tr>
       <% end %>
