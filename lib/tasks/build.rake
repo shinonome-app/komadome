@@ -7,7 +7,7 @@ class StaticPageBuilder
   attr_reader :target_dir, :rsync_keyfile
 
   def initialize(target_dir: nil)
-    @target_dir = target_dir || Pathname.new('/tmp/build')
+    @target_dir = target_dir || Rails.root.join('tmp/build')
     @rsync_keyfile = '/tmp/rsync.key'
   end
 
