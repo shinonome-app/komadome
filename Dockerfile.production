@@ -1,7 +1,7 @@
 FROM ruby:3.2.1-slim
 
 # Install dependencies
-RUN apt-get update -qq && apt-get upgrade -y && apt-get install -y build-essential libvips curl libpq-dev \
+RUN apt-get update -qq && apt-get upgrade -y && apt-get install -y build-essential libvips curl libpq-dev rsync ssh \
   && apt-get clean \
   && rm -rf /var/cache/apt/archives/* \
   && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \

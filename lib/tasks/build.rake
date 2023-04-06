@@ -28,9 +28,10 @@ namespace :build do
   desc 'rsync'
   task rsync: :environment do
     builder = StaticPageBuilder.new
-    builder.create_rsync_keyfile(ENV.fetch('RSYNC_PASS_FILE', nil))
+    builder.create_rsync_keyfile(ENV.fetch('RSYNC_PASS_FILE', '').gsub('\n', "\n"))
+    server_path = ENV.fetch('RSYNC_SERVER_PATH', nil)
     src_dir = "#{builder.target_dir}/"
-    cmd = "rsync -avhz -e \"ssh -o StrictHostKeyChecking=no -i #{builder.rsync_keyfile}\" #{src_dir} aozora-renewal@aozora-renewal.sakura.ne.jp:/home/aozora-renewal/www"
+    cmd = "rsync -avhz -e \"ssh -o StrictHostKeyChecking=no -i #{builder.rsync_keyfile}\" #{src_dir} #{server_path}"
     puts cmd
     system(cmd)
   end

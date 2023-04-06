@@ -25,6 +25,8 @@ env:
     - DATABASE_HOST
     - DATABASE_USER
     - DATABASE_PASS
+    - RSYNC_PASS_FILE
+    - RSYNC_SERVER_PATH
 # Inject ENV variables into containers (secrets come from .env).
 # env:
 #   clear:
