@@ -7,6 +7,9 @@ Rails.application.routes.draw do
 
   root to: 'top#index'
 
+  # health check
+  get "up" => "health#show"
+
   resources :index_pages, only: [] do
     collection do
       get 'index_top'
