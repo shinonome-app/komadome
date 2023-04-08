@@ -6,7 +6,13 @@ image: takahashim/komadome
 
 # Deploy to these servers.
 servers:
-  - 153.125.146.84
+  web:
+    - 153.125.146.84
+  cron:
+    hosts:
+      - 153.125.146.84
+    cmd:
+      bash -c "cat config/crontab | crontab - && cron -f"
 
 # Credentials for your image host.
 registry:

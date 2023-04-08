@@ -1,0 +1,1 @@
+*/10 * * * * cd /myapp && bundle exec rails build:all && bundle exec rails build:rsync
