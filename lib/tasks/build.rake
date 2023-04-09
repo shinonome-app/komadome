@@ -174,4 +174,7 @@ namespace :build do
 
     puts "Done: #{Time.current - start_time}"
   end
+
+  desc 'exec `all` and `rsync`'
+  task all_and_rsync: %i[build:all build:rsync]
 end
