@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Static page builder
 class StaticPageBuilder
   attr_reader :target_dir, :rsync_keyfile
@@ -35,7 +37,7 @@ class StaticPageBuilder
     html = ApplicationController.renderer.render(component, layout: nil)
     rel_path = path.sub(%r{^/}, '')
     full_path = @target_dir.join(rel_path)
-    puts "Generate #{full_path}"
+    puts "Generate #{full_path}" # rubocop:disable Rails/Output
     write_with_mkdir(full_path, html)
   end
 
