@@ -10,6 +10,9 @@ Rails.application.routes.draw do
   # health check
   get 'up' => 'health#show'
 
+  # kick task
+  post 'kick' => 'kick#create'
+
   resources :index_pages, only: [] do
     collection do
       get 'index_top'
