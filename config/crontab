@@ -2,4 +2,4 @@ SHELL=/bin/ash
 PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 
 ## */1 * * * *  date 1>>/proc/1/fd/1 2>>/proc/1/fd/2 # for debug
-*/15 * * * *  curl -X POST --max-time 1800 http://172.17.0.1/kick?token=$CK_TOKEN 1>>/proc/1/fd/1 2>>/proc/1/fd/2
+*/30 * * * *  curl -X POST --max-time 1800 http://172.17.0.1/kick?token=$CK_TOKEN 1>>/proc/1/fd/1 2>>/proc/1/fd/2
