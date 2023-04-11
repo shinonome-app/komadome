@@ -85,6 +85,12 @@ GEM
     concurrent-ruby (1.1.10)
     crass (1.0.6)
     date (3.3.3)
+    ddtrace (1.10.1)
+      debase-ruby_core_source (>= 0.10.16, <= 3.2.0)
+      libdatadog (~> 2.0.0.1.0)
+      libddwaf (~> 1.6.2.0.0)
+      msgpack
+    debase-ruby_core_source (3.2.0)
     debug (1.7.1)
       irb (>= 1.5.0)
       reline (>= 0.3.1)
@@ -97,6 +103,7 @@ GEM
       railties (>= 5.0.0)
     faker (3.1.0)
       i18n (>= 1.8.11, < 2)
+    ffi (1.15.5)
     gimei (1.1.0)
       romaji
     globalid (1.0.1)
@@ -113,6 +120,17 @@ GEM
       actionview (>= 5.0.0)
       activesupport (>= 5.0.0)
     json (2.6.3)
+    libdatadog (2.0.0.1.0)
+    libdatadog (2.0.0.1.0-aarch64-linux)
+    libdatadog (2.0.0.1.0-x86_64-linux)
+    libddwaf (1.6.2.0.0)
+      ffi (~> 1.0)
+    libddwaf (1.6.2.0.0-aarch64-linux)
+      ffi (~> 1.0)
+    libddwaf (1.6.2.0.0-arm64-darwin)
+      ffi (~> 1.0)
+    libddwaf (1.6.2.0.0-x86_64-linux)
+      ffi (~> 1.0)
     lograge (0.12.0)
       actionpack (>= 4)
       activesupport (>= 4)
@@ -295,6 +313,7 @@ PLATFORMS
 DEPENDENCIES
   bootsnap
   capybara
+  ddtrace
   debug
   factory_bot_rails
   faker

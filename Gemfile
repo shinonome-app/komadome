@@ -54,6 +54,7 @@ gem 'pagy'
 gem 'view_component'
 
 gem 'lograge'
+gem 'ddtrace', require: 'ddtrace/auto_instrument'
 
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 # gem "image_processing", "~> 1.2"
