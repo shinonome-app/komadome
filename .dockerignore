@@ -25,5 +25,6 @@
 *~
 #*#
 .env
+.env.production
 
 /config/credentials/production.key
