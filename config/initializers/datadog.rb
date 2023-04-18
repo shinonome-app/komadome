@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Datadog.configure do |c|
   c.env = Rails.env
   c.service = 'komadome'

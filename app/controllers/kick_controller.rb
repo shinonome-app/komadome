@@ -6,12 +6,12 @@ class KickController < ApplicationController
   def create
     token = params[:token]
 
-    if token != ENV['CK_TOKEN']
-      render json: {success: false, message: "invalid token"}, status: 500
-    else
+    if token == ENV['CK_TOKEN']
       BuildJob.perform_later
 
-      render json: {success: true, message: "job started"}
+      render json: { success: true, message: 'job started' }
+    else
+      render json: { success: false, message: 'invalid token' }, status: :internal_server_error
     end
   end
 end
