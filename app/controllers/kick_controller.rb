@@ -9,7 +9,7 @@ class KickController < ApplicationController
     if token != ENV['CK_TOKEN']
       render json: {success: false, message: "invalid token"}, status: 500
     else
-      BuildJob.perform_now
+      BuildJob.perform_later
 
       render json: {success: true, message: "job started"}
     end

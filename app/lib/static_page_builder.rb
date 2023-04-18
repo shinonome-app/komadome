@@ -13,7 +13,7 @@ class StaticPageBuilder
     Rake::Task['assets:precompile'].invoke
     FileUtils.mkdir_p(@target_dir.join('assets'))
     Rails.public_path.join('assets').children.each do |file|
-      FileUtils.mv(Rails.public_path.join('assets', file), @target_dir.join('assets'))
+      FileUtils.cp_r(Rails.public_path.join('assets', file), @target_dir.join('assets'))
     end
   end
 
