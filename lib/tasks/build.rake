@@ -141,7 +141,7 @@ namespace :build do
                          path: "index_pages/person_inp_#{key}.html")
     end
 
-    Person.all.find_each do |person|
+    Person.find_each do |person|
       builder.build_html(Pages::People::ShowPageComponent.new(person: person),
                          path: "index_pages/person#{person.id}.html")
       person.works.published.pluck(:id).each do |card_id|
