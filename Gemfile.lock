@@ -84,20 +84,15 @@ GEM
       xpath (~> 3.2)
     concurrent-ruby (1.2.2)
     crass (1.0.6)
-    datadog-ci (0.5.1)
-      msgpack
     date (3.3.4)
-    ddtrace (1.18.0)
-      datadog-ci (~> 0.5.0)
-      debase-ruby_core_source (= 3.2.3)
-      libdatadog (~> 5.0.0.1.0)
-      libddwaf (~> 1.14.0.0.0)
-      msgpack
-    debase-ruby_core_source (3.2.3)
     debug (1.9.0)
       irb (~> 1.10)
       reline (>= 0.3.8)
     diff-lcs (1.5.0)
+    dotenv (2.8.1)
+    dotenv-rails (2.8.1)
+      dotenv (= 2.8.1)
+      railties (>= 3.2)
     erubi (1.12.0)
     factory_bot (6.4.2)
       activesupport (>= 5.0.0)
@@ -106,7 +101,6 @@ GEM
       railties (>= 5.0.0)
     faker (3.2.2)
       i18n (>= 1.8.11, < 2)
-    ffi (1.16.3)
     gimei (1.2.0)
       romaji
     globalid (1.2.1)
@@ -126,17 +120,6 @@ GEM
       activesupport (>= 5.0.0)
     json (2.7.1)
     language_server-protocol (3.17.0.3)
-    libdatadog (5.0.0.1.0)
-    libdatadog (5.0.0.1.0-aarch64-linux)
-    libdatadog (5.0.0.1.0-x86_64-linux)
-    libddwaf (1.14.0.0.0)
-      ffi (~> 1.0)
-    libddwaf (1.14.0.0.0-aarch64-linux)
-      ffi (~> 1.0)
-    libddwaf (1.14.0.0.0-arm64-darwin)
-      ffi (~> 1.0)
-    libddwaf (1.14.0.0.0-x86_64-linux)
-      ffi (~> 1.0)
     lograge (0.14.0)
       actionpack (>= 4)
       activesupport (>= 4)
@@ -335,8 +318,8 @@ PLATFORMS
 DEPENDENCIES
   bootsnap
   capybara
-  ddtrace
   debug
+  dotenv-rails
   factory_bot_rails
   faker
   gimei
@@ -360,9 +343,6 @@ DEPENDENCIES
   web-console
   webdrivers
   webrick
-
-RUBY VERSION
-   ruby 3.2.2p53
 
 BUNDLED WITH
    2.4.1

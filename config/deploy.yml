@@ -7,7 +7,8 @@ image: takahashim/komadome
 # Deploy to these servers.
 servers:
   web:
-    - 153.125.146.84
+    hosts:
+      - 153.125.146.84
 
 # Credentials for your image host.
 registry:
@@ -27,6 +28,10 @@ env:
     - DATABASE_HOST
     - DATABASE_USER
     - DATABASE_PASS
+    - SKYLIGHT_AUTHENTICATION
+    - MAIN_SITE_URL
+    - SITE_NAME
+    - RECEPTION_EMAIL
     - RSYNC_PASS_FILE
     - RSYNC_SERVER_PATH
     - CK_TOKEN
@@ -57,28 +62,12 @@ env:
 
 builder:
   dockerfile: Dockerfile.production
+  remote:
+    arch: amd64
+  cache:
+    type: registry
 
 accessories:
-  monitoring:
-    image: gcr.io/datadoghq/agent:7
-    hosts:
-      - 153.125.146.84
-    port: 8126
-    env:
-      clear:
-        DD_LOGS_ENABLED: true
-        DD_LOGS_CONFIG_CONTAINER_COLLECT_ALL: true
-        DD_CONTAINER_EXCLUDE_LOGS: "name:shinonome-monitoring"
-        DD_APM_NON_LOCAL_TRAFFIC: true
-      secret:
-        - DD_API_KEY
-        - DD_SITE
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-      - /var/lib/docker/containers:/var/lib/docker/containers:ro
-      - /proc/:/host/proc/:ro
-      - /opt/datadog-agent/run:/opt/datadog-agent/run:rw
-      - /sys/fs/cgroup/:/host/sys/fs/cgroup:ro
   cronkicker:
     image: takahashim/cronkicker
     hosts:
@@ -88,6 +77,9 @@ accessories:
     env:
       secret:
         - CK_TOKEN
+healthcheck:
+  max_attempts: 10
+  interval: 10s
 
 
 # Use accessory services (secrets come from .env).

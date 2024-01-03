@@ -3,8 +3,6 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '3.2.2'
-
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem 'rails', '~> 7.0.2', '>= 7.0.2.3'
 
@@ -53,7 +51,6 @@ gem 'pagy'
 # view components for Rails
 gem 'view_component'
 
-gem 'ddtrace', require: 'ddtrace/auto_instrument'
 gem 'lograge'
 
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
@@ -71,6 +68,8 @@ group :development, :test do
   # Makes dummy data for seeds
   gem 'faker'
   gem 'gimei'
+
+  gem 'dotenv-rails'
 end
 
 group :development do
