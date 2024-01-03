@@ -266,6 +266,8 @@ GEM
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2, < 3.0)
       websocket (~> 1.0)
+    skylight (6.0.1)
+      activesupport (>= 5.2.0)
     sprockets (4.2.1)
       concurrent-ruby (~> 1.0)
       rack (>= 2.2.4, < 4)
@@ -329,13 +331,14 @@ DEPENDENCIES
   pagy
   pg
   puma (~> 6.0)
-  rails (~> 7.0.2, >= 7.0.2.3)
+  rails (~> 7.0.8)
   rails-i18n
   rspec-rails
   rubocop
   rubocop-rails
   rubocop-rspec
   selenium-webdriver
+  skylight
   sprockets-rails
   tailwindcss-rails
   tzinfo-data
