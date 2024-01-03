@@ -22,7 +22,7 @@ registry:
 env:
   clear:
     DATABASE_NAME: shinonome_production
-    RAILS_LOG_TO_STDOUT: ''
+    RAILS_LOG_TO_STDOUT: '1'
   secret:
     - RAILS_MASTER_KEY
     - DATABASE_HOST
@@ -35,6 +35,7 @@ env:
     - RSYNC_PASS_FILE
     - RSYNC_SERVER_PATH
     - CK_TOKEN
+    - SKYLIGHT_AUTHENTICATION
 # Inject ENV variables into containers (secrets come from .env).
 # env:
 #   clear:
