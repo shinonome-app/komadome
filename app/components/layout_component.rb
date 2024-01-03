@@ -1,9 +1,10 @@
 # frozen_string_literal: true
 
+# 静的サイトのレイアウト用
 class LayoutComponent < ViewComponent::Base
   attr_reader :title, :bgcolor
 
-  include Importmap::ImportmapTagsHelper
+  include Importmap::ImportmapTagsHelper if defined?(Importmap)
 
   def initialize(title: nil, bgcolor: nil)
     super
