@@ -72,6 +72,8 @@ group :development, :test do
   gem 'gimei'
 
   gem 'dotenv-rails'
+
+  gem 'erb_lint', '> 0.3.0', require: false
 end
 
 group :development do
