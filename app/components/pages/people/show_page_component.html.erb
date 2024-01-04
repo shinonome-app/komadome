@@ -4,8 +4,8 @@
 
   <header class="flex items-center justify-between">
     <a href="/" class="md:hidden flex justify-between px-2">
-	  <img src="/images/top_logo.png" alt="Logo" class="h-8 w-8" />
-	</a>
+    <img src="/images/top_logo.png" alt="Logo" class="h-8 w-8">
+  </a>
     <span class="hidden md:flex">&nbsp;</span>
     <nav class="flex justify-end">
       <div class="md:flex justify-end py-3 hidden">
@@ -118,7 +118,7 @@
 
   <div class="px-12 py-5">
     <ol class="list-decimal">
-      <% author.published_works.includes(:kana_type).each do |work|  %>
+      <% author.published_works.includes(:kana_type).each do |work| %>
       <li>
         <%= link_to work.title,
             card_path(person_id: work.card_person_id, card_id: work.id, format: :html),
@@ -126,7 +126,7 @@
         <%= work.subtitle %>
         <span class="px-4">（<%= work.kana_type.name %>、作品ID：<%= work.id %>）</span>
         <% work.work_people.order(:role_id).each do |work_person| %>
-        <%   next if work_person.person_id == author.id %>
+        <% next if work_person.person_id == author.id %>
         <span class="px-8">→<a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" href="person<%= work_person.person_id %>.html"><%= work_person.person.name %></a>(<%= work_person.role.name %>) </span>
         <% end %>
       </li>
@@ -143,12 +143,12 @@
 
   <div class="px-12 py-5">
     <ol class="list-decimal">
-      <% author.unpublished_works.includes(:kana_type).each do |work|  %>
+      <% author.unpublished_works.includes(:kana_type).each do |work| %>
       <li>
         <%= work.title %>
         <span class="px-4">（<%= work.kana_type.name %>、作品ID：<%= work.id %>）</span>
         <% work.work_people.order(:role_id).each do |work_person| %>
-        <%   next if work_person.person_id == author.id %>
+        <% next if work_person.person_id == author.id %>
         <span class="px-8">→<a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" href="person<%= work_person.person_id %>.html"><%= work_person.person.name %></a>(<%= work_person.role.name %>)
         </span>
         <% end %>
@@ -159,8 +159,6 @@
 
   <h2 class="flex py-1 px-5 text-2xl font-semibold bg-gray-300 border border-y-gray-500">関連サイト</h2>
 
-
-
   <div class="text-right py-4">
     <a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" href="#top">▲</a>
   </div>
@@ -169,7 +167,7 @@
 
   <footer class="pt-3 pb-14">
     <div>
-      ●作家リスト：公開中　
+      ●作家リスト：公開中
       <a href="person_a.html">[あ]</a>
       <a href="person_ka.html">[か]</a>
       <a href="person_sa.html">[さ]</a>
@@ -183,7 +181,7 @@
       <a href="person_zz.html">[他]</a>
     </div>
     <div>
-      ●作家リスト：作業中　
+      <span>●作家リスト：作業中　</span>
       <a href="person_inp_a.html">[あ]</a>
       <a href="person_inp_ka.html">[か]</a>
       <a href="person_inp_sa.html">[さ]</a>
@@ -197,9 +195,7 @@
       <a href="person_inp_zz.html">[他]</a>
     </div>
     <div>
-      <span>
-        ●作家リスト：全　　　
-      </span>
+      <span>●作家リスト：全　　　</span>
       <span>
         <a href="person_all_a.html">[あ]</a>
         <a href="person_all_ka.html">[か]</a>

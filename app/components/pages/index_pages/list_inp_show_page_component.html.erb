@@ -4,7 +4,7 @@
 
   <header class="flex items-center justify-between">
     <a href="/" class="md:hidden flex justify-between px-2">
-      <img src="/images/top_logo.png" alt="Logo" class="h-8 w-8" />
+      <img src="/images/top_logo.png" alt="Logo" class="h-8 w-8">
     </a>
     <span class="hidden md:flex">&nbsp;</span>
     <div class="flex md:hidden items-center space-x-3 py-3 px-3">
@@ -55,14 +55,14 @@
           <th class="w-100 font-normal bg-yellow-100 border-double border-2 border-gray-800">No.</th>
           <th class="w-220 font-normal bg-yellow-100 border-double border-2 border-gray-800">作品名(作品ID)<br>副題</th>
           <th class="w-110 font-normal bg-yellow-100 border-double border-2 border-gray-800">文字遣い種別</th>
-          <th class="w-110 font-normal bg-yellow-100 border-double border-2 border-gray-800">翻訳者名等<br/>(人物ID)</th>
-          <th class="w-110 font-normal bg-yellow-100 border-double border-2 border-gray-800">入力者名<br/>校正者名</th>
-          <th class="w-110 font-normal bg-yellow-100 border-double border-2 border-gray-800">状態<br/>状態の開始日</th>
-          <th class="w-110 font-normal bg-yellow-100 border-double border-2 border-gray-800">底本名<br/>出版社名</th>
+          <th class="w-110 font-normal bg-yellow-100 border-double border-2 border-gray-800">翻訳者名等<br>(人物ID)</th>
+          <th class="w-110 font-normal bg-yellow-100 border-double border-2 border-gray-800">入力者名<br>校正者名</th>
+          <th class="w-110 font-normal bg-yellow-100 border-double border-2 border-gray-800">状態<br>状態の開始日</th>
+          <th class="w-110 font-normal bg-yellow-100 border-double border-2 border-gray-800">底本名<br>出版社名</th>
           <th class="w-110 font-normal bg-yellow-100 border-double border-2 border-gray-800">入力に使用した版</th>
         </tr>
 
-        <% works.each_with_index do |work, work_index|  %>
+        <% works.each_with_index do |work, work_index| %>
         <tr>
           <td class="bg-white border-double border-2 border-gray-800 text-right"><%= work_index + 1 + (pagy.page - 1) * pagy.items %></td>
           <td class="bg-white border-double border-2 border-gray-800"><%= work.title %>(<%= work.id %>)</td>

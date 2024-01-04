@@ -39,7 +39,7 @@
   <div class="px-12 py-5">
     最新公開作品：<%= new_works_published_on %>
     <ol class="list-decimal">
-      <% new_works.each do |work|  %>
+      <% new_works.each do |work| %>
       <li>
         <%= link_to work.title,
             card_path(person_id: work.card_person_id, card_id: work.id, format: :html),

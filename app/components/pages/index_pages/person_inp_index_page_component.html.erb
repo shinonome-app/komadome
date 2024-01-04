@@ -4,8 +4,8 @@
 
   <header class="flex items-center justify-between">
     <a href="/" class="md:hidden flex justify-between px-2">
-	  <img src="/images/top_logo.png" alt="Logo" class="h-8 w-8" />
-	</a>
+    <img src="/images/top_logo.png" alt="Logo" class="h-8 w-8">
+  </a>
     <span class="hidden md:flex">&nbsp;</span>
     <nav class="flex justify-end">
       <div class="md:flex justify-end py-3 hidden">
@@ -41,7 +41,7 @@
 
   <div class="text-right py-4">
     <% kana_all.each_with_index do |kana, kana_index| %>
-    <a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" href="#sec<%= kana_index+1%>">[<%= kana %>]</a>
+    <a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" href="#sec<%= kana_index+1 %>">[<%= kana %>]</a>
     <% end %>
   </div>
 
@@ -69,11 +69,11 @@
     <div>
       <span class="pr-3">●作家リスト：作業中</span>
       <% %i(a ka sa ta na ha ma ya ra wa zz).each do |current_id| %>
-      <%   if current_id == id %>
+      <% if current_id == id %>
       <span class="text-red-500 font-bold">[<%= Kana.new(current_id).to_char(other: '他') %>]</span>
-      <%   else %>
+      <% else %>
       <span><a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" href="person_inp_<%= current_id %>.html">[<%= Kana.new(current_id).to_char(other: '他') %>]</a></span>
-      <%   end %>
+      <% end %>
       <% end %>
     </div>
     <div>

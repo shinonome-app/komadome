@@ -4,8 +4,8 @@
 
   <header class="flex items-center justify-between">
     <a href="/" class="md:hidden flex justify-between px-2">
-	  <img src="/images/top_logo.png" alt="Logo" class="h-8 w-8" />
-	</a>
+    <img src="/images/top_logo.png" alt="Logo" class="h-8 w-8">
+  </a>
     <span class="hidden md:flex">&nbsp;</span>
     <div class="flex md:hidden items-center space-x-3 py-3 px-3">
       <!--
@@ -21,7 +21,7 @@
 
   <h1 class="flex justify-center py-3 text-2xl font-semibold bg-yellow-100 border border-y-gray-500">新規公開作品　<%= date.year %>年公開分</h1>
 
-  <p class="flex justify-center py-3">最終更新日: <%= date.strftime('%Y.%m.%d')%></p>
+  <p class="flex justify-center py-3">最終更新日: <%= date.strftime('%Y.%m.%d') %></p>
 
   <p class="flex justify-center">
     新規公開作品は、表の上のほうに追加されていきます。
@@ -85,12 +85,12 @@
   <% unless pagy.next %>
   <div class="flex justify-center p-1">
     <div>
-      <%   (FIRST_YEAR..prev_year).each do |year| %>
+      <% (FIRST_YEAR..prev_year).each do |year| %>
       <%= link_to "#{year}年",
           whatsnew_year_index_pages_path(year_page: "#{year}_1", format: :html),
           class: "text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" %>
       <br>
-      <%   end %>
+      <% end %>
     </div>
   </div>
   <% end %>
