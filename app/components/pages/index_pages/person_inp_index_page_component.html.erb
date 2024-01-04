@@ -1,4 +1,4 @@
-<%= render ::LayoutComponent.new(title: "作業中　作家リスト：#{kana}行 | 青空文庫") do -%>
+<%= render LayoutComponent.new(title: "作業中　作家リスト：#{kana}行 | 青空文庫") do -%>
 <div id="app" class="container mx-auto max-w-5xl py-4">
   <span id="top" name="top">&nbsp;</span>
 
@@ -41,7 +41,7 @@
 
   <div class="text-right py-4">
     <% kana_all.each_with_index do |kana, kana_index| %>
-    <a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" href="#sec<%= kana_index+1 %>">[<%= kana %>]</a>
+    <a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" href="#sec<%= kana_index + 1 %>">[<%= kana %>]</a>
     <% end %>
   </div>
 
@@ -68,7 +68,7 @@
   <footer class="pt-3 pb-14">
     <div>
       <span class="pr-3">●作家リスト：作業中</span>
-      <% %i(a ka sa ta na ha ma ya ra wa zz).each do |current_id| %>
+      <% %i[a ka sa ta na ha ma ya ra wa zz].each do |current_id| %>
       <% if current_id == id %>
       <span class="text-red-500 font-bold">[<%= Kana.new(current_id).to_char(other: '他') %>]</span>
       <% else %>

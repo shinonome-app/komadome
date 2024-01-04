@@ -1,4 +1,4 @@
-<%= render ::LayoutComponent.new(title: '青空文庫', bgcolor: 'bg-white-100') do -%>
+<%= render LayoutComponent.new(title: '青空文庫', bgcolor: 'bg-white-100') do -%>
 <div id="app" class="container mx-auto max-w-6xl py-2">
   <div class="flex">
     <img src="/images/top_logo.png">
@@ -42,8 +42,8 @@
       <% new_works.each do |work| %>
       <li>
         <%= link_to work.title,
-            card_path(person_id: work.card_person_id, card_id: work.id, format: :html),
-            class: "text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" %>
+                    card_path(person_id: work.card_person_id, card_id: work.id, format: :html),
+                    class: "text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" %>
         <%= work.subtitle %>
       </li>
       <% end %>

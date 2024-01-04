@@ -1,4 +1,4 @@
-<%= render ::LayoutComponent.new(title: "作家別作品リスト：#{author.name} | 青空文庫", bgcolor: author.copyright? ? 'bg-rose-50' : 'bg-sky-50') do -%>
+<%= render LayoutComponent.new(title: "作家別作品リスト：#{author.name} | 青空文庫", bgcolor: author.copyright? ? 'bg-rose-50' : 'bg-sky-50') do -%>
 <div id="app" class="container mx-auto max-w-5xl ">
   <div id="top" name="top">&nbsp;</div>
 
@@ -118,11 +118,11 @@
 
   <div class="px-12 py-5">
     <ol class="list-decimal">
-      <% author.published_works.includes(:kana_type).each do |work| %>
+      <% author.published_works.includes(:kana_type).find_each do |work| %>
       <li>
         <%= link_to work.title,
-            card_path(person_id: work.card_person_id, card_id: work.id, format: :html),
-            class: "text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" %>
+                    card_path(person_id: work.card_person_id, card_id: work.id, format: :html),
+                    class: "text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" %>
         <%= work.subtitle %>
         <span class="px-4">（<%= work.kana_type.name %>、作品ID：<%= work.id %>）</span>
         <% work.work_people.order(:role_id).each do |work_person| %>
@@ -143,7 +143,7 @@
 
   <div class="px-12 py-5">
     <ol class="list-decimal">
-      <% author.unpublished_works.includes(:kana_type).each do |work| %>
+      <% author.unpublished_works.includes(:kana_type).find_each do |work| %>
       <li>
         <%= work.title %>
         <span class="px-4">（<%= work.kana_type.name %>、作品ID：<%= work.id %>）</span>

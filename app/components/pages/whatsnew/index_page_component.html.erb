@@ -1,4 +1,4 @@
-<%= render ::LayoutComponent.new(title: '新規公開作品 | 青空文庫') do -%>
+<%= render LayoutComponent.new(title: '新規公開作品 | 青空文庫') do -%>
 <div id="app" class="container mx-auto max-w-5xl py-4">
   <span id="top" name="top">&nbsp;</span>
 
@@ -35,7 +35,7 @@
     <div class="lg:w-3/4">
 
       <div class="text-right py-4">
-        <%= render(::Pages::Whatsnew::PagyNavComponent.new(pagy: pagy)) %>
+        <%= render(Pages::Whatsnew::PagyNavComponent.new(pagy: pagy)) %>
       </div>
 
       <table class="border-double border-2 border-gray-800 w-full">
@@ -60,8 +60,8 @@
           </td>
           <td class="bg-white border-double border-2 border-gray-800">
             <%= link_to work.title,
-                card_path(person_id: work.card_person_id, card_id: work.id, format: :html),
-                class: "text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" %>
+                        card_path(person_id: work.card_person_id, card_id: work.id, format: :html),
+                        class: "text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" %>
             <br><%= work.subtitle %>
           </td>
           <td class="bg-white border-double border-2 border-gray-800"><%= work.author_text %></td>
@@ -73,7 +73,7 @@
       </table>
 
       <div class="text-right py-4">
-        <%= render(::Pages::Whatsnew::PagyNavComponent.new(pagy: pagy)) %>
+        <%= render(Pages::Whatsnew::PagyNavComponent.new(pagy: pagy)) %>
       </div>
     </div>
   </div>
@@ -87,8 +87,8 @@
     <div>
       <% (FIRST_YEAR..prev_year).each do |year| %>
       <%= link_to "#{year}年",
-          whatsnew_year_index_pages_path(year_page: "#{year}_1", format: :html),
-          class: "text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" %>
+                  whatsnew_year_index_pages_path(year_page: "#{year}_1", format: :html),
+                  class: "text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" %>
       <br>
       <% end %>
     </div>

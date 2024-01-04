@@ -1,4 +1,4 @@
-<%= render ::LayoutComponent.new(title: 'そらもよう | 青空文庫', bgcolor: 'bg-white-100') do -%>
+<%= render LayoutComponent.new(title: 'そらもよう | 青空文庫', bgcolor: 'bg-white-100') do -%>
 <div id="app" class="container mx-auto max-w-5xl">
   <div id="top" name="top">&nbsp;</div>
 
@@ -33,8 +33,8 @@
   <div class="text-center">
     <% (1997...(Time.zone.now.year)).each do |year| %>
     <%= link_to "#{year}年のそらもよう",
-        soramoyou_year_path(year: year, format: :html),
-        class: "text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" %>
+                soramoyou_year_path(year: year, format: :html),
+                class: "text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" %>
     <br>
     <% end %>
   </div>

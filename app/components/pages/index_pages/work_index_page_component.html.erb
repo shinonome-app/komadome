@@ -1,4 +1,4 @@
-<%= render ::LayoutComponent.new(title: "公開中　作品一覧：#{kana} | 青空文庫") do -%>
+<%= render LayoutComponent.new(title: "公開中　作品一覧：#{kana} | 青空文庫") do -%>
 <div id="app" class="container mx-auto max-w-5xl py-4">
   <span id="top" name="top">&nbsp;</span>
 
@@ -43,7 +43,7 @@
     <div class="w-full">
 
       <div class="text-right py-4">
-        <%= render(::Pages::IndexPages::PagyNavComponent.new(id: id, pagy: pagy)) %>
+        <%= render(Pages::IndexPages::PagyNavComponent.new(id: id, pagy: pagy)) %>
       </div>
 
       <table class="border-double border-2 border-gray-800 w-full">
@@ -58,11 +58,11 @@
 
         <% works.each_with_index do |work, work_index| %>
         <tr>
-          <td class="bg-white border-double border-2 border-gray-800 text-right"><%= work_index + 1 + (pagy.page - 1) * pagy.items %></td>
+          <td class="bg-white border-double border-2 border-gray-800 text-right"><%= work_index + 1 + ((pagy.page - 1) * pagy.items) %></td>
           <td class="bg-white border-double border-2 border-gray-800">
             <%= link_to work.title,
-                card_path(person_id: work.card_person_id, card_id: work.id, format: :html),
-                class: "text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" %>
+                        card_path(person_id: work.card_person_id, card_id: work.id, format: :html),
+                        class: "text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" %>
             <br><%= work.subtitle %>
           </td>
           <td class="bg-white border-double border-2 border-gray-800"><%= work.kana_type.name %></td>
@@ -74,7 +74,7 @@
         <% end %>
       </table>
       <div class="text-right py-4">
-        <%= render(::Pages::IndexPages::PagyNavComponent.new(id: id, pagy: pagy)) %>
+        <%= render(Pages::IndexPages::PagyNavComponent.new(id: id, pagy: pagy)) %>
       </div>
     </div>
   </div>

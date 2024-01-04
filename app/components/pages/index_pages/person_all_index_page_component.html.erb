@@ -1,4 +1,4 @@
-<%= render ::LayoutComponent.new(title: "登録全作家　作家リスト：#{kana}行 | 青空文庫") do -%>
+<%= render LayoutComponent.new(title: "登録全作家　作家リスト：#{kana}行 | 青空文庫") do -%>
 <div id="app" class="container mx-auto max-w-5xl py-4">
   <span id="top" name="top">&nbsp;</span>
 
@@ -41,13 +41,13 @@
 
   <div class="text-right py-4">
     <% kana_all.each_with_index do |kana, kana_index| %>
-    <a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" href="#sec<%= kana_index+1 %>">[<%= kana %>]</a>
+    <a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" href="#sec<%= kana_index + 1 %>">[<%= kana %>]</a>
     <% end %>
   </div>
 
   <% kana_all.each_with_index do |kana, kana_index| %>
 
-  <h2 class="flex py-1 px-5 text-2xl font-semibold bg-gray-300 border border-y-gray-500"><a name="sec<%= kana_index+1 %>"><%= kana %></a></h2>
+  <h2 class="flex py-1 px-5 text-2xl font-semibold bg-gray-300 border border-y-gray-500"><a name="sec<%= kana_index + 1 %>"><%= kana %></a></h2>
 
   <div class="px-12 py-5">
     <ol class="list-decimal">
