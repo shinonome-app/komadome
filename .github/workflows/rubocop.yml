@@ -4,18 +4,19 @@ on:
   pull_request:
   push:
     branches:
-      - master
+      - main
 
 jobs:
-  rubocop:
+  test:
     runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           ref: ${{ github.event.pull_request.head.sha }}
       - uses: ruby/setup-ruby@v1
         with:
           bundler-cache: true
-          ruby-version: 3.2.1
+          ruby-version: 3.2.2
       - uses: r7kamura/rubocop-problem-matchers-action@v1
-      - run: bundle exec rubocop --parallel
+      - name: rubocop
+        run: bundle exec rubocop --parallel
