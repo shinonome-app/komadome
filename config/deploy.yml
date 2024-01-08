@@ -80,7 +80,7 @@ accessories:
         - CK_TOKEN
 healthcheck:
   max_attempts: 10
-  interval: 10s
+  interval: 20s
 
 
 # Use accessory services (secrets come from .env).
