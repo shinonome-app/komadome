@@ -10,7 +10,7 @@ gem 'rails', '~> 7.0.8'
 gem 'sprockets-rails'
 
 # Use the Puma web server [https://github.com/puma/puma]
-gem 'puma', '~> 6.0'
+gem 'puma', '~> 6.4'
 
 # To publish static pages
 gem 'webrick'
