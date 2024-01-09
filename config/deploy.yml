@@ -67,6 +67,8 @@ builder:
     arch: amd64
   cache:
     type: registry
+  args:
+    GIT_SHA: <%= %x(git rev-parse HEAD) %>
 
 accessories:
   cronkicker:

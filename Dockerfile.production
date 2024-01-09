@@ -11,9 +11,12 @@ RUN apt-get update -qq && apt-get upgrade -y && apt-get install -y build-essenti
 RUN mkdir /myapp
 WORKDIR /myapp
 
+ARG GIT_SHA
+
 ENV LANG="C.UTF-8"
 ENV RAILS_ENV="production"
 ENV NODE_ENV="production"
+ENV SKYLIGHT_DEPLOY_GIT_SHA=$GIT_SHA
 
 COPY Gemfile /myapp/Gemfile
 COPY Gemfile.lock /myapp/Gemfile.lock
