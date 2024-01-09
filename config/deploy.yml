@@ -67,6 +67,8 @@ builder:
     arch: amd64
   cache:
     type: registry
+  args:
+    GIT_SHA: <%= %x(git rev-parse HEAD) %>
 
 accessories:
   cronkicker:
@@ -79,8 +81,8 @@ accessories:
       secret:
         - CK_TOKEN
 healthcheck:
-  max_attempts: 10
-  interval: 20s
+  max_attempts: 20
+  interval: 30s
 
 
 # Use accessory services (secrets come from .env).
