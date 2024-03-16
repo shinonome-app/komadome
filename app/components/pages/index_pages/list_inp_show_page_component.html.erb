@@ -70,8 +70,8 @@
           <td class="bg-white border-double border-2 border-gray-800"><%= work.translator_text %></td>
           <td class="bg-white border-double border-2 border-gray-800"><%= work.inputer_text %><br><%= work.proofreader_text %></td>
           <td class="bg-white border-double border-2 border-gray-800"><%= work.work_status.name %><br><%= work.started_on.strftime("%F") %></td>
-          <td class="bg-white border-double border-2 border-gray-800"><%= work.first_teihon.title %><br><%= work.first_teihon.publisher %></td>
-          <td class="bg-white border-double border-2 border-gray-800"><%= work.first_teihon.input_edition %></td>
+          <td class="bg-white border-double border-2 border-gray-800"><%= work.first_teihon&.title %><br><%= work.first_teihon&.publisher %></td>
+          <td class="bg-white border-double border-2 border-gray-800"><%= work.first_teihon&.input_edition %></td>
         </tr>
         <% end %>
       </table>

@@ -68,15 +68,14 @@
             <%= work.subtitle %>
           </td>
           <td class="bg-white border-double border-2 border-gray-800"><%= work.kana_type.name %></td>
-          <td class="bg-white border-double border-2 border-gray-800"><%= work.first_author.name %>(<%= work.first_author.id %>)</td>
-          <td class="bg-white border-double border-2 border-gray-800"><%= work.first_author.original_person&.name %></td>
+          <td class="bg-white border-double border-2 border-gray-800"><%= work.first_author&.name %>(<%= work.first_author&.id %>)</td>
+          <td class="bg-white border-double border-2 border-gray-800"><%= work.first_author&.original_person&.name %></td>
           <td class="bg-white border-double border-2 border-gray-800"><%= work.translator_text %></td>
           <td class="bg-white border-double border-2 border-gray-800"><%= work.inputer_text %><br><%= work.proofreader_text %></td>
           <td class="bg-white border-double border-2 border-gray-800"><%= work.work_status.name %><br><%= work.started_on %></td>
-          <td class="bg-white border-double border-2 border-gray-800"><%= work.first_teihon.title %><br><%= work.first_teihon.publisher %></td>
-          <td class="bg-white border-double border-2 border-gray-800"><%= work.first_teihon.input_edition %></td>
+          <td class="bg-white border-double border-2 border-gray-800"><%= work.first_teihon&.title %><br><%= work.first_teihon&.publisher %></td>
+          <td class="bg-white border-double border-2 border-gray-800"><%= work.first_teihon&.input_edition %></td>
         </tr>
-
         <% end %>
       </table>
       <div class="text-right py-4">
