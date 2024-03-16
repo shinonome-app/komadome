@@ -187,6 +187,10 @@ class Work < ApplicationRecord
     work_people.where(role_id: 1).map { |a| a.person.name }.join(', ')
   end
 
+  def base_author_text
+    work_people.where(role_id: 1).map { |a| a.person.original_person&.name }.compact.join(', ')
+  end
+
   def translator_text
     work_people.where(role_id: 2).map { |a| a.person.name }.join(', ')
   end
