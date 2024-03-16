@@ -8,8 +8,6 @@
 #  filename         :text
 #  filesize         :integer
 #  last_updated_on  :date
-#  note             :text
-#  opened_on        :date
 #  registrated_on   :date
 #  revision_count   :integer
 #  url              :text
@@ -19,7 +17,6 @@
 #  compresstype_id  :bigint           not null
 #  file_encoding_id :bigint           not null
 #  filetype_id      :bigint           not null
-#  user_id          :bigint
 #  work_id          :bigint           not null
 #
 # Indexes
@@ -49,6 +46,13 @@ class Workfile < ApplicationRecord
   belongs_to :charset
 
   has_one_attached :workdata if defined?(ActiveStorage)
+
+  has_one :workfile_secret,
+          class_name: 'Shinonome::WorkfileSecret',
+          required: true,
+          dependent: :destroy
+
+  accepts_nested_attributes_for :workfile_secret, update_only: true
 
   after_save :set_filename
 

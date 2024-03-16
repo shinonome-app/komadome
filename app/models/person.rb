@@ -18,7 +18,6 @@
 #  last_name       :text             not null
 #  last_name_en    :text
 #  last_name_kana  :text             not null
-#  note            :text
 #  publish_count   :integer
 #  sortkey         :text
 #  sortkey2        :text
@@ -26,7 +25,6 @@
 #  url             :text
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
-#  note_user_id    :bigint
 #
 
 require 'csv'
@@ -46,13 +44,25 @@ class Person < ApplicationRecord
     ['わ', nil, 'を', nil, 'ん']
   ].freeze
 
-  belongs_to :note_user, optional: true
+  belongs_to :updated_user,
+             class_name: 'Shinonome::User',
+             optional: true,
+             foreign_key: 'updated_by',
+             inverse_of: false
+
   has_many :work_people, dependent: :destroy
   has_many :works, through: :work_people
   has_one :base_person, dependent: :destroy
   has_one :original_person, through: :base_person
   has_many :person_sites, dependent: :destroy
   has_many :sites, through: :person_sites
+
+  has_one :person_secret,
+          class_name: 'Shinonome::PersonSecret',
+          required: true,
+          dependent: :destroy
+
+  accepts_nested_attributes_for :person_secret, update_only: true
 
   validates :last_name, :last_name_kana, presence: true
   validates :copyright_flag, inclusion: { in: [true, false] }
@@ -73,7 +83,7 @@ class Person < ApplicationRecord
   end
 
   def to_csv
-    array = [id, last_name, last_name_kana, last_name_en, first_name, first_name_kana, first_name_en, born_on, died_on, copyright_char, email, url, description, basename, note, updated_at, updated_by, sortkey, sortkey2]
+    array = [id, last_name, last_name_kana, last_name_en, first_name, first_name_kana, first_name_en, born_on, died_on, copyright_char, email, url, description, basename, person_secret&.memo, updated_at, updated_by, sortkey, sortkey2]
 
     CSV.generate_line(array, force_quotes: true, row_sep: "\r\n")
   end
@@ -94,6 +104,10 @@ class Person < ApplicationRecord
 
   def copyright_char
     copyright_flag ? 't' : 'f'
+  end
+
+  def copyright_flag_name
+    copyright_flag ? 'あり' : 'なし'
   end
 
   def name
