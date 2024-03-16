@@ -54,9 +54,9 @@ namespace :build do
                        path: 'index_pages/person_all.html')
 
     Kana.each_sym_and_char do |id, kana|
-      item_count = 20
+      item_count = 50
 
-      works = Work.published.with_title_firstchar(kana).order(:id).all
+      works = Work.published.with_title_firstchar(kana).order(:sortkey, :id).all
 
       total_page = works.count.fdiv(item_count).ceil # 割り切れない場合は切り上げ
       (1..total_page).each do |page|
@@ -72,9 +72,9 @@ namespace :build do
     end
 
     Kana.each_sym_and_char do |id, kana| # rubocop:disable Style/CombinableLoops
-      item_count = 20
+      item_count = 50
 
-      works = Work.unpublished.with_title_firstchar(kana).order(:id).all
+      works = Work.unpublished.with_title_firstchar(kana).order(:sortkey, :id).all
 
       total_page = works.count.fdiv(item_count).ceil # 割り切れない場合は切り上げ
       (1..total_page).each do |page|
