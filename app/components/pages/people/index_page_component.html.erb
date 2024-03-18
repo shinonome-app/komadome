@@ -52,7 +52,7 @@
   <div class="px-12 py-5">
     <ol class="list-decimal">
       <% authors[kana_index].each do |person| %>
-      <%   next if person.published_works.count == 0 %>
+      <% next if person.published_works.count == 0 %>
       <li><a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" href="person<%= person.id %>.html#sakuhin_list_1"><%= person.name %></a>　(公開中：<%= person.published_works.count %>)　　<% if person.copyright_flag? %><strong>＊著作権存続＊</strong>　<% end %></li>
       <% end %>
     </ol>
