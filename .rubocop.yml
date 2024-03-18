@@ -10,6 +10,8 @@
 # See https://docs.rubocop.org/rubocop/configuration
 
 require:
+  - rubocop-capybara
+  - rubocop-factory_bot
   - rubocop-rails
   - rubocop-rspec
 
@@ -72,12 +74,15 @@ RSpec/ContextWording:
   Enabled: false
 
 RSpec/DescribedClass:
-  Enabled: false
+  EnforcedStyle: explicit
 
 RSpec/ExampleLength:
-  Max: 40
+  Max: 100
   Exclude:
   - "spec/services/**/*.rb"
+
+RSpec/IndexedLet:
+  Enabled: false
 
 RSpec/MultipleExpectations:
   Enabled: false
@@ -110,6 +115,10 @@ Style/NumericLiterals:
   Enabled: false
 
 Style/NumericPredicate:
+  Enabled: false
+
+Style/SymbolArray:
+  MinSize: 3
   Enabled: false
 
 Style/SymbolProc:
