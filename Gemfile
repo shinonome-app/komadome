@@ -46,7 +46,7 @@ gem 'pg'
 gem 'rails-i18n'
 
 # Pagination in views
-gem 'pagy'
+gem 'pagy', '6.2.0'
 
 # view components for Rails
 gem 'view_component'
