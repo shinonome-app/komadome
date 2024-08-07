@@ -65,6 +65,8 @@ class Workfile < ApplicationRecord
   validates :file_encoding_id, presence: true # rubocop:disable Rails/RedundantPresenceValidationOnBelongsTo
   validates :file_encoding_id, numericality: { only_integer: true }, if: -> { file_encoding_id.present? }
 
+  validates :url, format: { with: URI::DEFAULT_PARSER.make_regexp(%w[http https]) }, allow_blank: true
+
   def self.parse(url, validate: true)
     # ex.
     #   https://www.aozora.gr.jp/cards/001234/files/46340_24939.html
@@ -120,6 +122,14 @@ class Workfile < ApplicationRecord
 
   def zip?
     compresstype&.zip?
+  end
+
+  def filename_to_download
+    if filename.present?
+      filename
+    else
+      "#{work.id}.#{filetype&.extension}"
+    end
   end
 
   def using_ruby?

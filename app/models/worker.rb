@@ -55,7 +55,7 @@ class Worker < ApplicationRecord
     when 3 # で終わる
       where('name_kana like ?', "%#{name_kana}")
     when 4 # と等しい
-      where(name_kana: name_kana)
+      where(name_kana:)
     end
   }
 
@@ -68,7 +68,7 @@ class Worker < ApplicationRecord
     when 3 # で終わる
       where('name like ?', "%#{name}")
     when 4 # と等しい
-      where(name: name)
+      where(name:)
     end
   }
 
@@ -80,6 +80,8 @@ class Worker < ApplicationRecord
     end
   }
 
+  before_validation :set_sortkey
+
   validates :name, :name_kana, presence: true
 
   def self.csv_header
@@ -90,5 +92,11 @@ class Worker < ApplicationRecord
     array = [id, name, name_kana, worker_secret.email, worker_secret.url, worker_secret.note, updated_at, updated_by, sortkey]
 
     CSV.generate_line(array, force_quotes: true, row_sep: "\r\n")
+  end
+
+  private
+
+  def set_sortkey
+    self.sortkey = Kana.convert_sortkey(name_kana) if sortkey.blank?
   end
 end

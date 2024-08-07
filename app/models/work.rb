@@ -88,6 +88,8 @@ class Work < ApplicationRecord
   scope :unpublished, ->(date = Time.zone.today) { where('work_status_id in (3, 4, 5, 6, 7, 8, 9, 10, 11) OR (work_status_id = 1 AND started_on > ?)', date) }
   scope :not_proofread, -> { where('work_status_id in (5, 6)') }
 
+  before_validation :set_sortkey
+
   validates :title_kana, presence: true
   validates :title, presence: true
   validates :copyright_flag, inclusion: { in: [true, false] }
@@ -183,6 +185,10 @@ class Work < ApplicationRecord
     original_books.where(booktype: 1).first
   end
 
+  def first_oyahon
+    original_books.where(booktype: 2).first
+  end
+
   def author_text
     work_people.where(role_id: 1).map { |a| a.person.name }.join(', ')
   end
@@ -213,5 +219,15 @@ class Work < ApplicationRecord
 
   def card_url
     "https://www.aozora.gr.jp/cards/#{card_person_id}/card#{id}.html"
+  end
+
+  def xhtml_link
+    workfiles.find{ | workfile | workfile.html? }
+  end
+
+  private
+
+  def set_sortkey
+    self.sortkey = Kana.convert_sortkey(title_kana) if sortkey.blank?
   end
 end
