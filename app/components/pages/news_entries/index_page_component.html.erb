@@ -20,7 +20,7 @@
   </h2>
 
   <div>
-    <%= sanitize(news_entry.body, tags: %w(a b blockquote dd div dl dt embed hr i img li ol small strong ul), attributes: %w(href target src width height type pluginspage style)  %>
+    <%= sanitize(news_entry.body, tags: %w(a b blockquote dd div dl dt embed hr i img li ol small strong ul), attributes: %w(href target src width height type pluginspage style))  %>
   </div>
   <% end %>
 
