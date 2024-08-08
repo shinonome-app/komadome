@@ -13,6 +13,8 @@ module.exports = {
         nonpreflight: {
           css: {
             maxWidth: 'none',
+            '--tw-prose-links': theme('colors.blue[600]'),
+            '--tw-prose-invert-links': theme('colors.blue[400]'),
             blockquote: {
               fontStyle: 'normal',
             },
