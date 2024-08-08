@@ -9,6 +9,16 @@ module.exports = {
   ],
   theme: {
     extend: {
+      typography: (theme) => ({
+        nonpreflight: {
+          css: {
+            maxWidth: 'none',
+            blockquote: {
+              fontStyle: 'normal',
+            },
+          },
+        },
+      }),
       fontFamily: {
         sans: ['Inter var', ...defaultTheme.fontFamily.sans],
       },

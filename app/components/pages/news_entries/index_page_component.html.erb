@@ -19,8 +19,8 @@
     <div class="w-3/4 px-4 py-1 bg-yellow-100"><%= news_entry.title %></div>
   </h2>
 
-  <div>
-    <%= sanitize(news_entry.body, tags: %w(a b blockquote dd div dl dt embed hr i img li ol small strong ul), attributes: %w(href target src width height type pluginspage style))  %>
+  <div class="prose prose-nonpreflight">
+    <%= sanitize(news_entry.body.gsub(/\r?\n/, '<br />'), tags: %w(a b blockquote br dd div dl dt embed hr i img li ol small strong ul), attributes: %w(href target src width height type pluginspage style))  %>
   </div>
   <% end %>
 
