@@ -7,6 +7,8 @@ class StaticPageBuilder
   def initialize(target_dir: nil)
     @target_dir = target_dir || Rails.root.join('tmp/build')
     @rsync_keyfile = '/tmp/rsync.key'
+
+    yield self if block_given?
   end
 
   def copy_precompiled_assets
