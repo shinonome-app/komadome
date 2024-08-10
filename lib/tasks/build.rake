@@ -36,9 +36,8 @@ namespace :build do
     system(cmd)
   end
 
-  desc 'Build HTML files'
-  task generate: :environment do
-    url = Rails.application.routes.url_helpers
+  desc 'build index pages'
+  task generate_indexes: :environment do
     builder = StaticPageBuilder.new
 
     builder.build_html(Pages::Top::IndexPageComponent.new,
@@ -52,6 +51,11 @@ namespace :build do
 
     builder.build_html(Pages::IndexPages::PersonAllPageComponent.new,
                        path: 'index_pages/person_all.html')
+  end
+
+  desc 'build works index pages'
+  task generate_work_indexes: :environment do
+    builder = StaticPageBuilder.new
 
     Kana.each_sym_and_char do |id, kana|
       item_count = 50
@@ -70,6 +74,11 @@ namespace :build do
                            path: "index_pages/sakuhin_#{id}#{page}.html")
       end
     end
+  end
+
+  desc 'build WIP works index pages'
+  task generate_wip_work_indexes: :environment do
+    builder = StaticPageBuilder.new
 
     Kana.each_sym_and_char do |id, kana| # rubocop:disable Style/CombinableLoops
       item_count = 50
@@ -88,6 +97,11 @@ namespace :build do
                            path: "index_pages/sakuhin_inp_#{id}#{page}.html")
       end
     end
+  end
+
+  desc 'build soramoyou pages'
+  task generate_soramoyou: :environment do
+    builder = StaticPageBuilder.new
 
     current_year = Time.zone.now.year
     builder.build_html(Pages::NewsEntries::IndexPageComponent.new(year: current_year),
@@ -98,6 +112,12 @@ namespace :build do
       builder.build_html(Pages::NewsEntries::IndexYearPageComponent.new(year: year),
                          path: "soramoyou/soramoyou#{year}.html")
     end
+  end
+
+  desc 'build whatsnew pages'
+  task generate_whatsnew: :environment do
+    url = Rails.application.routes.url_helpers
+    builder = StaticPageBuilder.new
 
     item_count = WhatsnewsController::ITEM_COUNT
     date = Time.zone.today
@@ -129,6 +149,11 @@ namespace :build do
                            path: path)
       end
     end
+  end
+
+  desc 'build person index pages'
+  task generate_person_index: :environment do
+    builder = StaticPageBuilder.new
 
     Kana.each_column_key do |key|
       builder.build_html(Pages::People::IndexPageComponent.new(id: key),
@@ -140,10 +165,24 @@ namespace :build do
       builder.build_html(Pages::IndexPages::PersonInpIndexPageComponent.new(id: key),
                          path: "index_pages/person_inp_#{key}.html")
     end
+  end
+
+  desc 'build person pages'
+  task generate_person: :environment do
+    builder = StaticPageBuilder.new
 
     Person.find_each do |person|
       builder.build_html(Pages::People::ShowPageComponent.new(person: person),
                          path: "index_pages/person#{person.id}.html")
+    end
+  end
+
+  desc 'build work pages'
+  task generate_work: :environment do
+    url = Rails.application.routes.url_helpers
+    builder = StaticPageBuilder.new
+
+    Person.find_each do |person|
       person.works.published.pluck(:id).each do |card_id|
         builder.build_html(Pages::Cards::ShowPageComponent.new(person_id: person.id,
                                                                card_id: card_id),
@@ -151,7 +190,15 @@ namespace :build do
                                                card_id: card_id,
                                                format: :html))
       end
+    end
+  end
 
+  desc 'build WIP person index pages'
+  task generate_wip_person_index: :environment do
+    url = Rails.application.routes.url_helpers
+    builder = StaticPageBuilder.new
+
+    Person.find_each do |person|
       item_count = 20
       works = person.works.unpublished
       total_page = works.count.fdiv(item_count).ceil
@@ -165,6 +212,9 @@ namespace :build do
       end
     end
   end
+
+  desc 'Build all HTML files'
+  task generate: %i[build:generate_indexes build:generate_work_indexes build:generate_wip_work_indexes build:generate_soramoyou build:generate_whatsnew build:generate_person_index build:generate_person build:generate_work build:generate_wip_person_index]
 
   desc 'Generate all pages'
   task all: %i[environment build:clean build:prepare_assets build:copy_zip_files] do
