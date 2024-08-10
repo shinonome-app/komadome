@@ -256,7 +256,17 @@ namespace :build do
   end
 
   desc 'Build all HTML files'
-  task generate: %i[build:generate_indexes build:generate_work_indexes build:generate_wip_work_indexes build:generate_soramoyou build:generate_whatsnew build:generate_person_index build:generate_person build:generate_work build:generate_wip_person_index]
+  task generate: %i[
+    build:generate_indexes
+    build:generate_work_indexes
+    build:generate_wip_work_indexes
+    build:generate_soramoyou
+    build:generate_whatsnew
+    build:generate_person_index
+    build:generate_person
+    build:generate_work
+    build:generate_wip_person_index
+  ]
 
   desc 'Generate all pages'
   task all: %i[environment build:clean build:prepare_assets build:copy_zip_files] do
