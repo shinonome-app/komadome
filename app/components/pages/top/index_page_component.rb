@@ -19,8 +19,12 @@ module Pages
         @topics = NewsEntry.topics.order(published_on: :desc)
 
         @works_count = Work.published.count
-        @works_copyright_count = Work.published.select { |work| work.copyright? }.count
-        @works_noncopyright_count = Work.published.select { |work| work.noncopyright? }.count
+        @works_copyright_count = Rails.cache.fetch("#{Work.last.cache_key_with_version}/copyright_count", expires_in: 24.hours) do
+          Work.published.count { |work| work.copyright? }
+        end
+        @works_noncopyright_count = Rails.cache.fetch("#{Work.last.cache_key_with_version}/noncopyright_count", expires_in: 24.hours) do
+          Work.published.count { |work| work.noncopyright? }
+        end
       end
     end
   end
