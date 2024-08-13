@@ -13,23 +13,24 @@
       <div class="flex w-full">
         <div>
           <a href="shiryo_pdlocked.html" class="hover:underline">
-            <img src="https://www.aozora.gr.jp/banner/pd-locked-mini.png" width="230" height="50" alt="著作権保護期間延長">
+            <img src="https://www.aozora.gr.jp/banner/pd-locked-mini.png" width="230" height="50" alt="著作権保護期間延長" class="mx-16">
           </a>
         </div>
         <div class="w-full">
           <script type="text/javascript"><!--
-            var nm=0;var as_q=new String("");var dkey=new String("");
             function se(nm){
-              dkey=document.forms[0].as_q.value;
-              if(dkey!=""){dkey=uu[nm]+"site:www.aozora.gr.jp+"+encodeURIComponent(dkey);window.open(dkey,'_blank');}
+              const uu = new Array(
+                "", // 0
+                "http://www.google.co.jp/search?hl=ja&num=20&q=", // 1
+                "http://www.bing.com/search?q=", // 2
+                "http://search.naver.jp/search?&q=", // 3
+                "http://www.baidu.jp/s?rn=20&wd=", // 4
+                "http://search.goo.ne.jp/web.jsp?IE=UTF-8&MT=", // 5
+                "http://search.yahoo.co.jp/search?p=" // 6
+              )
+              const dkey=document.forms[0].as_q.value;
+              if(dkey!=""){const url=uu[nm]+"site:www.aozora.gr.jp+"+encodeURIComponent(dkey);window.open(url,'_blank');}
             }
-            uu=new Array(7);uu[0]="";
-            uu[1]="http://www.google.co.jp/search?hl=ja&num=20&q=";
-            uu[2]="http://www.bing.com/search?q=";
-            uu[3]="http://search.naver.jp/search?&q=";
-            uu[4]="http://www.baidu.jp/s?rn=20&wd=";
-            uu[5]="http://search.goo.ne.jp/web.jsp?IE=UTF-8&MT=";
-            uu[6]="http://search.yahoo.co.jp/search?p=";
             //-->
           </script>
           <form method="get" action="https://www.google.com/search" name="f" target="_blank" class="text-right">
@@ -44,12 +45,12 @@
             <input type="text" name="as_q" value="" autocomplete="on" size="25" class="text-sm h-6">
             <br>
             <input type="submit" value="Google" class="my-1 bg-gray-200 hover:bg-gray-300 border border-slate-500 text-sm w-16 h-6">
-            <!--<input type="button" style="width:60px;height:25px" onclick="se(1)" value="Google">-->
+            <!--<input type="button" onclick="se(1)" value="Google">-->
             <input type="button" onclick="se(2)" value="bing" class="my-1 bg-gray-200 hover:bg-gray-300 border border-slate-500 text-sm w-16 h-6">
-            <!--<input type="button" style="width:60px;height:25px" onclick="se(3)" value="Naver">-->
-            <!--<input type="button" style="width:60px;height:25px" onclick="se(4)" value="Baidu">-->
+            <!--<input type="button" onclick="se(3)" value="Naver">-->
+            <!--<input type="button" onclick="se(4)" value="Baidu">-->
             <input type="button" onclick="se(5)" value="goo" class="my-1 bg-gray-200 hover:bg-gray-300 border border-slate-500 text-sm w-16 h-6">
-            <!--<input type="button" style="width:50px;height:25px" onclick="se(6)" value="Yahoo!">-->
+            <!--<input type="button" onclick="se(6)" value="Yahoo!">-->
           </form>
         </div>
       </div>
@@ -60,13 +61,13 @@
     (作業中)インターネットの電子図書館、青空文庫へようこそ。
   </h1>
 
-  <div class="flex justify-center h-10 my-4 py-3 text-3xl font-semibold text-gray-900 w-full">
+  <div class="flex justify-center h-10 mt-4 py-3 text-3xl font-semibold text-gray-900 w-full">
     「<a href="https://www.aozora.gr.jp/soramoyou/soramoyouindex.html" class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline font-normal">
       青空文庫、新館引越中
       </a>」
   </div>
 
-  <div class="text-center py-5 my-4">
+  <div class="text-center pt-4 mt-4">
     <p class="py-2">
       初めての方はまず「<a href="https://www.aozora.gr.jp/guide/aozora_bunko_hayawakari.html" class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline">青空文庫早わかり</a>」をご覧ください。
     </p>
@@ -83,7 +84,7 @@
   <table class="border-double border-2 border-gray-800 table-fixed items-center w-full" summary="">
     <tr class="border-double border-2 border-gray-800 text-center">
       <th class="border-double border-2 border-gray-800 bg-yellow-100 w-1/3 whitespace-nowrap text-left align-top font-normal p-1">
-        <a href="person_a.html" class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline font-normal">
+        <a href="/guide/aozora_bunko_hayawakari.html" class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline font-normal">
           青空文庫早わかり
         </a>
       </th>
@@ -93,7 +94,7 @@
     </tr>
     <tr class="border-double border-2 border-gray-800 text-center">
       <th class="border-double border-2 border-gray-800 bg-yellow-100 w-1/3 text-left align-top font-normal p-1">
-        <a href="person_a.html" class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline font-normal">
+        <a href="/index_pages/index_top.html" class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline font-normal">
           総合インデックス
         </a>
       </th>
@@ -106,27 +107,18 @@
         公開中　作家別：
       </th>
       <td class="border-double border-2 border-gray-800 bg-sky-50 w-2/3 text-left align-top p-1">
-        <a href="/index_pages/person_a.html" class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline">あ行</a>
-
-        <a href="/index_pages/person_ka.html" class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline">か行</a>
-
-        <a href="/index_pages/person_sa.html" class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline">さ行</a>
-
-        <a href="/index_pages/person_ta.html" class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline">た行</a>
-
-        <a href="/index_pages/person_na.html" class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline">な行</a>
-
-        <a href="/index_pages/person_ha.html" class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline">は行</a>
+        <a href="/index_pages/person_a.html" class="mx-2 text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline">あ行</a>
+        <a href="/index_pages/person_ka.html" class="mx-2 text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline">か行</a>
+        <a href="/index_pages/person_sa.html" class="mx-2 text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline">さ行</a>
+        <a href="/index_pages/person_ta.html" class="mx-2 text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline">た行</a>
+        <a href="/index_pages/person_na.html" class="mx-2 text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline">な行</a>
+        <a href="/index_pages/person_ha.html" class="mx-2 text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline">は行</a>
         <br>
-        <a href="/index_pages/person_ma.html" class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline">ま行</a>
-
-        <a href="/index_pages/person_ya.html" class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline">や行</a>
-
-        <a href="/index_pages/person_ra.html" class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline">ら行</a>
-
-        <a href="/index_pages/person_wa.html" class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline">わ行</a>
-
-        <a href="/index_pages/person_zz.html" class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline">他</a>
+        <a href="/index_pages/person_ma.html" class="mx-2 text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline">ま行</a>
+        <a href="/index_pages/person_ya.html" class="mx-2 text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline">や行</a>
+        <a href="/index_pages/person_ra.html" class="mx-2 text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline">ら行</a>
+        <a href="/index_pages/person_wa.html" class="mx-2 text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline">わ行</a>
+        <a href="/index_pages/person_zz.html" class="mx-2 text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline">他</a>
       </td>
     </tr>
     <tr class="border-double border-2 border-gray-800 text-center">
@@ -247,7 +239,7 @@
     </colgroup>
     <tr class="border-double border-2 border-gray-800 text-center">
       <th class="border-double border-2 border-gray-800 bg-yellow-100 w-1/3 text-left align-top font-normal p-1">
-        <a href="person_a.html" class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline font-normal">
+        <a href="/index_pages/whatsnew1.html" class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline font-normal">
           新着情報
         </a>
       </th>
@@ -306,7 +298,7 @@
   <table class="border-double border-2 border-gray-800 table-fixed items-center w-full" summary="">
     <tr class="border-double border-2 border-gray-800 text-center">
       <th class="border-double border-2 border-gray-800 bg-yellow-100 w-1/3 whitespace-nowrap text-left align-top font-normal p-1">
-        <a href="/soramoyou/soramoyouindex.html" class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline font-normal">
+        <a href="https://www.aozora.gr.jp/aozorablog/" class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline font-normal">
           aozorablog
         </a>
       </th>
@@ -316,7 +308,7 @@
     </tr>
     <tr class="border-double border-2 border-gray-800 text-center">
       <th class="border-double border-2 border-gray-800 bg-yellow-100 w-1/3 whitespace-nowrap text-left align-top font-normal p-1">
-        <a href="/soramoyou/soramoyouindex.html" class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline font-normal">
+        <a href="http://honnomirai.net/" class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline font-normal">
           本の未来基金
         </a>
       </th>
@@ -326,7 +318,7 @@
     </tr>
     <tr class="border-double border-2 border-gray-800 text-center">
       <th class="border-double border-2 border-gray-800 bg-yellow-100 w-1/3 whitespace-nowrap text-left align-top font-normal p-1">
-        <a href="/soramoyou/soramoyouindex.html" class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline font-normal">
+        <a href="http://aozorahack.org/" class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline font-normal">
         aozorahack
         </a>
       </th>
@@ -489,7 +481,7 @@
   <table class="border-double border-2 border-gray-800 table-fixed items-center w-full" summary="">
     <tr class="border-double border-2 border-gray-800 text-center">
       <th class="border-double border-2 border-gray-800 bg-yellow-100 w-1/3 whitespace-nowrap text-left align-top font-normal p-1">
-        <a href="https://www.aozora.gr.jp/cards/001790/card56572.html" class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline font-normal">
+        <a href="/cards/001790/card56572.html" class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline font-normal">
           青空文庫の提案
         </a>
       </th>
