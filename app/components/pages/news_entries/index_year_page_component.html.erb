@@ -13,7 +13,7 @@
 
   <% news_entries.each do |news_entry| %>
   <h2 class="w-full flex justify-center h-8 my-4 font-semibold">
-    <div class="w-1/4 px-4 py-1 bg-gray-300"><a name="000523">
+    <div class="w-1/4 px-4 py-1 bg-gray-300"><a name="<%= news_entry.id %>">
         <%= news_entry.published_on.strftime('%Y年%m月%d日') %></a>
     </div>
     <div class="w-3/4 px-4 py-1 bg-yellow-100"><%= news_entry.title %></div>
