@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class KickController < ApplicationController
-  protect_from_forgery except: :create
+  skip_before_action :verify_authenticity_token
 
   def create
     token = params[:token]
