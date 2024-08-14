@@ -119,7 +119,7 @@ class Person < ApplicationRecord
   end
 
   def name_en
-    "#{first_name_en}, #{last_name_en}" if last_name_en || first_name_en
+    "#{last_name_en}, #{first_name_en}" if last_name_en || first_name_en
   end
 
   def published_works
