@@ -57,13 +57,11 @@
         <th class="text-left text-red-800 w-1/6">作家名：</th>
         <td>
           <span class="text-2xl"><%= author.name %></span>
-          <!--
-          <% author.other_people.each do |other_person| %>
+          <% author.other_base_people.each do |other_person| %>
           　<span class="text-2xl">→<%= link_to other_person.name,
                                                person_index_pages_path(other_person.id, format: :html),
                                                class: "text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" %></span>
           <% end %>
-          -->
         </td>
       </tr>
       <tr>
