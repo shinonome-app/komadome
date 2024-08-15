@@ -20,8 +20,13 @@ class StaticPageBuilder
   end
 
   def copy_public_images
+    # /images
     FileUtils.mkdir_p(@target_dir.join('images'))
     FileUtils.cp_r(Rails.public_path.join('images'), @target_dir)
+
+    # /cards/images
+    FileUtils.mkdir_p(@target_dir.join('cards/images'))
+    FileUtils.cp_r(Rails.public_path.join('cards/images'), @target_dir.join('cards'))
   end
 
   def copy_zip_files
