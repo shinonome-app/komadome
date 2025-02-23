@@ -107,9 +107,9 @@ class Work < ApplicationRecord
 
   def self.non_copyrighted_count
     published.joins(:people)
-      .group('works.id')
-      .having('bool_and(people.copyright_flag = false)')
-      .distinct.pluck('works.id').size
+             .group('works.id')
+             .having('bool_and(people.copyright_flag = false)')
+             .distinct.pluck('works.id').size
   end
 
   def self.csv_header

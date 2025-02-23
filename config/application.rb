@@ -38,11 +38,16 @@ module Komadome
     end
 
     # Initialize configuration defaults for originally generated Rails version.
-    config.load_defaults 7.0
+    config.load_defaults 7.2
 
     config.autoload_paths << "#{root}/app/lib"
 
     config.skylight.probes << 'active_job'
+
+    # Please, add to the `ignore` list any other `lib` subdirectories that do
+    # not contain `.rb` files, or that should not be reloaded or eager loaded.
+    # Common ones are `templates`, `generators`, or `middleware`, for example.
+    config.autoload_lib(ignore: %w[assets tasks])
 
     # Configuration for the application, engines, and railties goes here.
     #
@@ -62,5 +67,8 @@ module Komadome
     config.x.site_name = EnvConverter.unescape_ustring(ENV.fetch('SITE_NAME', 'Shinonome'))
     config.x.csv_dir = ENV.fetch('CSV_DIR', Rails.public_path.join('csv'))
     config.x.reception_email = ENV.fetch('RECEPTION_EMAIL', nil)
+
+    # make enable assets pipeline
+    # config.assets.enabled = true
   end
 end
