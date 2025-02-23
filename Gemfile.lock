@@ -197,6 +197,7 @@ GEM
       net-protocol
     net-ssh (7.2.3)
     nio4r (2.7.4)
+    nkf (0.2.0)
     nokogiri (1.18.3)
       mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
@@ -272,7 +273,8 @@ GEM
     request_store (1.6.0)
       rack (>= 1.4)
     rexml (3.3.7)
-    romaji (0.2.4)
+    romaji (0.3.0)
+      nkf (>= 0.2.0)
       rake (>= 0.8.0)
     rspec-core (3.13.0)
       rspec-support (~> 3.13.0)
