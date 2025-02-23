@@ -32,7 +32,7 @@ class IndexPagesController < ApplicationController
 
     works = Work.published.with_title_firstchar(kana).order(:sortkey, :id).all
 
-    pagy, current_works = pagy(works, item: 20, page: page)
+    pagy, current_works = pagy(works, items: 50, page: page)
 
     render ::Pages::IndexPages::WorkIndexPageComponent.new(id: id,
                                                            kana: kana,
@@ -49,7 +49,7 @@ class IndexPagesController < ApplicationController
 
     works = Work.unpublished.with_title_firstchar(kana).order(:sortkey, :id).all
 
-    pagy, current_works = pagy(works, item: 20, page: page)
+    pagy,current_works  = pagy(works, items: 50, page: page)
 
     render ::Pages::IndexPages::WorkInpIndexPageComponent.new(id: id,
                                                               kana: kana,
@@ -60,7 +60,7 @@ class IndexPagesController < ApplicationController
   def list_inp_show
     id, page = params[:id_page].split('_')
     author = Person.find(id)
-    pagy, works = pagy(author.unpublished_works.order(:sortkey, :id), item: 20, page: page.to_i)
+    pagy, works = pagy(author.unpublished_works.order(:sortkey, :id), items: 50, page: page.to_i)
 
     render ::Pages::IndexPages::ListInpShowPageComponent.new(author: author,
                                                              pagy: pagy,

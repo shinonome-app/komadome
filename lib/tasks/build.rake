@@ -236,8 +236,8 @@ namespace :build do
   task generate_wip_person_index: :environment do
     StaticPageBuilder.new do |builder|
       Person.find_each do |person|
-        item_count = 20
-        works = person.works.unpublished
+        item_count = 50
+        works = person.works.unpublished.order(:sortkey, :id)
         total_page = works.count.fdiv(item_count).ceil
         (1..total_page).each do |page|
           pagy = Pagy.new(count: works.count, items: item_count, page:)
