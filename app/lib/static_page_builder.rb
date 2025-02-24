@@ -40,8 +40,13 @@ class StaticPageBuilder
     FileUtils.remove_entry_secure(@target_dir, :force)
   end
 
-  def build_html(component, path:)
-    html = ApplicationController.renderer.render(component, layout: nil)
+  def build_html(path:)
+    env = Rack::MockRequest.env_for(path, 'HTTP_HOST' => 'www.aozora.gr.jp')
+    status, headers, response_body = Rails.application.call(env)
+    html = +""
+    response_body.each { |chunk| html << chunk }
+    response_body.close if response_body.respond_to?(:close)
+
     rel_path = path.sub(%r{^/}, '')
     full_path = @target_dir.join(rel_path)
     puts "Generate #{full_path}" # rubocop:disable Rails/Output
