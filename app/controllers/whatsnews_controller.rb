@@ -8,7 +8,7 @@ class WhatsnewsController < ApplicationController
   def index
     date = Time.zone.today
     works = Work.latest_published(until_date: date).order(started_on: :desc, id: :asc)
-    pagy, current_works = pagy(works, items: ITEM_COUNT)
+    pagy, current_works = pagy(works, limit: ITEM_COUNT, size: 13)
 
     render ::Pages::Whatsnew::IndexPageComponent.new(date: date,
                                                      pagy: pagy,
@@ -19,7 +19,7 @@ class WhatsnewsController < ApplicationController
     year, page = params[:year_page].split('_')
     date = Time.zone.today
     works = Work.latest_published(year: year).order(started_on: :desc, id: :asc)
-    pagy, current_works = pagy(works, items: ITEM_COUNT, page: page)
+    pagy, current_works = pagy(works, limit: ITEM_COUNT, page: page, size: 13)
 
     render ::Pages::Whatsnew::IndexYearPageComponent.new(year: year,
                                                          date: date,
