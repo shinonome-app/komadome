@@ -42,8 +42,8 @@ class StaticPageBuilder
 
   def build_html(path:)
     env = Rack::MockRequest.env_for(path, 'HTTP_HOST' => 'www.aozora.gr.jp')
-    status, headers, response_body = Rails.application.call(env)
-    html = +""
+    _status, _headers, response_body = Rails.application.call(env)
+    html = +''
     response_body.each { |chunk| html << chunk }
     response_body.close if response_body.respond_to?(:close)
 

@@ -109,6 +109,9 @@ Style/FetchEnvVar:
   Exclude:
     - 'bin/*'
 
+Style/GlobalStdStream:
+  Enabled: false
+
 Style/HashSyntax:
   Enabled: false
 
