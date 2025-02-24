@@ -92,7 +92,7 @@
       <tr>
         <th class="text-left text-red-800 w-1/6">著者名：</th>
         <td>
-          <% work.work_people.where(role_id: 1).find_each do |work_person| %>
+          <% work.work_people.where(role_id: 1).order(:person_id).find_each do |work_person| %>
           <%= link_to work_person.person.name,
                       person_index_pages_path(id: work_person.person_id, format: :html),
                       class: "underline text-blue-700 text-1xl" %>
@@ -176,7 +176,7 @@
   <h2 class="flex py-1 px-5 text-2xl font-semibold bg-gray-300 border border-y-gray-500"><a name="sakuhin_list_2">作家データ</a></h2>
 
   <div class="p-4">
-    <% work.work_people.each_with_index do |work_person, work_person_index| %>
+    <% work.work_people.order(:role_id, :person_id).each_with_index do |work_person, work_person_index| %>
     <% person = work_person.person %>
     <% if work_person_index > 0 %>
     <hr class="border-gray-400 my-2">

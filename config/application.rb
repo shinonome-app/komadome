@@ -3,24 +3,25 @@
 require_relative 'boot'
 
 require 'rails'
+# Pick the frameworks you want:
 require 'active_model/railtie'
 require 'active_job/railtie'
 require 'active_record/railtie'
 # require "active_storage/engine"
 require 'action_controller/railtie'
 # require "action_mailer/railtie"
+# require "action_mailbox/engine"
 # require "action_text/engine"
 require 'action_view/railtie'
 # require "action_cable/engine"
 # require "rails/test_unit/railtie"
-# require "sprockets/railtie"
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
 module Komadome
-  # アプリクラス
+  # App class
   class Application < Rails::Application
     # ENVの文字列を変換する
     class EnvConverter
@@ -38,9 +39,9 @@ module Komadome
     end
 
     # Initialize configuration defaults for originally generated Rails version.
-    config.load_defaults 7.2
+    config.load_defaults 8.0
 
-    config.autoload_paths << "#{root}/app/lib"
+    # config.autoload_paths << "#{root}/app/lib"
 
     config.skylight.probes << 'active_job'
 
@@ -56,6 +57,7 @@ module Komadome
     #
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
+
     config.time_zone = 'Asia/Tokyo'
     config.i18n.default_locale = :ja
     config.active_record.default_timezone = :local
@@ -68,7 +70,7 @@ module Komadome
     config.x.csv_dir = ENV.fetch('CSV_DIR', Rails.public_path.join('csv'))
     config.x.reception_email = ENV.fetch('RECEPTION_EMAIL', nil)
 
-    # make enable assets pipeline
-    # config.assets.enabled = true
+    # Don't generate system test files.
+    config.generators.system_tests = nil
   end
 end
