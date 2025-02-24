@@ -128,7 +128,7 @@
                     class: "text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" %>
         <%= work.subtitle %>
         <span class="px-4">（<%= work.kana_type.name %>、作品ID：<%= work.id %>）</span>
-        <% work.work_people.order(:role_id).each do |work_person| %>
+        <% work.work_people.order(:role_id, :person_id).each do |work_person| %>
         <% next if work_person.person_id == author.id %>
         <span class="px-8">→<a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" href="person<%= work_person.person_id %>.html"><%= work_person.person.name %></a>(<%= work_person.role.name %>) </span>
         <% end %>
@@ -152,7 +152,7 @@
       <li>
         <%= work.title %>
         <span class="px-4">（<%= work.kana_type.name %>、作品ID：<%= work.id %>）</span>
-        <% work.work_people.order(:role_id).each do |work_person| %>
+        <% work.work_people.order(:role_id, :person_id).each do |work_person| %>
         <% next if work_person.person_id == author.id %>
         <span class="px-8">→<a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" href="person<%= work_person.person_id %>.html"><%= work_person.person.name %></a>(<%= work_person.role.name %>)
         </span>
