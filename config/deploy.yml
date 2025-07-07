@@ -67,6 +67,3 @@ proxy:
   host: <%= ENV['PROXY_HOST'] %>
   app_port: 3000
   ssl: true
-  healthcheck:
-    interval: 30
-    timeout: 10
