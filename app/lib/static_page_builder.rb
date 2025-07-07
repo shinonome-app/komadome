@@ -54,7 +54,7 @@ class StaticPageBuilder
   end
 
   def create_rsync_keyfile(data)
-    File.write(@rsync_keyfile, data)
+    File.write(@rsync_keyfile, data.gsub('\\n', "\n"))
     FileUtils.chmod(0o600, @rsync_keyfile)
   end
 
