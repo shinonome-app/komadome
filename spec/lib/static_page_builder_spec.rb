@@ -130,49 +130,101 @@ RSpec.describe StaticPageBuilder do
   describe '#build_html' do
     let(:mock_response) { ['<html><body>Test Page</body></html>'] }
     let(:rack_app) { ->(_env) { [200, {}, mock_response] } }
-    let(:rack_mock_request) { class_spy(Rack::MockRequest) }
 
     before do
-      stub_const('Rack::MockRequest', rack_mock_request)
       allow(Rails).to receive(:application).and_return(rack_app)
       allow(rack_app).to receive(:call).and_return([200, {}, mock_response])
-      allow(FileUtils).to receive(:mkdir_p)
-      allow(File).to receive(:write)
     end
 
-    it 'creates a mock request for the given path' do
-      allow(rack_mock_request).to receive(:env_for).and_return({})
-      builder.build_html(path: '/test/path')
-      expect(rack_mock_request).to have_received(:env_for).with(
-        '/test/path',
-        'HTTP_HOST' => 'www.aozora.gr.jp'
-      )
+    context 'with single path' do
+      it 'generates HTML file for given path' do
+        result_path = builder.build_html(path: '/test/path')
+
+        expect(result_path).to eq(target_dir.join('test/path'))
+        expect(File.exist?(result_path)).to be true
+        expect(File.read(result_path)).to eq('<html><body>Test Page</body></html>')
+      end
+
+      it 'creates necessary directories' do
+        builder.build_html(path: '/deeply/nested/page')
+
+        expect(Dir.exist?(target_dir.join('deeply/nested'))).to be true
+      end
+
+      it 'handles root path correctly' do
+        result_path = builder.build_html(path: '/index.html')
+
+        expect(result_path).to eq(target_dir.join('index.html'))
+        expect(File.exist?(result_path)).to be true
+      end
     end
 
-    it 'calls Rails application with the mock request' do
-      builder.build_html(path: '/test/path')
-      expect(rack_app).to have_received(:call)
+    context 'with multiple paths' do
+      let(:paths) { ['/page1', '/page2', '/page3'] }
+
+      it 'generates all pages sequentially with progress reporting' do
+        stats = builder.build_html(paths: paths, verbose: false)
+
+        expect(stats[:success]).to eq(3)
+        expect(stats[:failed]).to eq(0)
+        expect(stats[:errors]).to be_empty
+
+        paths.each do |path|
+          file_path = target_dir.join(path.sub(%r{^/}, ''))
+          expect(File.exist?(file_path)).to be true
+          expect(File.read(file_path)).to eq('<html><body>Test Page</body></html>')
+        end
+      end
+
+      it 'handles errors gracefully and continues processing' do
+        call_count = 0
+        allow(Rails.application).to receive(:call) do
+          call_count += 1
+          raise StandardError, 'Mock error' if call_count == 1
+
+          [200, {}, mock_response]
+        end
+
+        stats = builder.build_html(paths: paths, verbose: false)
+
+        expect(stats[:success]).to eq(2)
+        expect(stats[:failed]).to eq(1)
+        expect(stats[:errors]).to include('/page1: Mock error')
+      end
+
+      it 'returns statistics for the batch operation' do
+        stats = builder.build_html(paths: [], verbose: false)
+
+        expect(stats).to have_key(:success)
+        expect(stats).to have_key(:failed)
+        expect(stats).to have_key(:errors)
+      end
+
+      it 'handles empty paths array' do
+        stats = builder.build_html(paths: [], verbose: false)
+
+        expect(stats[:success]).to eq(0)
+        expect(stats[:failed]).to eq(0)
+        expect(stats[:errors]).to be_empty
+      end
+
+      it 'handles nil paths' do
+        stats = builder.build_html(paths: nil, verbose: false)
+
+        expect(stats[:success]).to eq(0)
+        expect(stats[:failed]).to eq(0)
+        expect(stats[:errors]).to be_empty
+      end
     end
 
-    it 'writes HTML to the correct file path' do
-      builder.build_html(path: '/test/path')
-      expect(File).to have_received(:write).with(
-        target_dir.join('test/path'),
-        '<html><body>Test Page</body></html>'
-      )
-    end
+    context 'without path or paths' do
+      it 'returns empty stats when neither path nor paths provided' do
+        stats = builder.build_html(verbose: false)
 
-    it 'creates necessary directories before writing' do
-      builder.build_html(path: '/test/path')
-      expect(FileUtils).to have_received(:mkdir_p).with(target_dir.join('test').to_s)
-    end
-
-    it 'handles root path correctly' do
-      builder.build_html(path: '/index.html')
-      expect(File).to have_received(:write).with(
-        target_dir.join('index.html'),
-        '<html><body>Test Page</body></html>'
-      )
+        expect(stats[:success]).to eq(0)
+        expect(stats[:failed]).to eq(0)
+        expect(stats[:errors]).to be_empty
+      end
     end
   end
 
