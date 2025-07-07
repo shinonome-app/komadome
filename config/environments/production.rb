@@ -71,4 +71,5 @@ Rails.application.configure do
   config.host_authorization = { exclude: ->(request) { request.path == '/up' } }
 
   config.hosts << 'job2.aozora-renewal.cloud'
+  config.hosts << 'www.aozora.gr.jp'
 end
