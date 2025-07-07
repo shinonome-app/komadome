@@ -1,2 +1,2 @@
 # Build and rsync static pages every day at 2:00 AM
-0 2 * * * cd /myapp && /usr/local/bin/bundle exec rake build:all_and_rsync RAILS_ENV=production >> /proc/1/fd/1 2>&1
+0 1 * * * cd /myapp && /usr/local/bin/bundle exec rake build:all RAILS_ENV=production >> /proc/1/fd/1 2>&1

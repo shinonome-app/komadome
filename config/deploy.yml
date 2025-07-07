@@ -63,16 +63,6 @@ builder:
   arch: amd64
   local: true
 
-accessories:
-  cronkicker:
-    image: takahashim/cronkicker
-    hosts:
-      - 133.242.228.219
-    files:
-      - config/crontab:/var/spool/cron/crontabs/root
-    env:
-      secret:
-        - CK_TOKEN
 proxy:
   host: <%= ENV['PROXY_HOST'] %>
   app_port: 3000
