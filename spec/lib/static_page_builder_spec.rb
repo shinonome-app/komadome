@@ -9,6 +9,10 @@ RSpec.describe StaticPageBuilder do
 
   before do
     FileUtils.rm_rf(target_dir)
+    FileUtils.mkdir_p(Rails.public_path.join('assets'))
+    # Create test asset files
+    FileUtils.touch(Rails.public_path.join('assets', 'application-dummy.css'))
+    FileUtils.touch(Rails.public_path.join('assets', 'application-dummy.js'))
   end
 
   after do
@@ -36,17 +40,9 @@ RSpec.describe StaticPageBuilder do
 
   describe '#copy_precompiled_assets' do
     let(:rake_task) { instance_spy(Rake::Task) }
-    let(:assets_path) { instance_spy(Pathname) }
 
     before do
       allow(Rake::Task).to receive(:[]).with('assets:precompile').and_return(rake_task)
-      allow(Rails.public_path).to receive(:join).with('assets').and_return(assets_path)
-      allow(assets_path).to receive(:children).and_return([
-                                                            Pathname.new('application.css'),
-                                                            Pathname.new('application.js')
-                                                          ])
-      allow(FileUtils).to receive(:mkdir_p)
-      allow(FileUtils).to receive(:cp_r)
     end
 
     it 'invokes assets:precompile task' do
@@ -56,12 +52,13 @@ RSpec.describe StaticPageBuilder do
 
     it 'creates assets directory in target_dir' do
       builder.copy_precompiled_assets
-      expect(FileUtils).to have_received(:mkdir_p).with(target_dir.join('assets'))
+      expect(Dir.exist?(target_dir.join('assets'))).to be true
     end
 
     it 'copies asset files to target directory' do
       builder.copy_precompiled_assets
-      expect(FileUtils).to have_received(:cp_r).at_least(:once)
+      expect(File.exist?(target_dir.join('assets', 'application-dummy.css'))).to be true
+      expect(File.exist?(target_dir.join('assets', 'application-dummy.js'))).to be true
     end
   end
 

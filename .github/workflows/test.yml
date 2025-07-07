@@ -29,5 +29,19 @@ jobs:
         with:
           bundler-cache: true
           ruby-version: 3.4.2
+      - name: migration
+        run: |
+          bundle exec rails db:create
+          bundle exec rails db:test:prepare
+        env:
+          RAILS_ENV: test
+          DATABASE_USER: postgres
+          DATABASE_PASS: postgres
+          DATABASE_HOST: localhost
       - name: rspec
         run: bundle exec rspec
+        env:
+          RAILS_ENV: test
+          DATABASE_USER: postgres
+          DATABASE_PASS: postgres
+          DATABASE_HOST: localhost
