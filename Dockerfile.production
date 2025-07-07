@@ -27,6 +27,10 @@ RUN bundle config jobs 4 \
 
 COPY . /myapp
 
+# Copy crontab file for cron role
+COPY config/docker-crontab /etc/cron.d/komadome-cron
+RUN chmod 0644 /etc/cron.d/komadome-cron
+
 RUN SECRET_KEY_BASE=placeholder bundle exec rails assets:precompile
 
 ENV RAILS_SERVE_STATIC_FILES="true"

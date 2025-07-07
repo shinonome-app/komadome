@@ -9,6 +9,12 @@ servers:
   web:
     hosts:
       - 133.242.228.219
+  cron:
+    hosts:
+      - 133.242.228.219
+    cmd: bash -c "env > /etc/environment && cron -f"
+    options:
+      user: root
 
 # Credentials for your image host.
 registry:
