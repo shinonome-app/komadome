@@ -67,11 +67,10 @@ RSpec.configure do |config|
 
   config.include FactoryBot::Syntax::Methods
   config.include ActionDispatch::TestProcess::FixtureFile
-  config.include RequestSpecHelper, type: :request
   config.include ViewComponent::TestHelpers, type: :component
   config.include Capybara::RSpecMatchers, type: :component
 
-  config.before(:suite) do
-    Rails.application.load_seed # loading seeds
-  end
+  # config.before(:suite) do
+  #   Rails.application.load_seed # loading seeds
+  # end
 end

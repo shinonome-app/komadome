@@ -28,7 +28,7 @@ namespace :build do
   desc 'rsync'
   task rsync: :environment do
     StaticPageBuilder.new do |builder|
-      builder.create_rsync_keyfile(ENV.fetch('RSYNC_PASS_FILE', '').gsub('\n', "\n"))
+      builder.create_rsync_keyfile(ENV.fetch('RSYNC_PASS_FILE', ''))
       server_path = ENV.fetch('RSYNC_SERVER_PATH', nil)
       src_dir = "#{builder.target_dir}/"
       cmd = "rsync -avhz -e \"ssh -o StrictHostKeyChecking=no -i #{builder.rsync_keyfile}\" #{src_dir} #{server_path}"
@@ -40,10 +40,15 @@ namespace :build do
   desc 'build index pages'
   task generate_indexes: :environment do
     StaticPageBuilder.new do |builder|
-      builder.build_html(path: 'index.html')
-      builder.build_html(path: 'index_pages/index_top.html')
-      builder.build_html(path: 'index_pages/index_all.html')
-      builder.build_html(path: 'index_pages/person_all.html')
+      builder.build_html(
+        paths:
+          [
+            'index.html',
+            'index_pages/index_top.html',
+            'index_pages/index_all.html',
+            'index_pages/person_all.html'
+          ]
+      )
     end
   end
 
@@ -57,7 +62,7 @@ namespace :build do
 
         total_page = works.count.fdiv(item_count).ceil # 割り切れない場合は切り上げ
         (1..total_page).each do |page|
-          builder.build_html(path: "index_pages/sakuhin_#{id}#{page}.html")
+          builder.build_html(paths: ["index_pages/sakuhin_#{id}#{page}.html"])
         end
       end
     end
@@ -73,7 +78,7 @@ namespace :build do
 
         total_page = works.count.fdiv(item_count).ceil # 割り切れない場合は切り上げ
         (1..total_page).each do |page|
-          builder.build_html(path: "index_pages/sakuhin_inp_#{id}#{page}.html")
+          builder.build_html(paths: ["index_pages/sakuhin_inp_#{id}#{page}.html"])
         end
       end
     end
@@ -83,11 +88,11 @@ namespace :build do
   task generate_soramoyou: :environment do
     StaticPageBuilder.new do |builder|
       current_year = Time.zone.now.year
-      builder.build_html(path: 'soramoyou/soramoyouindex.html')
+      builder.build_html(paths: ['soramoyou/soramoyouindex.html'])
 
       begin_year = Pages::NewsEntries::IndexYearPageComponent::BEGIN_YEAR
       (begin_year..current_year).each do |year|
-        builder.build_html(path: "soramoyou/soramoyou#{year}.html")
+        builder.build_html(paths: ["soramoyou/soramoyou#{year}.html"])
       end
     end
   end
@@ -104,7 +109,7 @@ namespace :build do
       total_page = works.count.fdiv(item_count).ceil # 割り切れない場合は切り上げ
       (1..total_page).each do |page|
         path = url.whatsnew_index_pages_path(page:, format: :html)
-        builder.build_html(path:)
+        builder.build_html(paths: [path])
       end
 
       prev_year = date.year - 1
@@ -113,7 +118,7 @@ namespace :build do
         total_page = works.count.fdiv(item_count).ceil # 割り切れない場合は切り上げ
         (1..total_page).each do |page|
           path = url.whatsnew_year_index_pages_path(year_page: "#{year}_#{page}", format: :html)
-          builder.build_html(path:)
+          builder.build_html(paths: [path])
         end
       end
     end
@@ -123,9 +128,14 @@ namespace :build do
   task generate_person_index: :environment do
     StaticPageBuilder.new do |builder|
       Kana.each_column_key do |key|
-        builder.build_html(path: "index_pages/person_#{key}.html")
-        builder.build_html(path: "index_pages/person_all_#{key}.html")
-        builder.build_html(path: "index_pages/person_inp_#{key}.html")
+        builder.build_html(
+          paths:
+            [
+              "index_pages/person_#{key}.html",
+              "index_pages/person_all_#{key}.html",
+              "index_pages/person_inp_#{key}.html"
+            ]
+        )
       end
     end
   end
@@ -134,7 +144,7 @@ namespace :build do
   task generate_person: :environment do
     StaticPageBuilder.new do |builder|
       Person.find_each do |person|
-        builder.build_html(path: "index_pages/person#{person.id}.html")
+        builder.build_html(paths: ["index_pages/person#{person.id}.html"])
       end
     end
   end
@@ -147,11 +157,13 @@ namespace :build do
       Person.find_each do |person|
         person.works.published.pluck(:id).each do |card_id|
           builder.build_html(
-            path: url.card_path(
-              person_id: format('%06d', person.id),
-              card_id: card_id,
-              format: :html
-            )
+            paths: [
+              url.card_path(
+                person_id: format('%06d', person.id),
+                card_id: card_id,
+                format: :html
+              )
+            ]
           )
         end
       end
@@ -166,7 +178,7 @@ namespace :build do
         works = person.works.unpublished.order(:sortkey, :id)
         total_page = works.count.fdiv(item_count).ceil
         (1..total_page).each do |page|
-          builder.build_html(path: "index_pages/list_inp#{person.id}_#{page}.html")
+          builder.build_html(paths: ["index_pages/list_inp#{person.id}_#{page}.html"])
         end
       end
     end

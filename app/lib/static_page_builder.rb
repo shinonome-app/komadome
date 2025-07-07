@@ -1,12 +1,17 @@
 # frozen_string_literal: true
 
-# Static page builder
+require_relative 'page_generator'
+require_relative 'progress_reporter'
+
+# Static page builder - handles file operations and coordinates page generation
 class StaticPageBuilder
   attr_reader :target_dir, :rsync_keyfile
 
-  def initialize(target_dir: nil)
+  def initialize(target_dir: nil, verbose: true)
     @target_dir = target_dir || Rails.root.join('tmp/build')
     @rsync_keyfile = '/tmp/rsync.key'
+    @page_generator = PageGenerator.new(@target_dir)
+    @progress_reporter = ProgressReporter.new(verbose: verbose)
 
     yield self if block_given?
   end
@@ -40,29 +45,44 @@ class StaticPageBuilder
     FileUtils.remove_entry_secure(@target_dir, :force)
   end
 
-  def build_html(path:)
-    env = Rack::MockRequest.env_for(path, 'HTTP_HOST' => 'www.aozora.gr.jp')
-    _status, _headers, response_body = Rails.application.call(env)
-    html = +''
-    response_body.each { |chunk| html << chunk }
-    response_body.close if response_body.respond_to?(:close)
+  # Generate HTML pages - supports both single path and array of paths
+  def build_html(path: nil, paths: nil, verbose: nil)
+    # Update verbosity if specified
+    @progress_reporter = ProgressReporter.new(verbose: verbose) if verbose != @progress_reporter.instance_variable_get(:@verbose) && !verbose.nil?
 
-    rel_path = path.sub(%r{^/}, '')
-    full_path = @target_dir.join(rel_path)
-    puts "Generate #{full_path}" # rubocop:disable Rails/Output
-    write_with_mkdir(full_path, html)
+    # Handle single path (backward compatibility)
+    if path
+      full_path = @page_generator.generate(path)
+      @progress_reporter.log_generation(full_path)
+      return full_path
+    end
+
+    # Handle multiple paths (batch processing)
+    return { success: 0, failed: 0, errors: [] } if paths.blank?
+
+    total = paths.size
+    @progress_reporter.reset_stats
+
+    @progress_reporter.log_batch_start(total, 1) # Sequential processing
+    start_time = Time.current
+
+    paths.each_with_index do |batch_path, index|
+      full_path = @page_generator.generate(batch_path)
+      @progress_reporter.log_generation(full_path)
+      @progress_reporter.record_success
+      @progress_reporter.show_progress(index + 1, total, start_time)
+    rescue StandardError => e
+      error_msg = "#{batch_path}: #{e.message}"
+      @progress_reporter.record_failure(error_msg)
+    end
+
+    elapsed = Time.current - start_time
+    @progress_reporter.log_batch_complete(elapsed)
+    @progress_reporter.stats
   end
 
   def create_rsync_keyfile(data)
-    File.write(@rsync_keyfile, data)
+    File.write(@rsync_keyfile, data.gsub('\\n', "\n"))
     FileUtils.chmod(0o600, @rsync_keyfile)
-  end
-
-  private
-
-  def write_with_mkdir(full_path, html)
-    dir = File.dirname(full_path)
-    FileUtils.mkdir_p(dir)
-    File.write(full_path, html)
   end
 end

@@ -40,6 +40,10 @@
 # Ignore SSG
 /build/*
 
+# Kamal
+
+.kamal/*
+
 # others
 
 *~

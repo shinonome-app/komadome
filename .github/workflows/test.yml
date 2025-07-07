@@ -1,0 +1,47 @@
+name: test
+
+permissions:
+  contents: read
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-24.04
+    services:
+      postgres:
+        image: postgres:13
+        ports:
+          - 5432:5432
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+          ruby-version: 3.4.2
+      - name: migration
+        run: |
+          bundle exec rails db:create
+          bundle exec rails db:test:prepare
+        env:
+          RAILS_ENV: test
+          DATABASE_USER: postgres
+          DATABASE_PASS: postgres
+          DATABASE_HOST: localhost
+      - name: rspec
+        run: bundle exec rspec
+        env:
+          RAILS_ENV: test
+          DATABASE_USER: postgres
+          DATABASE_PASS: postgres
+          DATABASE_HOST: localhost
