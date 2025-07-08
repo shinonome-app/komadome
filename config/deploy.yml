@@ -19,11 +19,11 @@ servers:
 # Credentials for your image host.
 registry:
   # Specify the registry server, if you're not using Docker Hub
-  server: komadome.sakuracr.jp
+  server: <%= ENV['REGISTRY_SERVER'] %>
   username: <%= ENV['REGISTRY_USER'] %>
   # Always use an access token rather than real password when possible.
   password:
-    - MRSK_REGISTRY_PASSWORD
+    - REGISTRY_PASSWORD
 
 env:
   clear:
