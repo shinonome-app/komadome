@@ -228,7 +228,7 @@ RSpec.describe StaticPageBuilder do
   describe '#create_rsync_keyfile' do
     let(:keyfile_path) { '/tmp/rsync.key' }
     let(:key_data) do
-      '-----BEGIN OPENSSH PRIVATE KEY-----\\nb3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAAAlwAAAAdzc2gtcn\\nB4FbIgEwUY6VQhG0nkaRmjPXTH1R8y/XJnpA5jO3GuPnnlACx8K8Yj5W8X4kQAAAAt0ZXN\\nQGV4YW1wbGU=\\n-----END OPENSSH PRIVATE KEY-----\\n'
+      '-----BEGIN OPENSSH PRIVATE KEY-----@NL@b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAAAlwAAAAdzc2gtcn@NL@B4FbIgEwUY6VQhG0nkaRmjPXTH1R8y/XJnpA5jO3GuPnnlACx8K8Yj5W8X4kQAAAAt0ZXN@NL@QGV4YW1wbGU=@NL@-----END OPENSSH PRIVATE KEY-----@NL@'
     end
 
     before do
@@ -253,8 +253,8 @@ RSpec.describe StaticPageBuilder do
       expect(FileUtils).to have_received(:chmod).with(0o600, keyfile_path)
     end
 
-    it 'converts escaped newlines to actual newlines' do
-      escaped_data = 'line1\\nline2\\nline3'
+    it 'converts @NL@ to actual newlines' do
+      escaped_data = 'line1@NL@line2@NL@line3'
       expected_data = "line1\nline2\nline3"
       builder.create_rsync_keyfile(escaped_data)
       expect(File).to have_received(:write).with(keyfile_path, expected_data)
