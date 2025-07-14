@@ -19,14 +19,11 @@ class PageDependencies
       # publishedパラメータは将来の公開/非公開作品の分離処理用に保持
       {
         models: {
-          # 簡略化: 公開/非公開の作品に依存
-          Work: {}
-        },
-        # 関連するモデルも最近更新されたもののみチェック
-        related_checks: {
-          Person: :recent_only, # 最近更新された人物のみ
-          WorkPerson: :recent_only,
-          KanaType: :all # マスタデータは全チェック
+          # 作品インデックスには作品情報と著者情報が表示される
+          Work: {},
+          Person: {},
+          WorkPerson: {},
+          Role: {} # 翻訳者等の役割表示
         }
       }
     end
@@ -36,19 +33,16 @@ class PageDependencies
     def person_page(person_id)
       {
         models: {
-          Person: { id: person_id }
-        },
-        # この人物に関連するレコードのみチェック
-        related_models: {
-          Work: ->(t_person_id) { Work.joins(:work_people).where(work_people: { person_id: t_person_id }) },
+          Person: { id: person_id },
           WorkPerson: { person_id: person_id },
-          PersonSite: { person_id: person_id }
-        },
-        # マスタデータ
-        master_data: {
-          KanaType: :all,
-          Site: :recent_only,
-          BasePerson: :recent_only
+          PersonSite: { person_id: person_id },
+          BasePerson: { person_id: person_id },
+          # 作品情報（人物ページに表示される）
+          Work: {}, # WorkPersonを通じて関連
+          # マスタデータ
+          Site: {},
+          Role: {},
+          KanaType: {}
         }
       }
     end
@@ -58,32 +52,24 @@ class PageDependencies
     def work_detail_page(work_id)
       {
         models: {
-          Work: { id: work_id }
-        },
-        # この作品に直接関連するレコードのみ
-        related_models: {
+          Work: { id: work_id },
           WorkPerson: { work_id: work_id },
           OriginalBook: { work_id: work_id },
           WorkWorker: { work_id: work_id },
           Workfile: { work_id: work_id },
-          WorkSite: { work_id: work_id }
-        },
-        # 間接的に関連するレコード（JOINで取得）
-        indirect_models: {
-          Person: ->(t_work_id) { Person.joins(:work_people).where(work_people: { work_id: t_work_id }) },
-          Worker: ->(t_work_id) { Worker.joins(:work_workers).where(work_workers: { work_id: t_work_id }) }
-        },
-        # マスタデータ（変更頻度が低い）
-        master_data: {
-          Role: :all,
-          Booktype: :all,
-          WorkerRole: :all,
-          Filetype: :all,
-          Compresstype: :all,
-          Charset: :all,
-          FileEncoding: :all,
-          Bibclass: :all,
-          Site: :recent_only
+          WorkSite: { work_id: work_id },
+          # 関連する人物・労働者（作品に紐づく）
+          Person: {},  # WorkPersonを通じて関連
+          Worker: {},  # WorkWorkerを通じて関連
+          # マスタデータ（表示に必要）
+          Site: {},
+          Role: {},
+          WorkerRole: {},
+          Booktype: {},
+          Filetype: {},
+          Compresstype: {},
+          Charset: {},
+          FileEncoding: {}
         }
       }
     end
@@ -93,7 +79,7 @@ class PageDependencies
       if year
         {
           models: {
-            NewsEntry: ->(year) { NewsEntry.where(created_at: Date.new(year)..Date.new(year).end_of_year) }
+            NewsEntry: { published_on: Date.new(year.to_i)..Date.new(year.to_i).end_of_year }
           }
         }
       else
@@ -106,30 +92,19 @@ class PageDependencies
     end
 
     # 新着情報ページ
-    def whatsnew_page(year = nil, _page = 1)
-      year ? Date.new(year).end_of_year : Time.zone.today
-
+    def whatsnew_page(_year = nil, _page = 1)
       {
         models: {
-          Work: ->(date) { Work.latest_published(until_date: date) }
-        },
-        # 最近公開された作品の関連データのみ
-        related_checks: {
-          WorkPerson: :recent_only,
-          Person: :recent_only,
-          WorkWorker: :recent_only,
-          Worker: :recent_only
+          # 新着作品の表示には作品情報と著者情報が必要
+          Work: {},
+          Person: {},
+          WorkPerson: {},
+          # 入力者・校正者情報も表示される
+          Worker: {},
+          WorkWorker: {},
+          WorkerRole: {}
         }
       }
-    end
-
-    # より効率的な依存関係チェックのためのヘルパー
-    def should_check_all_records?(check_type)
-      check_type == :all
-    end
-
-    def recent_check_period
-      7.days.ago
     end
   end
 end
