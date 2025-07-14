@@ -97,15 +97,26 @@ class BuildOrchestrator
     updated_works = Work.where('updated_at > ?', last_update - 1.hour)
 
     # 影響を受ける頭文字を特定
-    affected_kana = updated_works.pluck(:title_firstchar).uniq
+    # sortkey の最初の文字を取得し、どのかなグループに属するか判定
+    affected_kana_syms = Set.new
+
+    updated_works.pluck(:sortkey).each do |sortkey|
+      next if sortkey.blank?
+
+      first_char = sortkey[0]
+      # 各かなグループをチェックして、該当するシンボルを見つける
+      Kana.each_sym_and_char do |sym, kana_char|
+        if kana_char == first_char || (sym == :zz && !first_char.match?(/[あいうえおか-もやゆよら-ろわをんアイウエオカ-モヤユヨラ-ロワヲンヴ]/))
+          affected_kana_syms.add(sym)
+          break
+        end
+      end
+    end
 
     # 該当する作品インデックスのみ再生成
-    affected_kana.each do |kana|
-      Kana.each_sym_and_char do |id, k|
-        next unless k == kana
-
-        build_work_index_for_kana(builder, id, k)
-      end
+    affected_kana_syms.each do |sym|
+      kana = Kana::ROMA2KANA[sym]
+      build_work_index_for_kana(builder, sym, kana)
     end
 
     # 更新された作品の詳細ページ

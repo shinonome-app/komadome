@@ -15,10 +15,12 @@ class PageDependencies
 
     # 作品インデックスページ
     # 特定の頭文字の作品のみに依存
-    def work_index_page(kana, published: true)
+    def work_index_page(_kana, published: true) # rubocop:disable Lint/UnusedMethodArgument
+      # publishedパラメータは将来の公開/非公開作品の分離処理用に保持
       {
         models: {
-          Work: { title_firstchar: kana, published: published }
+          # 簡略化: 公開/非公開の作品に依存
+          Work: {}
         },
         # 関連するモデルも最近更新されたもののみチェック
         related_checks: {
