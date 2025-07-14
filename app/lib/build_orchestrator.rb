@@ -50,6 +50,9 @@ class BuildOrchestrator
     # 更新されたモデルを事前にチェック
     recently_updated = check_recent_updates
 
+    # 定期的に公開される作品もチェック
+    check_scheduled_publications(recently_updated)
+
     if recently_updated.empty?
       log "\nNo recent updates found. Skipping all dynamic pages."
       @stats[:skipped] += estimate_total_dynamic_pages
@@ -74,7 +77,25 @@ class BuildOrchestrator
       updated[model_name] = last_update if last_update
     end
 
+    # 中間テーブルの更新もチェック
+    %w[WorkPerson WorkWorker PersonSite WorkSite BasePerson OriginalBook Workfile].each do |model_name|
+      model_class = model_name.constantize
+      last_update = model_class.where('updated_at > ?', check_period).maximum(:updated_at)
+      updated[model_name] = last_update if last_update
+    end
+
     updated
+  end
+
+  def check_scheduled_publications(recently_updated)
+    # 本日公開予定の作品をチェック
+    today = Time.zone.today
+    newly_published = Work.where(work_status_id: 1, started_on: today)
+
+    return unless newly_published.exists?
+
+    log "\nFound #{newly_published.count} newly published works today"
+    recently_updated['Work'] = [recently_updated['Work'], Time.current].compact.max
   end
 
   def build_affected_pages(builder, recently_updated)
@@ -85,16 +106,50 @@ class BuildOrchestrator
     build_person_related_pages(builder, recently_updated['Person']) if recently_updated['Person']
 
     # お知らせが更新された場合
-    return unless recently_updated['NewsEntry']
+    build_news_pages(builder) if recently_updated['NewsEntry']
 
-    build_news_pages(builder)
+    # 中間テーブルが更新された場合の処理
+    handle_join_table_updates(builder, recently_updated)
+  end
+
+  def build_person_related_pages(builder, last_update)
+    log "\nBuilding person-related pages..."
+
+    # 更新された人物を取得
+    updated_people = Person.where('updated_at > ?', last_update - 1.hour)
+
+    return if updated_people.empty?
+
+    # 更新された人物のページを再生成
+    updated_people.find_each do |person|
+      path = "index_pages/person#{person.id}.html"
+
+      if @track_usage
+        used_records = @usage_tracker.track do
+          builder.build_html(path: path)
+        end
+        @cache_manager.record_build_with_actual_records(path,
+                                                        PageDependencies.person_page(person.id),
+                                                        used_records)
+      else
+        builder.build_html(path: path)
+        @cache_manager.record_build(path, PageDependencies.person_page(person.id))
+      end
+
+      @stats[:built] += 1
+      log "  Built: #{path}"
+    end
   end
 
   def build_work_related_pages(builder, last_update)
     log "\nBuilding work-related pages..."
 
-    # 更新された作品を取得
-    updated_works = Work.where('updated_at > ?', last_update - 1.hour)
+    # 更新された作品、または新しく公開された作品を取得
+    updated_works = Work.where(
+      'updated_at > ? OR (work_status_id = 1 AND started_on > ?)',
+      last_update - 1.hour,
+      last_update - 1.hour
+    )
 
     # 影響を受ける頭文字を特定
     # sortkey の最初の文字を取得し、どのかなグループに属するか判定
@@ -121,6 +176,9 @@ class BuildOrchestrator
 
     # 更新された作品の詳細ページ
     build_updated_work_details(builder, updated_works)
+
+    # 更新された作品に関連する著者ページ
+    build_affected_person_pages(builder, updated_works)
   end
 
   def build_work_index_for_kana(builder, id, kana)
@@ -150,8 +208,9 @@ class BuildOrchestrator
   def build_updated_work_details(builder, updated_works)
     log "  Building #{updated_works.count} updated work detail pages..."
 
+    url = Rails.application.routes.url_helpers
+
     updated_works.includes(work_people: :person).find_each do |work|
-      url = Rails.application.routes.url_helpers
       path = url.card_path(
         person_id: work.card_person_id,
         card_id: work.id,
@@ -171,6 +230,131 @@ class BuildOrchestrator
       end
 
       @stats[:built] += 1
+    end
+  end
+
+  def build_affected_person_pages(builder, updated_works)
+    # 更新された作品に関連する著者を収集
+    affected_person_ids = Set.new
+
+    updated_works.includes(work_people: :person).find_each do |work|
+      work.work_people.where(role_id: 1).find_each do |work_person|
+        affected_person_ids.add(work_person.person_id)
+      end
+    end
+
+    return if affected_person_ids.empty?
+
+    log "  Building #{affected_person_ids.size} affected person pages..."
+
+    # 影響を受ける著者のページを再生成
+    Person.where(id: affected_person_ids.to_a).find_each do |person|
+      path = "index_pages/person#{person.id}.html"
+
+      if @track_usage
+        used_records = @usage_tracker.track do
+          builder.build_html(path: path)
+        end
+        @cache_manager.record_build_with_actual_records(path,
+                                                        PageDependencies.person_page(person.id),
+                                                        used_records)
+      else
+        builder.build_html(path: path)
+        @cache_manager.record_build(path, PageDependencies.person_page(person.id))
+      end
+
+      @stats[:built] += 1
+      log "  Built: #{path}"
+    end
+  end
+
+  def build_news_pages(builder)
+    log "\nBuilding news pages..."
+
+    # お知らせ一覧ページ（年別）
+    current_year = Time.zone.now.year
+    (2015..current_year).each do |year|
+      path = "soramoyou#{year}.html"
+
+      if @track_usage
+        used_records = @usage_tracker.track do
+          builder.build_html(path: path)
+        end
+        @cache_manager.record_build_with_actual_records(path,
+                                                        PageDependencies.soramoyou_page(year),
+                                                        used_records)
+      else
+        builder.build_html(path: path)
+        @cache_manager.record_build(path, PageDependencies.soramoyou_page(year))
+      end
+
+      @stats[:built] += 1
+      log "  Built: #{path}"
+    end
+
+    # 新着情報ページ
+    path = 'soramoyou_new.html'
+    if @track_usage
+      used_records = @usage_tracker.track do
+        builder.build_html(path: path)
+      end
+      @cache_manager.record_build_with_actual_records(path,
+                                                      PageDependencies.soramoyou_page,
+                                                      used_records)
+    else
+      builder.build_html(path: path)
+      @cache_manager.record_build(path, PageDependencies.soramoyou_page)
+    end
+
+    @stats[:built] += 1
+    log "  Built: #{path}"
+  end
+
+  def handle_join_table_updates(builder, recently_updated)
+    # WorkPersonが更新された場合、関連する作品と人物のページを更新
+    if recently_updated['WorkPerson']
+      log "\nHandling WorkPerson updates..."
+      affected_work_ids = WorkPerson.where('updated_at > ?', recently_updated['WorkPerson'] - 1.hour).pluck(:work_id).uniq
+      WorkPerson.where('updated_at > ?', recently_updated['WorkPerson'] - 1.hour).pluck(:person_id).uniq
+
+      # 影響を受ける作品の詳細ページを更新
+      build_updated_work_details(builder, Work.where(id: affected_work_ids))
+
+      # 影響を受ける人物のページを更新
+      build_affected_person_pages(builder, Work.where(id: affected_work_ids))
+    end
+
+    # WorkWorkerが更新された場合
+    if recently_updated['WorkWorker']
+      log "\nHandling WorkWorker updates..."
+      affected_work_ids = WorkWorker.where('updated_at > ?', recently_updated['WorkWorker'] - 1.hour).pluck(:work_id).uniq
+      build_updated_work_details(builder, Work.where(id: affected_work_ids))
+    end
+
+    # OriginalBookやWorkfileが更新された場合
+    %w[OriginalBook Workfile].each do |model_name|
+      next unless recently_updated[model_name]
+
+      log "\nHandling #{model_name} updates..."
+      model_class = model_name.constantize
+      affected_work_ids = model_class.where('updated_at > ?', recently_updated[model_name] - 1.hour).pluck(:work_id).uniq
+      build_updated_work_details(builder, Work.where(id: affected_work_ids))
+    end
+
+    # BasePersonが更新された場合
+    return unless recently_updated['BasePerson']
+
+    log "\nHandling BasePerson updates..."
+    affected_person_ids = BasePerson.where('updated_at > ?', recently_updated['BasePerson'] - 1.hour)
+                                    .pluck(:person_id, :original_person_id).flatten.uniq
+
+    Person.where(id: affected_person_ids).find_each do |person|
+      path = "index_pages/person#{person.id}.html"
+
+      builder.build_html(path: path)
+      @cache_manager.record_build(path, PageDependencies.person_page(person.id))
+      @stats[:built] += 1
+      log "  Built: #{path}"
     end
   end
 
