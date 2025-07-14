@@ -150,10 +150,10 @@ class BuildOrchestrator
   def build_updated_work_details(builder, updated_works)
     log "  Building #{updated_works.count} updated work detail pages..."
 
-    updated_works.includes(:person).find_each do |work|
+    updated_works.includes(work_people: :person).find_each do |work|
       url = Rails.application.routes.url_helpers
       path = url.card_path(
-        person_id: format('%06d', work.person_id),
+        person_id: work.card_person_id,
         card_id: work.id,
         format: :html
       )
