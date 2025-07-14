@@ -199,11 +199,27 @@ namespace :build do
 
   desc 'Generate all pages'
   task all: %i[environment build:clean build:prepare_assets build:copy_zip_files] do
+    # ログレベルを一時的に変更
+    original_log_level = Rails.logger.level
+    Rails.logger.level = ENV.fetch('RAILS_LOG_LEVEL', 'warn').to_sym
+
+    # ActiveRecordのログも抑制
+    if defined?(ActiveRecord::Base)
+      original_ar_logger = ActiveRecord::Base.logger
+      ActiveRecord::Base.logger = Rails.logger
+    end
+
     start_time = Time.current
 
-    Rake::Task['build:generate'].invoke
+    begin
+      Rake::Task['build:generate'].invoke
 
-    puts "Done: #{Time.current - start_time}"
+      puts "Done: #{Time.current - start_time}"
+    ensure
+      # ログレベルを元に戻す
+      Rails.logger.level = original_log_level
+      ActiveRecord::Base.logger = original_ar_logger if defined?(ActiveRecord::Base) && original_ar_logger
+    end
   end
 
   desc 'exec `all` and `rsync`'
