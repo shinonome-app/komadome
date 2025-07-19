@@ -9,12 +9,6 @@ servers:
   web:
     hosts:
       - <%= ENV['PRIMARY_HOST'] %>
-  cron:
-    hosts:
-      - <%= ENV['PRIMARY_HOST'] %>
-    cmd: bash -c "env > /etc/environment && cron -f"
-    options:
-      user: root
 
 # Credentials for your image host.
 registry:
