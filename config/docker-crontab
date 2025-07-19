@@ -1,2 +1,2 @@
-# Build static pages every day at 1:00 AM
-0 1 * * * cd /myapp && RAILS_LOG_LEVEL=warn /usr/local/bin/bundle exec rake build:all RAILS_ENV=production >> /proc/1/fd/1 2>&1
+# Build static pages every 4 hours starting at 1:00 JST (with smart caching)
+0 1,5,9,13,17,21 * * * cd /myapp && RAILS_LOG_LEVEL=warn /usr/local/bin/bundle exec rake build:all RAILS_ENV=production >> /proc/1/fd/1 2>&1
