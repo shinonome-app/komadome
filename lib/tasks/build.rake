@@ -62,9 +62,8 @@ namespace :build do
         work_count = Work.published.with_title_firstchar(kana).count
 
         total_page = work_count.fdiv(item_count).ceil # 割り切れない場合は切り上げ
-        (1..total_page).each do |page|
-          builder.build_html(paths: ["index_pages/sakuhin_#{id}#{page}.html"])
-        end
+        paths = (1..total_page).map { |page| "index_pages/sakuhin_#{id}#{page}.html" }
+        builder.build_html(paths: paths)
       end
     end
   end
@@ -79,9 +78,8 @@ namespace :build do
         work_count = Work.unpublished.with_title_firstchar(kana).count
 
         total_page = work_count.fdiv(item_count).ceil # 割り切れない場合は切り上げ
-        (1..total_page).each do |page|
-          builder.build_html(paths: ["index_pages/sakuhin_inp_#{id}#{page}.html"])
-        end
+        paths = (1..total_page).map { |page| "index_pages/sakuhin_inp_#{id}#{page}.html" }
+        builder.build_html(paths: paths)
       end
     end
   end
@@ -93,9 +91,8 @@ namespace :build do
       builder.build_html(paths: ['soramoyou/soramoyouindex.html'])
 
       begin_year = Pages::NewsEntries::IndexYearPageComponent::BEGIN_YEAR
-      (begin_year..current_year).each do |year|
-        builder.build_html(paths: ["soramoyou/soramoyou#{year}.html"])
-      end
+      paths = (begin_year..current_year).map { |year| "soramoyou/soramoyou#{year}.html" }
+      builder.build_html(paths: paths)
     end
   end
 
@@ -110,10 +107,8 @@ namespace :build do
       # Use count directly instead of loading records
       work_count = Work.latest_published(until_date: date).count
       total_page = work_count.fdiv(item_count).ceil # 割り切れない場合は切り上げ
-      (1..total_page).each do |page|
-        path = url.whatsnew_index_pages_path(page:, format: :html)
-        builder.build_html(paths: [path])
-      end
+      paths = (1..total_page).map { |page| url.whatsnew_index_pages_path(page:, format: :html) }
+      builder.build_html(paths: paths)
 
       prev_year = date.year - 1
       # Pre-calculate counts for all years to reduce queries
@@ -122,29 +117,29 @@ namespace :build do
         year_counts[year] = Work.latest_published(year: year).count
       end
 
+      paths = []
       year_counts.each do |year, count|
         total_page = count.fdiv(item_count).ceil # 割り切れない場合は切り上げ
         (1..total_page).each do |page|
-          path = url.whatsnew_year_index_pages_path(year_page: "#{year}_#{page}", format: :html)
-          builder.build_html(paths: [path])
+          paths << url.whatsnew_year_index_pages_path(year_page: "#{year}_#{page}", format: :html)
         end
       end
+      builder.build_html(paths: paths)
     end
   end
 
   desc 'build person index pages'
   task generate_person_index: :environment do
     StaticPageBuilder.new do |builder|
+      paths = []
       Kana.each_column_key do |key|
-        builder.build_html(
-          paths:
-            [
-              "index_pages/person_#{key}.html",
-              "index_pages/person_all_#{key}.html",
-              "index_pages/person_inp_#{key}.html"
-            ]
+        paths.push(
+          "index_pages/person_#{key}.html",
+          "index_pages/person_all_#{key}.html",
+          "index_pages/person_inp_#{key}.html"
         )
       end
+      builder.build_html(paths: paths)
     end
   end
 
