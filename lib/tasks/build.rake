@@ -58,9 +58,10 @@ namespace :build do
       Kana.each_sym_and_char do |id, kana|
         item_count = 50
 
-        works = Work.published.with_title_firstchar(kana).order(:sortkey, :id).all
+        # Use count instead of loading all records
+        work_count = Work.published.with_title_firstchar(kana).count
 
-        total_page = works.count.fdiv(item_count).ceil # 割り切れない場合は切り上げ
+        total_page = work_count.fdiv(item_count).ceil # 割り切れない場合は切り上げ
         (1..total_page).each do |page|
           builder.build_html(paths: ["index_pages/sakuhin_#{id}#{page}.html"])
         end
@@ -74,9 +75,10 @@ namespace :build do
       Kana.each_sym_and_char do |id, kana|
         item_count = 50
 
-        works = Work.unpublished.with_title_firstchar(kana).order(:sortkey, :id).all
+        # Use count instead of loading all records
+        work_count = Work.unpublished.with_title_firstchar(kana).count
 
-        total_page = works.count.fdiv(item_count).ceil # 割り切れない場合は切り上げ
+        total_page = work_count.fdiv(item_count).ceil # 割り切れない場合は切り上げ
         (1..total_page).each do |page|
           builder.build_html(paths: ["index_pages/sakuhin_inp_#{id}#{page}.html"])
         end
@@ -105,17 +107,23 @@ namespace :build do
       item_count = WhatsnewsController::ITEM_COUNT
       date = Time.zone.today
 
-      works = Work.latest_published(until_date: date).order(started_on: :desc, id: :asc)
-      total_page = works.count.fdiv(item_count).ceil # 割り切れない場合は切り上げ
+      # Use count directly instead of loading records
+      work_count = Work.latest_published(until_date: date).count
+      total_page = work_count.fdiv(item_count).ceil # 割り切れない場合は切り上げ
       (1..total_page).each do |page|
         path = url.whatsnew_index_pages_path(page:, format: :html)
         builder.build_html(paths: [path])
       end
 
       prev_year = date.year - 1
+      # Pre-calculate counts for all years to reduce queries
+      year_counts = {}
       (Pages::Whatsnew::IndexPageComponent::FIRST_YEAR..prev_year).each do |year|
-        works = Work.latest_published(year: year).order(started_on: :desc, id: :asc)
-        total_page = works.count.fdiv(item_count).ceil # 割り切れない場合は切り上げ
+        year_counts[year] = Work.latest_published(year: year).count
+      end
+
+      year_counts.each do |year, count|
+        total_page = count.fdiv(item_count).ceil # 割り切れない場合は切り上げ
         (1..total_page).each do |page|
           path = url.whatsnew_year_index_pages_path(year_page: "#{year}_#{page}", format: :html)
           builder.build_html(paths: [path])
@@ -143,7 +151,8 @@ namespace :build do
   desc 'build person pages'
   task generate_person: :environment do
     StaticPageBuilder.new do |builder|
-      Person.find_each do |person|
+      # Eager load associations to prevent N+1 queries
+      Person.includes(:works, :work_people, :sites, :person_sites).find_each do |person|
         builder.build_html(paths: ["index_pages/person#{person.id}.html"])
       end
     end
@@ -154,13 +163,15 @@ namespace :build do
     StaticPageBuilder.new do |builder|
       url = Rails.application.routes.url_helpers
 
-      Person.find_each do |person|
-        person.works.published.pluck(:id).each do |card_id|
+      # Eager load works and related associations to prevent N+1 queries
+      # Also batch the work building by loading all published works with their associations
+      Person.includes(works: [:work_people, :people, :sites, :workfiles, :work_status]).find_each do |person|
+        person.works.published.each do |work|
           builder.build_html(
             paths: [
               url.card_path(
                 person_id: format('%06d', person.id),
-                card_id: card_id,
+                card_id: work.id,
                 format: :html
               )
             ]
@@ -173,10 +184,12 @@ namespace :build do
   desc 'build WIP person index pages'
   task generate_wip_person_index: :environment do
     StaticPageBuilder.new do |builder|
-      Person.find_each do |person|
+      # Eager load works to prevent N+1 queries
+      Person.includes(:works).find_each do |person|
         item_count = 50
-        works = person.works.unpublished.order(:sortkey, :id)
-        total_page = works.count.fdiv(item_count).ceil
+        # Use count instead of loading all records
+        work_count = person.works.unpublished.count
+        total_page = work_count.fdiv(item_count).ceil
         (1..total_page).each do |page|
           builder.build_html(paths: ["index_pages/list_inp#{person.id}_#{page}.html"])
         end
