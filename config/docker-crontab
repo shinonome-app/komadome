@@ -1,2 +1,6 @@
+# Environment variables needed for cron
+SHELL=/bin/bash
+PATH=/usr/local/bundle/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+
 # Build static pages every 4 hours starting at 1:00 JST (with smart caching)
-0 1,5,9,13,17,21 * * * cd /myapp && RAILS_LOG_LEVEL=warn /usr/local/bin/bundle exec rake build:all_and_rsync RAILS_ENV=production >> /proc/1/fd/1 2>&1
+40 1,5,9,13,17,21 * * * root cd /myapp && RAILS_LOG_LEVEL=warn /usr/local/bin/bundle exec rake build:all_and_rsync RAILS_ENV=production >> /proc/1/fd/1 2>&1
