@@ -33,7 +33,9 @@ COPY . /myapp
 
 # Copy crontab file for cron role
 COPY config/docker-crontab /etc/cron.d/komadome-cron
-RUN chmod 0644 /etc/cron.d/komadome-cron
+COPY config/cron-build.sh /myapp/config/cron-build.sh
+RUN chmod 0644 /etc/cron.d/komadome-cron && \
+    chmod +x /myapp/config/cron-build.sh
 
 # Copy and setup entrypoint script
 COPY config/docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
