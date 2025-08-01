@@ -1,2 +1,6 @@
+# Set environment variables for cron
+PATH=/usr/local/bundle/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+RAILS_ENV=production
+
 # Build static pages every 4 hours starting at 1:00 JST (with smart caching)
 30 1,5,9,13,15,21 * * * root /myapp/config/cron-build.sh >> /proc/1/fd/1 2>&1
