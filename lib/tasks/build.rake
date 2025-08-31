@@ -146,9 +146,11 @@ namespace :build do
   desc 'build person pages'
   task generate_person: :environment do
     StaticPageBuilder.new do |builder|
-      # Eager load associations to prevent N+1 queries
-      Person.includes(:works, :work_people, :sites, :person_sites).find_each do |person|
-        builder.build_html(paths: ["index_pages/person#{person.id}.html"])
+      # Process in batches to manage memory usage
+      Person.includes(:works, :work_people, :sites, :person_sites).find_in_batches(batch_size: 100) do |people|
+        people.each do |person|
+          builder.build_html(paths: ["index_pages/person#{person.id}.html"])
+        end
       end
     end
   end
@@ -158,19 +160,20 @@ namespace :build do
     StaticPageBuilder.new do |builder|
       url = Rails.application.routes.url_helpers
 
-      # Eager load works and related associations to prevent N+1 queries
-      # Also batch the work building by loading all published works with their associations
-      Person.includes(works: [:work_people, :people, :sites, :workfiles, :work_status]).find_each do |person|
-        person.works.published.each do |work|
-          builder.build_html(
-            paths: [
-              url.card_path(
-                person_id: format('%06d', person.id),
-                card_id: work.id,
-                format: :html
-              )
-            ]
-          )
+      # Process in batches to manage memory usage
+      Person.includes(works: [:work_people, :people, :sites, :workfiles, :work_status]).find_in_batches(batch_size: 50) do |people|
+        people.each do |person|
+          person.works.published.each do |work|
+            builder.build_html(
+              paths: [
+                url.card_path(
+                  person_id: format('%06d', person.id),
+                  card_id: work.id,
+                  format: :html
+                )
+              ]
+            )
+          end
         end
       end
     end
@@ -179,14 +182,16 @@ namespace :build do
   desc 'build WIP person index pages'
   task generate_wip_person_index: :environment do
     StaticPageBuilder.new do |builder|
-      # Eager load works to prevent N+1 queries
-      Person.includes(:works).find_each do |person|
-        item_count = 50
-        # Use count instead of loading all records
-        work_count = person.works.unpublished.count
-        total_page = work_count.fdiv(item_count).ceil
-        (1..total_page).each do |page|
-          builder.build_html(paths: ["index_pages/list_inp#{person.id}_#{page}.html"])
+      # Process in batches to manage memory usage
+      Person.includes(:works).find_in_batches(batch_size: 100) do |people|
+        people.each do |person|
+          item_count = 50
+          # Use count instead of loading all records
+          work_count = person.works.unpublished.count
+          total_page = work_count.fdiv(item_count).ceil
+          (1..total_page).each do |page|
+            builder.build_html(paths: ["index_pages/list_inp#{person.id}_#{page}.html"])
+          end
         end
       end
     end
