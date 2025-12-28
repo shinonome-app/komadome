@@ -23,6 +23,10 @@ class IndexPagesController < ApplicationController
     render ::Pages::IndexPages::PersonInpIndexPageComponent.new(id: params[:id].to_sym)
   end
 
+  def person_inp_all
+    render ::Pages::IndexPages::PersonInpAllPageComponent.new
+  end
+
   def work_index
     params[:id_page] =~ /([kstnhmyrw]?[aiueo]|zz|nn)(\d+)/
     id = Regexp.last_match(1).to_sym
