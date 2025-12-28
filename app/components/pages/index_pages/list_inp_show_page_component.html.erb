@@ -65,7 +65,7 @@
         <% works.each_with_index do |work, work_index| %>
         <tr>
           <td class="bg-white border-double border-2 border-gray-800 text-right"><%= work_index + 1 + ((pagy.page - 1) * pagy.limit) %></td>
-          <td class="bg-white border-double border-2 border-gray-800"><%= work.title %>(<%= work.id %>)</td>
+          <td class="bg-white border-double border-2 border-gray-800"><%= work.title %>(<%= work.id %>)<br><%= work.subtitle %></td>
           <td class="bg-white border-double border-2 border-gray-800"><%= work.kana_type.name %></td>
           <td class="bg-white border-double border-2 border-gray-800"><%= work.translator_text %></td>
           <td class="bg-white border-double border-2 border-gray-800"><%= work.inputer_text %><br><%= work.proofreader_text %></td>
