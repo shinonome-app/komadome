@@ -12,12 +12,12 @@ module Pages
         Kana.each_column_chars do |chars|
           if chars.empty?
             @authors['その他'] = Person.joins(:works).merge(Work.unpublished)
-                                    .where('sortkey !~ ?', '^[あいうえおか-もやゆよら-ろわをんアイウエオカ-モヤユヨラ-ロワヲンヴ]')
+                                    .where('people.sortkey !~ ?', '^[あいうえおか-もやゆよら-ろわをんアイウエオカ-モヤユヨラ-ロワヲンヴ]')
                                     .distinct
           else
             chars.each do |kana|
               @authors[kana] = Person.joins(:works).merge(Work.unpublished)
-                                     .where('sortkey like ?', "#{kana}%")
+                                     .where('people.sortkey like ?', "#{kana}%")
                                      .distinct
             end
           end
