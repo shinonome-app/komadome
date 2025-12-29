@@ -138,15 +138,15 @@ Person.create(id: 0,
               last_name_en: 'Choshanashi',
               copyright_flag: false,
               sortkey: 'ちょしゃなし')
-## 予備工作員を追加
+## 予備耕作員を追加
 worker_dummy = Worker.create(id: 0,
-                             name: '予備工作員',
+                             name: '予備耕作員',
                              name_kana: 'よびこうさくいん',
                              sortkey: 'よびこうさくいん')
 WorkerSecret.create(
   worker_id: worker_dummy.id,
   email: 'shinonome-worker0@example.com',
-  note: '予備工作員用',
+  note: '予備耕作員用',
   url: 'https://shinonome.example.com/dummy/workers/0'
 )
 
