@@ -10,8 +10,14 @@ export BUNDLE_PATH="/usr/local/bundle"
 
 # Import environment variables from the main process
 # This includes DATABASE_*, SKYLIGHT_*, MAIN_SITE_URL, etc.
+# Using tr instead of strings to handle binary null separators properly
 if [ -f /proc/1/environ ]; then
-    export $(cat /proc/1/environ | strings | grep -E '^[A-Z_]+=' | grep -v 'PATH=' | grep -v 'RAILS_ENV=' | xargs)
+    while IFS='=' read -r -d '' key value; do
+        # Skip PATH and RAILS_ENV (we set these ourselves)
+        if [[ "$key" != "PATH" && "$key" != "RAILS_ENV" && "$key" =~ ^[A-Z_]+$ ]]; then
+            export "$key=$value"
+        fi
+    done < /proc/1/environ
 fi
 
 # Change to app directory
