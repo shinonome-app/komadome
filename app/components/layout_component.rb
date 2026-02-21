@@ -4,8 +4,6 @@
 class LayoutComponent < ViewComponent::Base
   attr_reader :title, :bgcolor
 
-  include Importmap::ImportmapTagsHelper if defined?(Importmap)
-
   def initialize(title: nil, bgcolor: nil)
     super
     @title = title || '青空文庫'

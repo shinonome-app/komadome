@@ -383,8 +383,10 @@
     <a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline"
        href="/index_pages/index_all.html">全</a>
     ●
-    <a class="text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline"
-       href="/index_pages/person1155.html">作家別作品リスト</a>
+    <%= link_to "作家別作品リスト",
+                person_index_pages_path(id: work.first_author.id,
+                                        format: :html),
+                class: "text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" %>
   </div>
 </div>
 <%- if ENV['KOMADOME_OUTPUT_TIMESTAMP'] -%>

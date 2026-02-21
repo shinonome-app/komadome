@@ -13,12 +13,12 @@ module Pages
           if chars.empty?
             @authors['その他'] = Person.joins(:works).merge(Work.unpublished)
                                     .where('people.sortkey !~ ?', '^[あいうえおか-もやゆよら-ろわをんアイウエオカ-モヤユヨラ-ロワヲンヴ]')
-                                    .distinct
+                                    .distinct.order(:sortkey, :sortkey2, :id)
           else
             chars.each do |kana|
               @authors[kana] = Person.joins(:works).merge(Work.unpublished)
                                      .where('people.sortkey like ?', "#{kana}%")
-                                     .distinct
+                                     .distinct.order(:sortkey, :sortkey2, :id)
             end
           end
         end

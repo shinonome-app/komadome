@@ -116,15 +116,15 @@ class Person < ApplicationRecord
   end
 
   def name
-    "#{last_name} #{first_name}"
+    [last_name, first_name].compact_blank.join(' ')
   end
 
   def name_kana
-    "#{last_name_kana} #{first_name_kana}"
+    [last_name_kana, first_name_kana].compact_blank.join(' ')
   end
 
   def name_en
-    "#{last_name_en}, #{first_name_en}" if last_name_en || first_name_en
+    [last_name_en, first_name_en].compact_blank.join(', ').presence
   end
 
   def published_works

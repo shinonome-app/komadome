@@ -8,13 +8,15 @@ module Pages
       def initialize
         super
 
-        if Work.latest_published.blank?
-          @new_works_published_on = Work.latest_published(year: Time.zone.now.year - 1).order(started_on: :desc).first.started_on
-          @new_works = Work.latest_published(year: Time.zone.now.year - 1).where(started_on: new_works_published_on).order(id: :asc)
-        else
-          @new_works_published_on = Work.latest_published.order(started_on: :desc).first.started_on
-          @new_works = Work.latest_published.where(started_on: new_works_published_on).order(id: :asc)
-        end
+        scope = Work.latest_published
+        scope = Work.latest_published(year: Time.zone.now.year - 1) if scope.blank?
+
+        @new_works_published_on = scope.order(started_on: :desc).first&.started_on
+        @new_works = if new_works_published_on
+                       scope.where(started_on: new_works_published_on).order(id: :asc)
+                     else
+                       Work.none
+                     end
         @latest_news_entry = NewsEntry.published.order(published_on: :desc).first
         @topics = NewsEntry.topics.order(published_on: :desc)
 

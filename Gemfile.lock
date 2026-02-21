@@ -197,6 +197,7 @@ GEM
       net-protocol
     net-ssh (7.3.0)
     nio4r (2.7.4)
+    nkf (0.2.0)
     nokogiri (1.19.0)
       mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
@@ -398,6 +399,7 @@ DEPENDENCIES
   jbuilder
   kamal
   lograge
+  nkf
   pagy
   pg
   puma (~> 6.4)
