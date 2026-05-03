@@ -11,14 +11,10 @@ module Pages
         @authors = {}
         Kana.each_column_chars do |chars|
           if chars.empty?
-            @authors['その他'] = Person.joins(:works).merge(Work.unpublished)
-                                    .where('people.sortkey !~ ?', '^[あいうえおか-もやゆよら-ろわをんアイウエオカ-モヤユヨラ-ロワヲンヴ]')
-                                    .distinct.order(:sortkey, :sortkey2, :id)
+            @authors['その他'] = Person.with_unpublished_works_by_kana('その他')
           else
             chars.each do |kana|
-              @authors[kana] = Person.joins(:works).merge(Work.unpublished)
-                                     .where('people.sortkey like ?', "#{kana}%")
-                                     .distinct.order(:sortkey, :sortkey2, :id)
+              @authors[kana] = Person.with_unpublished_works_by_kana(kana)
             end
           end
         end

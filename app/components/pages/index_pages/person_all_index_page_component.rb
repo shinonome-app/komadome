@@ -13,10 +13,10 @@ module Pages
 
         @authors = []
         if @kana_all.empty?
-          @authors << Person.where('sortkey !~ ?', '^[あいうえおか-もやゆよら-ろわをんアイウエオカ-モヤユヨラ-ロワヲンヴ]')
+          @authors << Person.with_name_firstchar(nil)
         else
           @kana_all.each do |kana|
-            @authors << Person.where('sortkey like ?', "#{kana}%")
+            @authors << Person.with_name_firstchar(kana)
           end
         end
       end
