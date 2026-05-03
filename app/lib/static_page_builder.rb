@@ -22,6 +22,7 @@ class StaticPageBuilder
     Rails.public_path.join('assets').children.each do |file|
       FileUtils.cp_r(Rails.public_path.join('assets', file), @target_dir.join('assets'))
     end
+    create_nondigest_asset_aliases
   end
 
   def copy_public_images
@@ -84,5 +85,25 @@ class StaticPageBuilder
   def create_rsync_keyfile(data)
     File.write(@rsync_keyfile, data.gsub('@NL@', "\n"))
     FileUtils.chmod(0o600, @rsync_keyfile)
+  end
+
+  def create_nondigest_asset_aliases
+    manifest = Rails.application.assets_manifest
+    return if manifest.nil? || manifest.assets.nil?
+
+    assets_dir = @target_dir.join('assets')
+
+    manifest.assets.each do |logical_path, digested_path|
+      next if logical_path == digested_path
+
+      src = assets_dir.join(digested_path)
+      next unless src.exist?
+
+      dest = assets_dir.join(logical_path)
+      next if dest.exist?
+
+      FileUtils.mkdir_p(dest.dirname)
+      FileUtils.cp(src, dest)
+    end
   end
 end
