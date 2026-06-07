@@ -148,7 +148,8 @@ namespace :build do
   task generate_person: :environment do
     StaticPageBuilder.new do |builder|
       # Process in batches to manage memory usage
-      Person.includes(:works, :work_people, :sites, :person_sites).find_in_batches(batch_size: 100) do |people|
+      # person_id=0 ("著者なし" placeholder) は public 公開対象から除外する
+      Person.where.not(id: 0).includes(:works, :work_people, :sites, :person_sites).find_in_batches(batch_size: 100) do |people|
         people.each do |person|
           builder.build_html(paths: ["index_pages/person#{person.id}.html"])
         end
@@ -162,7 +163,8 @@ namespace :build do
       url = Rails.application.routes.url_helpers
 
       # Process in batches to manage memory usage
-      Person.includes(works: [:work_people, :people, :sites, :workfiles, :work_status]).find_in_batches(batch_size: 50) do |people|
+      # person_id=0 ("著者なし" placeholder) は public 公開対象から除外する
+      Person.where.not(id: 0).includes(works: [:work_people, :people, :sites, :workfiles, :work_status]).find_in_batches(batch_size: 50) do |people|
         people.each do |person|
           person.works.published.each do |work|
             builder.build_html(
@@ -184,7 +186,8 @@ namespace :build do
   task generate_wip_person_index: :environment do
     StaticPageBuilder.new do |builder|
       # Process in batches to manage memory usage
-      Person.includes(:works).find_in_batches(batch_size: 100) do |people|
+      # person_id=0 ("著者なし" placeholder) は public 公開対象から除外する
+      Person.where.not(id: 0).includes(:works).find_in_batches(batch_size: 100) do |people|
         people.each do |person|
           item_count = 50
           # Use count instead of loading all records

@@ -211,6 +211,9 @@ class BuildOrchestrator
     url = Rails.application.routes.url_helpers
 
     updated_works.includes(work_people: :person).find_each do |work|
+      # person_id=0 ("著者なし" placeholder) は public 公開対象外
+      next if work.first_author&.id == 0
+
       path = url.card_path(
         person_id: work.card_person_id,
         card_id: work.id,
