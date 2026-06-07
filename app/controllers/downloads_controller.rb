@@ -19,6 +19,14 @@ class DownloadsController < ApplicationController
     send_zip_file('list_person_all_extended_utf8.zip')
   end
 
+  def list_inp_person_all
+    send_zip_file('list_inp_person_all.zip')
+  end
+
+  def list_inp_person_all_utf8
+    send_zip_file('list_inp_person_all_utf8.zip')
+  end
+
   private
 
   def send_zip_file(filename)

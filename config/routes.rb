@@ -44,6 +44,8 @@ Rails.application.routes.draw do
       get 'list_person_all_extended', to: 'downloads#list_person_all_extended', constraints: { format: 'zip' }
       get 'list_person_all_utf8', to: 'downloads#list_person_all_utf8', constraints: { format: 'zip' }
       get 'list_person_all_extended_utf8', to: 'downloads#list_person_all_extended_utf8', constraints: { format: 'zip' }
+      get 'list_inp_person_all', to: 'downloads#list_inp_person_all', constraints: { format: 'zip' }
+      get 'list_inp_person_all_utf8', to: 'downloads#list_inp_person_all_utf8', constraints: { format: 'zip' }
     end
   end
 
