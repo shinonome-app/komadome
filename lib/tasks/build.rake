@@ -229,7 +229,11 @@ namespace :build do
     start_time = Time.current
 
     begin
-      Rake::Task['build:generate'].invoke
+      # KOMADOME_BUILD_DATE が設定されていれば、その日付に時刻を固定して生成する
+      # (komadome-rs の --date と対応。決定論的ビルドのため。docs 参照)
+      BuildClock.with_pinned_date do
+        Rake::Task['build:generate'].invoke
+      end
 
       puts "Done: #{Time.current - start_time}"
     ensure
