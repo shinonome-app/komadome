@@ -160,3 +160,9 @@ if Rails.env.development? || ENV.fetch('USE_ALL_SEEDS', nil)
   require_relative 'seeds/sites'
   require_relative 'seeds/workfiles'
 end
+
+# Load parity fixture data for komadome-rs parity testing
+# Usage: PARITY_FIXTURE=1 bundle exec rake db:seed
+if ENV.fetch('PARITY_FIXTURE', nil)
+  require_relative 'seeds/parity_fixture'
+end
