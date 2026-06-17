@@ -138,7 +138,7 @@
       <tr>
         <th class="text-left text-red-800 align-top break-keep">作品について：</th>
         <td class="[&_img]:inline [&_img]:align-middle">
-          <%== work.description %>
+          <%== work.description.gsub("\r\n", "<br>").gsub("\n", "<br>") %>
         </td>
       </tr>
       <% end %>
@@ -196,7 +196,7 @@
       <tr>
         <th class="text-left text-red-800 w-1/6 align-top">人物について：</th>
         <td class="[&_img]:inline [&_img]:align-middle">
-          <%== person.description %>
+          <%== person.description.to_s.gsub("\r\n", "<br>").gsub("\n", "<br>") %>
           <!-- TODO: データを分割
                <div class="flex flex-row">
                  <a href="http://ja.wikipedia.org/" target="_blank">
