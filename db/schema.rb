@@ -10,9 +10,9 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_08_03_045608) do
+ActiveRecord::Schema[8.0].define(version: 2025_02_15_090000) do
   # These are extensions that must be enabled in order to support this database
-  enable_extension "plpgsql"
+  enable_extension "pg_catalog.plpgsql"
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -88,6 +88,18 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_03_045608) do
     t.text "extension"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "editable_contents", force: :cascade do |t|
+    t.string "area_name"
+    t.string "key"
+    t.text "value"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "status", default: "draft", null: false
+    t.datetime "published_at"
+    t.index ["area_name", "key", "status"], name: "index_editable_contents_on_area_name_and_key_and_status"
+    t.index ["area_name", "key"], name: "index_editable_contents_on_area_name_and_key"
   end
 
   create_table "exec_commands", force: :cascade do |t|
@@ -199,7 +211,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_03_045608) do
     t.integer "work_copy", default: 0, null: false
     t.integer "work_print", default: 0, null: false
     t.text "proof_edition"
-    t.bigint "workfile"
+    t.bigint "workfile_id"
     t.text "address"
     t.text "memo"
     t.bigint "worker_id"
@@ -409,7 +421,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_03_045608) do
     t.integer "revision_count"
     t.bigint "file_encoding_id", null: false
     t.bigint "charset_id", null: false
-    t.date "registrated_on"
+    t.date "registered_on"
     t.date "last_updated_on"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
