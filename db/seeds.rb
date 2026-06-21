@@ -163,6 +163,4 @@ end
 
 # Load parity fixture data for komadome-rs parity testing
 # Usage: PARITY_FIXTURE=1 bundle exec rake db:seed
-if ENV.fetch('PARITY_FIXTURE', nil)
-  require_relative 'seeds/parity_fixture'
-end
+require_relative 'seeds/parity_fixture' if ENV.fetch('PARITY_FIXTURE', nil)
