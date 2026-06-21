@@ -21,6 +21,11 @@ module ParityFixture # rubocop:disable Metrics/ModuleLength
   WORKER_ROLE_INPUT = 1
   WORKER_ROLE_PROOFREAD = 2
 
+  # parity の基準日（=「今日」）。決定論のためビルドの DATE と必ず一致させる。
+  # works の started_on が 2026-01-01(公開)/2027-01-01(未来除外) で 2026 年を前提に組まれているため、
+  # 既定値も 2026 年央に固定する（時間が経って 2026 を過ぎたら見直すこと）。
+  BASE_DATE = (ENV.fetch('DATE', '').empty? ? Date.new(2026, 6, 15) : Date.parse(ENV.fetch('DATE'))).freeze
+
   # Persons (20 people covering edge cases)
   PERSONS = [
     # 101: normal case (last + first + en)
@@ -302,13 +307,13 @@ module ParityFixture # rubocop:disable Metrics/ModuleLength
   # News entries (10 entries covering year boundaries and flags)
   NEWS_ENTRIES = [
     { id: 101, title: '今日のトピックス', body: "今日のお知らせ本文です。\n\n詳細はこちら。",
-      flag: true, published_on: Time.zone.today },
+      flag: true, published_on: BASE_DATE },
     { id: 102, title: '今日の普通ニュース', body: "普通のお知らせ本文です。\n\n詳細はこちら。",
-      flag: false, published_on: Time.zone.today },
+      flag: false, published_on: BASE_DATE },
     { id: 103, title: '昨年のトピックス', body: "去年のお知らせ本文です。\n\n詳細はこちら。",
-      flag: true, published_on: Time.zone.today - 365 },
+      flag: true, published_on: BASE_DATE - 365 },
     { id: 104, title: '昨年の普通ニュース', body: "去年の普通のお知らせ本文です。\n\n詳細はこちら。",
-      flag: false, published_on: Time.zone.today - 365 },
+      flag: false, published_on: BASE_DATE - 365 },
     { id: 105, title: '古いお知らせ1997', body: "1997年のお知らせ本文です。\n\n詳細はこちら。",
       flag: false, published_on: Date.new(1997, 8, 1) },
     { id: 106, title: '2000年のお知らせ', body: "2000年のお知らせ本文です。\n\n詳細はこちら。",
@@ -322,7 +327,7 @@ module ParityFixture # rubocop:disable Metrics/ModuleLength
     { id: 110, title: '2025年のお知らせ', body: "2025年のお知らせ本文です。\n\n詳細はこちら。",
       flag: true, published_on: Date.new(2025, 12, 1) },
     # 201: bodyが空のニュース
-    { id: 201, title: '空の本文', body: '', flag: false, published_on: Time.zone.today }
+    { id: 201, title: '空の本文', body: '', flag: false, published_on: BASE_DATE }
   ].freeze
 
   # Sites (5 sites)
