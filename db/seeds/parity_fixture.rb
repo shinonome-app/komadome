@@ -488,7 +488,7 @@ now = Time.current
 insert_fixture = lambda do |model, rows|
   keys = rows.flat_map(&:keys).uniq
   normalized = rows.map { |r| keys.index_with { |k| r[k] }.merge(created_at: now, updated_at: now) }
-  model.insert_all(normalized) # rubocop:disable Rails/SkipsModelValidations
+  model.insert_all(normalized)
   puts "  #{model.name}: #{rows.size}"
 end
 
