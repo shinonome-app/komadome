@@ -7,7 +7,7 @@
 #
 # See: komadome-rs/docs/parity-fixture-plan.md
 
-module ParityFixture
+module ParityFixture # rubocop:disable Metrics/ModuleLength
   # Master table IDs (must match seeds.rb)
   KANA_TYPE_ID = 1
   CHARSET_ID = 1        # JIS X 0208
@@ -21,9 +21,7 @@ module ParityFixture
   WORKER_ROLE_INPUT = 1
   WORKER_ROLE_PROOFREAD = 2
 
-  # --------------------------------------------------------------------------
   # Persons (20 people covering edge cases)
-  # --------------------------------------------------------------------------
   PERSONS = [
     # 101: normal case (last + first + en)
     { id: 101, last_name: '太宰', last_name_kana: 'だざい', last_name_en: 'Dazai',
@@ -113,13 +111,11 @@ module ParityFixture
       copyright_flag: false, sortkey: 'からじんぶつ', sortkey2: 'てすと' },
     # 202: HTML特殊文字を含む名前
     { id: 202, last_name: '山田<&>', last_name_kana: 'やまだ', last_name_en: 'Yamada&lt;&gt;',
-      first_name: '太郎', first_name_kana: 'たろう', first_name_en: 'Taro',
-      copyright_flag: false, sortkey: 'やまだ', sortkey2: 'たろう' }
+      first_name: '風太郎', first_name_kana: 'ふうたろう', first_name_en: 'Futaro',
+      copyright_flag: false, sortkey: 'やまだ', sortkey2: 'ふうたろう' }
   ].freeze
 
-  # --------------------------------------------------------------------------
   # Works (30 works covering edge cases)
-  # --------------------------------------------------------------------------
   WORKS = [
     # 1001-1005: basic published works with different authors
     { id: 1001, title: '雪の早晨', title_kana: 'ゆきのあした',
@@ -243,9 +239,7 @@ module ParityFixture
       sortkey: 'くうふぃーるどさくひん', kana_type_id: KANA_TYPE_ID, user_id: 1 }
   ].freeze
 
-  # --------------------------------------------------------------------------
   # WorkPeople (work-person relationships with various roles)
-  # --------------------------------------------------------------------------
   WORK_PEOPLE = [
     # Single author works
     { work_id: 1001, person_id: 101, role_id: ROLE_AUTHOR },
@@ -305,18 +299,16 @@ module ParityFixture
     { work_id: 2003, person_id: 201, role_id: ROLE_AUTHOR }
   ].freeze
 
-  # --------------------------------------------------------------------------
   # News entries (10 entries covering year boundaries and flags)
-  # --------------------------------------------------------------------------
   NEWS_ENTRIES = [
     { id: 101, title: '今日のトピックス', body: "今日のお知らせ本文です。\n\n詳細はこちら。",
-      flag: true, published_on: Date.today },
+      flag: true, published_on: Time.zone.today },
     { id: 102, title: '今日の普通ニュース', body: "普通のお知らせ本文です。\n\n詳細はこちら。",
-      flag: false, published_on: Date.today },
+      flag: false, published_on: Time.zone.today },
     { id: 103, title: '昨年のトピックス', body: "去年のお知らせ本文です。\n\n詳細はこちら。",
-      flag: true, published_on: Date.today - 365 },
+      flag: true, published_on: Time.zone.today - 365 },
     { id: 104, title: '昨年の普通ニュース', body: "去年の普通のお知らせ本文です。\n\n詳細はこちら。",
-      flag: false, published_on: Date.today - 365 },
+      flag: false, published_on: Time.zone.today - 365 },
     { id: 105, title: '古いお知らせ1997', body: "1997年のお知らせ本文です。\n\n詳細はこちら。",
       flag: false, published_on: Date.new(1997, 8, 1) },
     { id: 106, title: '2000年のお知らせ', body: "2000年のお知らせ本文です。\n\n詳細はこちら。",
@@ -330,12 +322,10 @@ module ParityFixture
     { id: 110, title: '2025年のお知らせ', body: "2025年のお知らせ本文です。\n\n詳細はこちら。",
       flag: true, published_on: Date.new(2025, 12, 1) },
     # 201: bodyが空のニュース
-    { id: 201, title: '空の本文', body: '', flag: false, published_on: Date.today }
+    { id: 201, title: '空の本文', body: '', flag: false, published_on: Time.zone.today }
   ].freeze
 
-  # --------------------------------------------------------------------------
   # Sites (5 sites)
-  # --------------------------------------------------------------------------
   SITES = [
     { id: 101, name: '青空文庫関連サイト1', url: 'https://example.com/aozora1' },
     { id: 102, name: '青空文庫関連サイト2', url: 'https://example.com/aozora2' },
@@ -344,35 +334,27 @@ module ParityFixture
     { id: 105, name: '研究サイト', url: 'https://example.com/research' }
   ].freeze
 
-  # --------------------------------------------------------------------------
   # WorkSites (3 relationships)
-  # --------------------------------------------------------------------------
   WORK_SITES = [
     { work_id: 1012, site_id: 101 },
     { work_id: 1012, site_id: 102 },
     { work_id: 1013, site_id: 103 }
   ].freeze
 
-  # --------------------------------------------------------------------------
   # PersonSites (2 relationships)
-  # --------------------------------------------------------------------------
   PERSON_SITES = [
     { person_id: 109, site_id: 104 },
     { person_id: 110, site_id: 105 }
   ].freeze
 
-  # --------------------------------------------------------------------------
   # BasePeople (3 aliases)
-  # --------------------------------------------------------------------------
   BASE_PEOPLE = [
     { person_id: 110, original_person_id: 101 },
     { person_id: 111, original_person_id: 102 },
     { person_id: 112, original_person_id: 103 }
   ].freeze
 
-  # --------------------------------------------------------------------------
   # OriginalBooks (10 books)
-  # --------------------------------------------------------------------------
   ORIGINAL_BOOKS = [
     { work_id: 1001, title: '雪の早晨底本', publisher: '春出版社',
       first_pubdate: '1910年', input_edition: '2000年入力版',
@@ -406,9 +388,7 @@ module ParityFixture
       proof_edition: '2026年校正版', booktype_id: BOOKTYPE_ID }
   ].freeze
 
-  # --------------------------------------------------------------------------
   # Bibclasses (10 bibclasses)
-  # --------------------------------------------------------------------------
   BIBCLASSES = [
     { work_id: 1001, name: 'NDC', num: '913' },
     { work_id: 1002, name: 'NDC', num: '914' },
@@ -422,9 +402,7 @@ module ParityFixture
     { work_id: 1027, name: 'NDC', num: '911' }
   ].freeze
 
-  # --------------------------------------------------------------------------
   # Workers (5 workers)
-  # --------------------------------------------------------------------------
   WORKERS = [
     { id: 101, name: '入力者A', name_kana: 'にゅうりょくしゃえー', sortkey: 'にゅうりょくしゃえー' },
     { id: 102, name: '校正者B', name_kana: 'こうせいしゃびー', sortkey: 'こうせいしゃびー' },
@@ -433,9 +411,7 @@ module ParityFixture
     { id: 105, name: '入力者E', name_kana: 'にゅうりょくしゃいー', sortkey: 'にゅうりょくしゃいー' }
   ].freeze
 
-  # --------------------------------------------------------------------------
   # WorkerSecrets (5 worker secrets)
-  # --------------------------------------------------------------------------
   WORKER_SECRETS = [
     { worker_id: 101, email: 'worker-a@example.com', url: 'https://example.com/worker-a', note: '入力者Aのメモ' },
     { worker_id: 102, email: 'worker-b@example.com', url: 'https://example.com/worker-b', note: '校正者Bのメモ' },
@@ -444,9 +420,7 @@ module ParityFixture
     { worker_id: 105, email: 'worker-e@example.com', url: 'https://example.com/worker-e', note: '入力者Eのメモ' }
   ].freeze
 
-  # --------------------------------------------------------------------------
   # WorkWorkers (15 work-worker relationships)
-  # --------------------------------------------------------------------------
   WORK_WORKERS = [
     { work_id: 1001, worker_id: 101, worker_role_id: WORKER_ROLE_INPUT },
     { work_id: 1001, worker_id: 102, worker_role_id: WORKER_ROLE_PROOFREAD },
@@ -465,9 +439,7 @@ module ParityFixture
     { work_id: 1027, worker_id: 105, worker_role_id: WORKER_ROLE_INPUT }
   ].freeze
 
-  # --------------------------------------------------------------------------
   # Workfiles (10 workfiles)
-  # --------------------------------------------------------------------------
   WORKFILES = [
     { work_id: 1001, filetype_id: FILETYPE_ID, compresstype_id: COMPRESSTYPE_ID,
       file_encoding_id: FILE_ENCODING_ID, charset_id: CHARSET_ID,
@@ -512,11 +484,11 @@ module ParityFixture
   ].freeze
 end
 
-# =============================================================================
 # Load fixture data
-# =============================================================================
 
-puts "Loading parity fixture data..."
+# rubocop:disable Rails/Output
+
+puts 'Loading parity fixture data...'
 
 # Insert in dependency order
 Person.insert_all(ParityFixture::PERSONS.map { |p| p.merge(created_at: Time.current, updated_at: Time.current) })
@@ -561,4 +533,5 @@ puts "  WorkWorkers: #{ParityFixture::WORK_WORKERS.size}"
 Workfile.insert_all(ParityFixture::WORKFILES.map { |wf| wf.merge(created_at: Time.current, updated_at: Time.current) })
 puts "  Workfiles: #{ParityFixture::WORKFILES.size}"
 
-puts "Parity fixture loaded successfully."
+puts 'Parity fixture loaded successfully.'
+# rubocop:enable Rails/Output
