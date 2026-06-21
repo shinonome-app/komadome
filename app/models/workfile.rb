@@ -8,7 +8,7 @@
 #  filename         :text
 #  filesize         :integer
 #  last_updated_on  :date
-#  registrated_on   :date
+#  registered_on    :date
 #  revision_count   :integer
 #  url              :text
 #  created_at       :datetime         not null
@@ -45,12 +45,27 @@ class Workfile < ApplicationRecord
   belongs_to :file_encoding
   belongs_to :charset
 
+  # Phase 3: ActiveStorageサポート（移行用rake taskでのみ使用）
   has_one_attached :workdata if defined?(ActiveStorage)
 
   has_one :workfile_secret,
           class_name: 'Shinonome::WorkfileSecret',
           required: true,
           dependent: :destroy
+
+  def filesystem
+    @filesystem ||= Workfile::Filesystem.new(self)
+  end
+
+  def file_exists?
+    filesystem.exists?
+  end
+
+  def download_admin_url
+    return nil unless persisted? && work
+
+    Rails.application.routes.url_helpers.admin_work_workfile_download_path(work, self)
+  end
 
   accepts_nested_attributes_for :workfile_secret, update_only: true
 
@@ -66,6 +81,8 @@ class Workfile < ApplicationRecord
   validates :file_encoding_id, numericality: { only_integer: true }, if: -> { file_encoding_id.present? }
 
   validates :url, format: { with: URI::DEFAULT_PARSER.make_regexp(%w[http https]) }, allow_blank: true
+  # ファイル名に使用可能な文字：英数字、ハイフン、アンダースコア、ドットのみ
+  validates :filename, format: { with: /\A[a-zA-Z0-9\-_.]+\z/ }, allow_blank: true
 
   def self.parse(url, validate: true)
     # ex.
@@ -129,11 +146,11 @@ class Workfile < ApplicationRecord
   end
 
   def using_ruby?
-    content = uncompressed_workdata
-    return false if content.nil?
+    file_content = content
+    return false if file_content.nil?
 
-    content.force_encoding('Shift_JIS')
-    utf8_content = content.encode('UTF-8')
+    file_content.force_encoding('Shift_JIS')
+    utf8_content = file_content.encode('UTF-8')
     utf8_content.match?(/《.*》/)
   end
 
@@ -141,35 +158,54 @@ class Workfile < ApplicationRecord
     compresstype&.compressed?
   end
 
-  def uncompressed_workdata
-    return nil if workdata.blank? || compresstype.blank?
+  # ファイル内容の取得（Filesystemのみ）
+  def content
+    filesystem.exists? ? filesystem.read : nil
+  end
 
-    content = workdata.open { |file| file&.read }
+  # ファイルサイズの取得
+  def file_size
+    filesystem.exists? ? filesystem.size : (filesize || 0)
+  end
+
+  # ActiveStorageファイルの削除（移行用rakeタスクでのみ使用）
+  def purge_activestorage_file
+    return unless defined?(ActiveStorage) && respond_to?(:workdata)
+
+    workdata.purge if workdata.attached?
+  end
+
+  def uncompressed_workdata
+    return nil if compresstype.blank?
+
+    content = filesystem.read
     return content unless compressed?
 
     raise 'サポートしていない圧縮形式です' if compresstype.lha? || compresstype.sit?
 
     if compresstype.zip?
-      unzip_workdata
+      unzip_filesystem_data
     elsif compresstype.gzip?
-      gunzip_workdata
+      gunzip_filesystem_data
     else
       raise 'サポートしていない圧縮形式です'
     end
   end
 
-  def unzip_workdata
-    workdata.open do |file|
-      Zip::File.open(file) do |zip|
-        zip.each do |entry|
-          return entry.get_input_stream.read if entry.name =~ /\.txt\z/
-        end
+  def unzip_filesystem_data
+    return nil unless filesystem.exists?
+
+    Zip::File.open(filesystem.path) do |zip|
+      zip.each do |entry|
+        return entry.get_input_stream.read if entry.name =~ /\.txt\z/
       end
     end
   end
 
-  def gunzip_workdata
-    workdata.open do |file|
+  def gunzip_filesystem_data
+    return nil unless filesystem.exists?
+
+    File.open(filesystem.path, 'rb') do |file|
       Zlib::GzipReader.open(file) do |gz|
         return gz.read
       end

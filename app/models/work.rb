@@ -66,7 +66,10 @@ class Work < ApplicationRecord
   belongs_to :kana_type
   belongs_to :work_status
 
-  scope :with_year_and_status, ->(year, status) { where('extract(year from created_at) = ? AND work_status_id = ?', year, status) }
+  # created_at はUTC保存だが、JST基準で検索する
+  scope :with_year_and_status, lambda { |year, status|
+    where(created_at: Time.zone.local(year.to_i).all_year, work_status_id: status)
+  }
 
   scope :with_creator_firstchar, lambda { |char|
     if char.blank? || char == 'その他'
@@ -85,8 +88,14 @@ class Work < ApplicationRecord
   }
 
   scope :published, ->(date = Time.zone.today) { where('work_status_id = 1 AND started_on <= ?', date) }
-  scope :unpublished, ->(date = Time.zone.today) { where('work_status_id in (3, 4, 5, 6, 7, 8, 9, 10, 11) OR (work_status_id = 1 AND started_on > ?)', date) }
+  scope :unpublished, ->(date = Time.zone.today) { where('work_status_id in (3, 4, 5, 6, 7, 8, 9, 10, 11, 13, 14, 15) OR (work_status_id = 1 AND started_on > ?)', date) }
   scope :not_proofread, -> { where('work_status_id in (5, 6)') }
+
+  scope :without_authors, lambda {
+    left_outer_joins(:work_people)
+      .group('works.id')
+      .having('COUNT(CASE WHEN work_people.role_id = 1 THEN 1 END) = 0')
+  }
 
   before_validation :set_sortkey
 
@@ -97,19 +106,21 @@ class Work < ApplicationRecord
   validates :kana_type_id, inclusion: { in: [1, 2, 3, 4, 99] }, if: -> { kana_type_id.present? }
   validates :started_on, presence: true
   validates :work_status_id, presence: true # rubocop:disable Rails/RedundantPresenceValidationOnBelongsTo
-  validates :work_status_id, inclusion: { in: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12] }, if: -> { work_status_id.present? }
+  validates :work_status_id, inclusion: { in: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15] }, if: -> { work_status_id.present? }
 
   def self.copyrighted_count
-    published.joins(:people)
-             .where(people: { copyright_flag: true })
-             .distinct.count
+    published
+      .joins(:people)
+      .where(people: { copyright_flag: true })
+      .distinct.count
   end
 
   def self.non_copyrighted_count
-    published.joins(:people)
-             .group('works.id')
-             .having('bool_and(people.copyright_flag = false)')
-             .distinct.pluck('works.id').size
+    published
+      .joins(:people)
+      .group('works.id')
+      .having('bool_and(people.copyright_flag = false)')
+      .distinct.pluck('works.id').size
   end
 
   def self.csv_header
@@ -191,6 +202,8 @@ class Work < ApplicationRecord
   end
 
   def card_person_id
+    return nil unless first_author
+
     format('%06d', first_author.id)
   end
 
@@ -203,7 +216,8 @@ class Work < ApplicationRecord
   end
 
   def author_text
-    work_people.where(role_id: 1).map { |a| a.person.name }.join(', ')
+    work_people.select { |wp| wp.role_id == 1 }.map { |wp| wp.person.name }.join(', ')
+    # work_people.where(role_id: 1).map { |a| a.person.name }.join(', ')
   end
 
   def base_author_text
