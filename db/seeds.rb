@@ -131,26 +131,19 @@ booktypes.each do |k, v|
   Booktype.create!(id: k, name: v)
 end
 
-## 人物（著者なし）を追加
-Person.create(id: 0,
-              last_name: '著者なし',
-              last_name_kana: 'ちょしゃなし',
-              last_name_en: 'Choshanashi',
-              copyright_flag: false,
-              sortkey: 'ちょしゃなし')
-## 予備耕作員を追加
-worker_dummy = Worker.create(id: 0,
-                             name: '予備耕作員',
-                             name_kana: 'よびこうさくいん',
-                             sortkey: 'よびこうさくいん')
-WorkerSecret.create(
-  worker_id: worker_dummy.id,
-  email: 'shinonome-worker0@example.com',
-  note: '予備耕作員用',
-  url: 'https://shinonome.example.com/dummy/workers/0'
-)
+## 人物（著者なし）/ 予備耕作員 を追加
+# Person/Worker は has_one :*_secret(class_name: 'Shinonome::*Secret', required: true) を持つが、
+# secret モデル群は Shinonome 専用で komadome には存在しない。baseline は validation を介さず
+# insert_all で投入する（WorkerSecret は Shinonome 専用データのため komadome では作らない＝ビルド不要）。
+now = Time.current
+Person.insert_all([{ id: 0, last_name: '著者なし', last_name_kana: 'ちょしゃなし', # rubocop:disable Rails/SkipsModelValidations
+                     last_name_en: 'Choshanashi', copyright_flag: false, sortkey: 'ちょしゃなし',
+                     created_at: now, updated_at: now }])
+Worker.insert_all([{ id: 0, name: '予備耕作員', name_kana: 'よびこうさくいん', # rubocop:disable Rails/SkipsModelValidations
+                     sortkey: 'よびこうさくいん', created_at: now, updated_at: now }])
 
-if Rails.env.development? || ENV.fetch('USE_ALL_SEEDS', nil)
+# parity fixture 実行時は開発用ダミーデータを投入しない（fixture の最小データのみにする）。
+if !ENV.fetch('PARITY_FIXTURE', nil) && (Rails.env.development? || ENV.fetch('USE_ALL_SEEDS', nil))
   require_relative 'seeds/users'
   require_relative 'seeds/news_entries'
   require_relative 'seeds/workers'

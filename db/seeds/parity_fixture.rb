@@ -411,15 +411,6 @@ module ParityFixture # rubocop:disable Metrics/ModuleLength
     { id: 105, name: '入力者E', name_kana: 'にゅうりょくしゃいー', sortkey: 'にゅうりょくしゃいー' }
   ].freeze
 
-  # WorkerSecrets (5 worker secrets)
-  WORKER_SECRETS = [
-    { worker_id: 101, email: 'worker-a@example.com', url: 'https://example.com/worker-a', note: '入力者Aのメモ' },
-    { worker_id: 102, email: 'worker-b@example.com', url: 'https://example.com/worker-b', note: '校正者Bのメモ' },
-    { worker_id: 103, email: 'worker-c@example.com', url: 'https://example.com/worker-c', note: '入力者Cのメモ' },
-    { worker_id: 104, email: 'worker-d@example.com', url: 'https://example.com/worker-d', note: '校正者Dのメモ' },
-    { worker_id: 105, email: 'worker-e@example.com', url: 'https://example.com/worker-e', note: '入力者Eのメモ' }
-  ].freeze
-
   # WorkWorkers (15 work-worker relationships)
   WORK_WORKERS = [
     { work_id: 1001, worker_id: 101, worker_role_id: WORKER_ROLE_INPUT },
@@ -523,9 +514,6 @@ puts "  Bibclasses: #{ParityFixture::BIBCLASSES.size}"
 
 Worker.insert_all(ParityFixture::WORKERS.map { |w| w.merge(created_at: Time.current, updated_at: Time.current) })
 puts "  Workers: #{ParityFixture::WORKERS.size}"
-
-WorkerSecret.insert_all(ParityFixture::WORKER_SECRETS.map { |ws| ws.merge(created_at: Time.current, updated_at: Time.current) })
-puts "  WorkerSecrets: #{ParityFixture::WORKER_SECRETS.size}"
 
 WorkWorker.insert_all(ParityFixture::WORK_WORKERS.map { |ww| ww.merge(created_at: Time.current, updated_at: Time.current) })
 puts "  WorkWorkers: #{ParityFixture::WORK_WORKERS.size}"
