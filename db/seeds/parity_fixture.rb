@@ -435,43 +435,43 @@ module ParityFixture # rubocop:disable Metrics/ModuleLength
     { work_id: 1001, filetype_id: FILETYPE_ID, compresstype_id: COMPRESSTYPE_ID,
       file_encoding_id: FILE_ENCODING_ID, charset_id: CHARSET_ID,
       filesize: 10240, filename: '1001.txt', revision_count: 1,
-      registrated_on: '2020-01-01', last_updated_on: '2020-01-01' },
+      registered_on: '2020-01-01', last_updated_on: '2020-01-01' },
     { work_id: 1002, filetype_id: FILETYPE_ID, compresstype_id: 2,
       file_encoding_id: FILE_ENCODING_ID, charset_id: CHARSET_ID,
       filesize: 20480, filename: '1002.zip', revision_count: 2,
-      registrated_on: '2020-02-01', last_updated_on: '2020-02-15' },
+      registered_on: '2020-02-01', last_updated_on: '2020-02-15' },
     { work_id: 1003, filetype_id: 3, compresstype_id: COMPRESSTYPE_ID,
       file_encoding_id: FILE_ENCODING_ID, charset_id: CHARSET_ID,
       filesize: 15360, filename: '1003.html', revision_count: 1,
-      registrated_on: '2020-03-01', last_updated_on: '2020-03-01' },
+      registered_on: '2020-03-01', last_updated_on: '2020-03-01' },
     { work_id: 1006, filetype_id: FILETYPE_ID, compresstype_id: COMPRESSTYPE_ID,
       file_encoding_id: FILE_ENCODING_ID, charset_id: CHARSET_ID,
       filesize: 30720, filename: '1006.txt', revision_count: 3,
-      registrated_on: '2020-06-01', last_updated_on: '2020-07-01' },
+      registered_on: '2020-06-01', last_updated_on: '2020-07-01' },
     { work_id: 1007, filetype_id: 1, compresstype_id: 2,
       file_encoding_id: FILE_ENCODING_ID, charset_id: CHARSET_ID,
       filesize: 25600, filename: '1007.zip', revision_count: 2,
-      registrated_on: '2020-07-01', last_updated_on: '2020-08-01' },
+      registered_on: '2020-07-01', last_updated_on: '2020-08-01' },
     { work_id: 1010, filetype_id: FILETYPE_ID, compresstype_id: COMPRESSTYPE_ID,
       file_encoding_id: FILE_ENCODING_ID, charset_id: CHARSET_ID,
       filesize: 40960, filename: '1010.txt', revision_count: 1,
-      registrated_on: '2020-10-01', last_updated_on: '2020-10-01' },
+      registered_on: '2020-10-01', last_updated_on: '2020-10-01' },
     { work_id: 1011, filetype_id: 3, compresstype_id: COMPRESSTYPE_ID,
       file_encoding_id: FILE_ENCODING_ID, charset_id: CHARSET_ID,
       filesize: 51200, filename: '1011.html', revision_count: 4,
-      registrated_on: '2020-11-01', last_updated_on: '2020-12-01' },
+      registered_on: '2020-11-01', last_updated_on: '2020-12-01' },
     { work_id: 1013, filetype_id: FILETYPE_ID, compresstype_id: 2,
       file_encoding_id: FILE_ENCODING_ID, charset_id: CHARSET_ID,
       filesize: 20480, filename: '1013.zip', revision_count: 2,
-      registrated_on: '2021-01-01', last_updated_on: '2021-02-01' },
+      registered_on: '2021-01-01', last_updated_on: '2021-02-01' },
     { work_id: 1016, filetype_id: FILETYPE_ID, compresstype_id: COMPRESSTYPE_ID,
       file_encoding_id: FILE_ENCODING_ID, charset_id: CHARSET_ID,
       filesize: 15360, filename: '1016.txt', revision_count: 1,
-      registrated_on: '2021-04-01', last_updated_on: '2021-04-01' },
+      registered_on: '2021-04-01', last_updated_on: '2021-04-01' },
     { work_id: 1027, filetype_id: 3, compresstype_id: COMPRESSTYPE_ID,
       file_encoding_id: FILE_ENCODING_ID, charset_id: CHARSET_ID,
       filesize: 10240, filename: '1027.html', revision_count: 1,
-      registrated_on: '2026-01-01', last_updated_on: '2026-01-01' }
+      registered_on: '2026-01-01', last_updated_on: '2026-01-01' }
   ].freeze
 end
 
@@ -481,45 +481,31 @@ end
 
 puts 'Loading parity fixture data...'
 
+# fixture 配列は行ごとにキー集合が異なり得る(例: first_name を持たない人物)。
+# insert_all は全行で同一キーを要求するため、配列内キーの和集合で正規化し
+# 欠損キーは nil 補完してから timestamps を付けて投入する。
+now = Time.current
+insert_fixture = lambda do |model, rows|
+  keys = rows.flat_map(&:keys).uniq
+  normalized = rows.map { |r| keys.index_with { |k| r[k] }.merge(created_at: now, updated_at: now) }
+  model.insert_all(normalized) # rubocop:disable Rails/SkipsModelValidations
+  puts "  #{model.name}: #{rows.size}"
+end
+
 # Insert in dependency order
-Person.insert_all(ParityFixture::PERSONS.map { |p| p.merge(created_at: Time.current, updated_at: Time.current) })
-puts "  Persons: #{ParityFixture::PERSONS.size}"
-
-Work.insert_all(ParityFixture::WORKS.map { |w| w.merge(created_at: Time.current, updated_at: Time.current) })
-puts "  Works: #{ParityFixture::WORKS.size}"
-
-WorkPerson.insert_all(ParityFixture::WORK_PEOPLE.map { |wp| wp.merge(created_at: Time.current, updated_at: Time.current) })
-puts "  WorkPeople: #{ParityFixture::WORK_PEOPLE.size}"
-
-NewsEntry.insert_all(ParityFixture::NEWS_ENTRIES.map { |n| n.merge(created_at: Time.current, updated_at: Time.current) })
-puts "  NewsEntries: #{ParityFixture::NEWS_ENTRIES.size}"
-
-Site.insert_all(ParityFixture::SITES.map { |s| s.merge(created_at: Time.current, updated_at: Time.current) })
-puts "  Sites: #{ParityFixture::SITES.size}"
-
-WorkSite.insert_all(ParityFixture::WORK_SITES.map { |ws| ws.merge(created_at: Time.current, updated_at: Time.current) })
-puts "  WorkSites: #{ParityFixture::WORK_SITES.size}"
-
-PersonSite.insert_all(ParityFixture::PERSON_SITES.map { |ps| ps.merge(created_at: Time.current, updated_at: Time.current) })
-puts "  PersonSites: #{ParityFixture::PERSON_SITES.size}"
-
-BasePerson.insert_all(ParityFixture::BASE_PEOPLE.map { |bp| bp.merge(created_at: Time.current, updated_at: Time.current) })
-puts "  BasePeople: #{ParityFixture::BASE_PEOPLE.size}"
-
-OriginalBook.insert_all(ParityFixture::ORIGINAL_BOOKS.map { |ob| ob.merge(created_at: Time.current, updated_at: Time.current) })
-puts "  OriginalBooks: #{ParityFixture::ORIGINAL_BOOKS.size}"
-
-Bibclass.insert_all(ParityFixture::BIBCLASSES.map { |b| b.merge(created_at: Time.current, updated_at: Time.current) })
-puts "  Bibclasses: #{ParityFixture::BIBCLASSES.size}"
-
-Worker.insert_all(ParityFixture::WORKERS.map { |w| w.merge(created_at: Time.current, updated_at: Time.current) })
-puts "  Workers: #{ParityFixture::WORKERS.size}"
-
-WorkWorker.insert_all(ParityFixture::WORK_WORKERS.map { |ww| ww.merge(created_at: Time.current, updated_at: Time.current) })
-puts "  WorkWorkers: #{ParityFixture::WORK_WORKERS.size}"
-
-Workfile.insert_all(ParityFixture::WORKFILES.map { |wf| wf.merge(created_at: Time.current, updated_at: Time.current) })
-puts "  Workfiles: #{ParityFixture::WORKFILES.size}"
+insert_fixture.call(Person, ParityFixture::PERSONS)
+insert_fixture.call(Work, ParityFixture::WORKS)
+insert_fixture.call(WorkPerson, ParityFixture::WORK_PEOPLE)
+insert_fixture.call(NewsEntry, ParityFixture::NEWS_ENTRIES)
+insert_fixture.call(Site, ParityFixture::SITES)
+insert_fixture.call(WorkSite, ParityFixture::WORK_SITES)
+insert_fixture.call(PersonSite, ParityFixture::PERSON_SITES)
+insert_fixture.call(BasePerson, ParityFixture::BASE_PEOPLE)
+insert_fixture.call(OriginalBook, ParityFixture::ORIGINAL_BOOKS)
+insert_fixture.call(Bibclass, ParityFixture::BIBCLASSES)
+insert_fixture.call(Worker, ParityFixture::WORKERS)
+insert_fixture.call(WorkWorker, ParityFixture::WORK_WORKERS)
+insert_fixture.call(Workfile, ParityFixture::WORKFILES)
 
 puts 'Parity fixture loaded successfully.'
 # rubocop:enable Rails/Output
