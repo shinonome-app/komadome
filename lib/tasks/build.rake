@@ -63,6 +63,7 @@ namespace :build do
         work_count = Work.published.with_title_firstchar(kana).count
 
         total_page = work_count.fdiv(item_count).ceil # 割り切れない場合は切り上げ
+        total_page = 1 if total_page.zero? # 0件でもトップから全かなにリンクされるため1ページは生成する
         paths = (1..total_page).map { |page| "index_pages/sakuhin_#{id}#{page}.html" }
         builder.build_html(paths: paths)
       end
@@ -79,6 +80,7 @@ namespace :build do
         work_count = Work.unpublished.with_title_firstchar(kana).count
 
         total_page = work_count.fdiv(item_count).ceil # 割り切れない場合は切り上げ
+        total_page = 1 if total_page.zero? # 0件でもトップから全かなにリンクされるため1ページは生成する
         paths = (1..total_page).map { |page| "index_pages/sakuhin_inp_#{id}#{page}.html" }
         builder.build_html(paths: paths)
       end
