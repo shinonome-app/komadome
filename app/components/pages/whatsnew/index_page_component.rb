@@ -3,7 +3,7 @@
 module Pages
   module Whatsnew
     class IndexPageComponent < ViewComponent::Base
-      FIRST_YEAR = 2001
+      FIRST_YEAR = 1997
 
       attr_reader :pagy, :works, :date, :prev_year
 
