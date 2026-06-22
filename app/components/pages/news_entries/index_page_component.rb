@@ -8,7 +8,8 @@ module Pages
       def initialize(year:)
         super
 
-        @news_entries = NewsEntry.published.where('extract(year from published_on) = ?', year).order(published_on: :desc)
+        @news_entries = NewsEntry.published.where('extract(year from published_on) = ?',
+                                                  year).order(published_on: :desc, id: :asc)
       end
     end
   end
