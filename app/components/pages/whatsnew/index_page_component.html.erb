@@ -51,8 +51,7 @@
         <% works.each_with_index do |work, work_index| %>
         <tr>
           <td class="bg-white border-double border-2 border-gray-800">
-            <%# TODO: 7.daysに修正する %>
-            <% if work.started_on && work.started_on > Time.zone.now.ago(400.days) %>
+            <% if work.started_on && work.started_on >= date - 7 %>
             <span class="text-red-500"><%= work.started_on %></span>
             <% else %>
             <span><%= work.started_on %></span>
