@@ -133,7 +133,7 @@ module ParityFixture # rubocop:disable Metrics/ModuleLength
     { id: 1003, title: '夏の空', title_kana: 'なつのそら',
       work_status_id: 1, started_on: '2020-03-01', copyright_flag: false,
       sortkey: 'なつのそら', kana_type_id: KANA_TYPE_ID, user_id: 1,
-      note: '<div id="link"><script src="link.js"></script></div>本文テキスト' },
+      note: '<div id="link"></div><script type="text/javascript" src="../link.js"></script>本文テキスト' },
     { id: 1004, title: '秋の色', title_kana: 'あきのいろ',
       work_status_id: 1, started_on: '2099-12-31', copyright_flag: false,
       sortkey: 'あきのいろ', kana_type_id: KANA_TYPE_ID, user_id: 1 },
