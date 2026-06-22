@@ -22,6 +22,8 @@ Rails.application.routes.draw do
       get 'person_:id', to: 'people#index', constraints: { id: /[kstnhmyrw]?a|zz/ }, as: :people
       get 'person:id', to: 'people#show', constraints: { id: /\d+/ }, as: :person
 
+      get 'person_all_all', to: 'index_pages#person_all_all'
+
       get 'person_all_:id', to: 'index_pages#person_all_index', constraints: { id: /[kstnhmyrw]?a|zz/ }
 
       get 'person_inp_:id', to: 'index_pages#person_inp_index', constraints: { id: /[kstnhmyrw]?a|zz/ }

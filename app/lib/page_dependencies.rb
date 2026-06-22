@@ -9,7 +9,8 @@ class PageDependencies
         'index.html' => { static: true },
         'index_pages/index_top.html' => { static: true },
         'index_pages/index_all.html' => { static: true },
-        'index_pages/person_all.html' => { static: true }
+        'index_pages/person_all.html' => { static: true },
+        'index_pages/person_all_all.html' => { static: true }
       }
     end
 

@@ -47,6 +47,7 @@ namespace :build do
             'index_pages/index_top.html',
             'index_pages/index_all.html',
             'index_pages/person_all.html',
+            'index_pages/person_all_all.html',
             'index_pages/person_inp_all.html'
           ]
       )

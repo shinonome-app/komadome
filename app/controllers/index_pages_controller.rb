@@ -19,6 +19,10 @@ class IndexPagesController < ApplicationController
     render ::Pages::IndexPages::PersonAllPageComponent.new
   end
 
+  def person_all_all
+    render ::Pages::IndexPages::PersonAllAllPageComponent.new
+  end
+
   def person_inp_index
     render ::Pages::IndexPages::PersonInpIndexPageComponent.new(id: params[:id].to_sym)
   end
