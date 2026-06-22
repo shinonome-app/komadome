@@ -462,7 +462,7 @@
         <ul class="m-2">
           <%- topics.first(10).each do |news_entry| -%>
           <li class="my-1"><%= news_entry.published_on %> <%= link_to news_entry.title,
-                                                                      soramoyou_year_path(news_entry.published_on.year, anchor: news_entry.id),
+                                                                      soramoyou_year_path(news_entry.published_on.year, anchor: news_entry.anchor),
                                                                       class: "text-blue-700 hover:text-gray-100 hover:bg-blue-700 visited:text-purple-600 underline" %></li>
           <%- end -%>
         </ul>
